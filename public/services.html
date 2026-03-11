@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Noteracker Ltd. WP Performance & Security Services - Speed optimization, core protection, caching, database health, SSL, and automatic backup for Website sites.">
+  <meta name="description" content="Noteracker Ltd. WaaS Services - Shopping, LMS, CMS, CRM, AI Chatbot, and Cloud Hosting. Complete website management powered by Cloudflare & Vultr.">
   <title>Services - Noteracker Ltd.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,137 +22,166 @@
   <section class="hero" style="min-height: 700px; height: 700px; overflow:hidden;">
     <canvas id="svc-hero-grad" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
     <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(28,34,40,0.65);z-index:1;"></div>
-    <div class="hero-container" style="grid-template-columns: 1fr; position:relative; z-index:2;">
-      <div class="hero-content" style="text-align: center; max-width: 900px; margin: 0 auto;">
-        <span class="hero-badge">WP Performance & Security</span>
-        <h1>Malware-Free Stable Data Flow<br>via Our Tech</h1>
-        <p style="margin: 0 auto;">
-          Solid, rapid, and resilient  six integrated service disciplines engineered to keep your
-          Website site clean, fast, and protected against every threat that targets it.
+    <div class="hero-container" style="position:relative; z-index:2;">
+      <div class="hero-content">
+        <span class="hero-badge">Complete WaaS Platform</span>
+        <h1>Modern Web Services<br>All in One Place</h1>
+        <p>
+          Six integrated service disciplines — from e-commerce to AI chatbot — engineered to
+          power your business with modern web technology and minimized operational costs.
         </p>
-        <div class="hero-buttons" style="justify-content: center; margin-top: 2rem;">
-          <button class="btn-primary" onclick="location.href='#malware-care'"><span class="btn-desk">Explore Services</span><span class="btn-mob">Services</span></button>
+        <div class="hero-buttons" style="margin-top: 2rem;">
+          <button class="btn-primary" onclick="location.href='#waas-platform'"><span class="btn-desk">Explore Services</span><span class="btn-mob">Services</span></button>
           <button class="btn-secondary" onclick="location.href='/contact'"><span class="btn-desk">Get Free Consultation</span><span class="btn-mob">Consult</span></button>
         </div>
       </div>
+      <!-- Right: Lottie-style widget -->
+      <div class="svc-lottie">
+        <div class="lottie-wrap" id="svc-lottie-widget">
+          <div class="lstep lstep-active" data-step="0">
+            <div class="svc-lstep-title">Shopping & E-Commerce</div>
+            <div class="svc-lstep-row"><div class="svc-lstep-icon"><img src="/images/icons/opt/1375106.webp" alt="" width="20" height="20"></div><div class="svc-lstep-text"><strong>Store Setup</strong> — WooCommerce or custom</div></div>
+            <div class="svc-lstep-row"><div class="svc-lstep-icon"><img src="/images/icons/opt/1197409.webp" alt="" width="20" height="20"></div><div class="svc-lstep-text"><strong>Payment Gateway</strong> — Stripe, PayPal & more</div></div>
+            <div class="svc-lstep-row"><div class="svc-lstep-icon"><img src="/images/icons/opt/921591.webp" alt="" width="20" height="20"></div><div class="svc-lstep-text"><strong>Inventory</strong> — Real-time stock tracking</div></div>
+            <div class="svc-lstep-bar"><div class="svc-lstep-bar-fill"></div></div>
+          </div>
+          <div class="lstep" data-step="1">
+            <div class="svc-lstep-title">LMS & CMS Platform</div>
+            <div class="svc-lstep-row"><div class="svc-lstep-icon"><img src="/images/icons/opt/599694.webp" alt="" width="20" height="20"></div><div class="svc-lstep-text"><strong>Course Builder</strong> — Lessons, quizzes & certs</div></div>
+            <div class="svc-lstep-row"><div class="svc-lstep-icon"><img src="/images/icons/opt/2721593.webp" alt="" width="20" height="20"></div><div class="svc-lstep-text"><strong>Web Design</strong> — Modern & responsive</div></div>
+            <div class="svc-lstep-row"><div class="svc-lstep-icon"><img src="/images/icons/opt/3786576.webp" alt="" width="20" height="20"></div><div class="svc-lstep-text"><strong>SEO Optimized</strong> — Core Web Vitals ready</div></div>
+            <div class="svc-lstep-bar"><div class="svc-lstep-bar-fill"></div></div>
+          </div>
+          <div class="lstep" data-step="2">
+            <div class="svc-lstep-title">CRM & AI Chatbot</div>
+            <div class="svc-lstep-row"><div class="svc-lstep-icon"><img src="/images/icons/opt/4121798.webp" alt="" width="20" height="20"></div><div class="svc-lstep-text"><strong>Lead Pipeline</strong> — Capture & convert</div></div>
+            <div class="svc-lstep-row"><div class="svc-lstep-icon"><img src="/images/icons/opt/3000777.webp" alt="" width="20" height="20"></div><div class="svc-lstep-text"><strong>AI Chatbot</strong> — 24/7 automated support</div></div>
+            <div class="svc-lstep-row"><div class="svc-lstep-icon"><img src="/images/icons/opt/7515734.webp" alt="" width="20" height="20"></div><div class="svc-lstep-text"><strong>Integration</strong> — CRM + Store synced</div></div>
+            <div class="svc-lstep-bar"><div class="svc-lstep-bar-fill"></div></div>
+          </div>
+          <div class="lnav">
+            <button class="lnav-btn active" data-target="0"></button>
+            <button class="lnav-btn" data-target="1"></button>
+            <button class="lnav-btn" data-target="2"></button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Emergency Malware  Flagship -->
-  <section class="section" id="malware-care">
+  <!-- WaaS Platform — Flagship -->
+  <section class="section" id="waas-platform">
     <div class="container">
-      <div class="card" style="padding: 4rem; border: 3px solid var(--accent-primary);">
-        <div class="featured-card-grid">
+      <div class="card" style="padding: 4rem; border: 2px solid var(--accent-primary); box-shadow: var(--shadow-glow);">
+        <div class="svc-featured-grid">
           <div>
-            <span class="section-badge">Emergency Service</span>
-            <h2 style="margin-top: 1rem; margin-bottom: 1.5rem;">Emergency Malware Removal</h2>
+            <span class="section-badge">Flagship Service</span>
+            <h2 style="margin-top: 1rem; margin-bottom: 1.5rem;">Complete WaaS Platform</h2>
             <p style="font-size: 1.1rem; margin-bottom: 2rem;">
-              Our flagship service. Rapid response for infected Website sites powered by Sucuri's
-              enterprise security platform. Complete malware removal, security hardening, and 30-day monitoring 
-              guaranteed.
+              Our flagship offering. A fully managed web platform powered by Cloudflare and Vultr
+              that integrates website, e-commerce, LMS, CRM, and AI chatbot into one subscription.
             </p>
-            <ul style="list-style: none; padding: 0; margin-bottom: 2rem;">
-              <li style="padding: 0.75rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border-color);">✓ Response within 24 hours</li>
-              <li style="padding: 0.75rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border-color);">✓ Unlimited manual malware cleanups</li>
-              <li style="padding: 0.75rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border-color);">✓ Backdoor & SEO spam removal</li>
-              <li style="padding: 0.75rem 0; color: var(--text-secondary); border-bottom: 1px solid var(--border-color);">✓ Google blacklist removal assistance</li>
-              <li style="padding: 0.75rem 0; color: var(--text-secondary);">✓ 30-day reinfection guarantee</li>
+            <ul class="svc-feature-list" style="margin-bottom: 2rem;">
+              <li>Website design, hosting, and management included</li>
+              <li>Shopping, LMS, CMS, CRM modules available</li>
+              <li>AI Chatbot for automated customer support</li>
+              <li>Cloudflare CDN + Vultr cloud servers</li>
+              <li>Up to 60% operational cost reduction</li>
             </ul>
             <div style="display: flex; gap: 1rem;">
               <button class="btn-primary" onclick="location.href='/solution'"><span class="btn-desk">Learn More</span><span class="btn-mob">More</span></button>
-              <button class="btn-secondary" onclick="location.href='/contact'"><span class="btn-desk">Get Emergency Help</span><span class="btn-mob">Help</span></button>
+              <button class="btn-secondary" onclick="location.href='/contact'"><span class="btn-desk">Get Free Consultation</span><span class="btn-mob">Consult</span></button>
             </div>
           </div>
-          <div style="background-color: var(--bg-secondary); padding: 3rem; border-radius: 12px; text-align: center;">
-            <div style="font-size: 4rem; margin-bottom: 1rem;"><img src="/images/icons/opt/4201965.webp" alt="Warning" width="64" height="64" loading="lazy"></div>
-            <h3 style="color: var(--text-primary); margin-bottom: 1rem;">Website Infected?</h3>
-            <p style="margin-bottom: 1.5rem;">Max response time: <strong style="color: var(--text-primary);">24 Hours</strong></p>
-            <p style="color: var(--text-muted); margin-bottom: 0.5rem;">500+ sites cleaned</p>
-            <p style="color: var(--text-muted);">Powered by Sucuri</p>
+          <div class="svc-flagship-box">
+            <div style="margin-bottom: 1.5rem;"><img src="/images/icons/opt/4201965.webp" alt="WaaS" width="64" height="64" loading="lazy"></div>
+            <h3 style="color: var(--text-primary); margin-bottom: 1.5rem;">All-in-One Platform</h3>
+            <div class="svc-flagship-stat">99.9%</div>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Uptime Guarantee</p>
+            <p style="color: var(--text-muted); margin-bottom: 0.5rem;">200+ sites managed</p>
+            <p style="color: var(--text-muted); margin: 0;">Powered by Cloudflare & Vultr</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Speed Optimization -->
-  <section class="section" id="speed" style="background-color: var(--bg-secondary);">
+  <!-- Shopping & E-Commerce -->
+  <section class="section" id="shopping" style="background-color: var(--bg-secondary);">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Service 01</span>
-        <h2 class="section-title">Speed Optimization</h2>
+        <h2 class="section-title">Shopping & E-Commerce</h2>
         <p class="section-description">
-          The benchmark of high-performance loading. We eliminate bounce rates and maximize user retention
-          through instant response times and precision asset compression.
+          Launch and manage powerful online stores with WooCommerce or custom e-commerce solutions.
+          From product catalog to checkout — fully integrated and optimized for conversion.
         </p>
       </div>
 
       <div class="card-grid">
         <div class="card">
-          <div class="card-icon"><img src="/images/icons/opt/1375106.webp" alt="Image" width="36" height="36" loading="lazy"></div>
-          <h3>Image Compression & Lazy Loading</h3>
-          <p>Next-gen image formats (WebP/AVIF), intelligent compression, and lazy loading to eliminate render-blocking images without compromising visual quality.</p>
+          <div class="card-icon"><img src="/images/icons/opt/1375106.webp" alt="Store" width="36" height="36" loading="lazy"></div>
+          <h3>Store Setup & Design</h3>
+          <p>Professional online store design with WooCommerce or custom framework. Product catalogs, category management, and conversion-optimized layouts built for your brand.</p>
         </div>
         <div class="card">
-          <div class="card-icon"><img src="/images/icons/opt/1197409.webp" alt="Code" width="36" height="36" loading="lazy"></div>
-          <h3>JS/CSS Optimization</h3>
-          <p>Minification, concatenation, and deferred loading of JavaScript and CSS assets. Critical path rendering ensures your page is visually complete within milliseconds.</p>
+          <div class="card-icon"><img src="/images/icons/opt/1197409.webp" alt="Payment" width="36" height="36" loading="lazy"></div>
+          <h3>Payment & Checkout</h3>
+          <p>Secure payment gateway integration — Stripe, PayPal, and local processors. One-page checkout, cart recovery, and PCI-compliant transaction handling.</p>
         </div>
         <div class="card">
-          <div class="card-icon"><img src="/images/icons/opt/921591.webp" alt="Analytics" width="36" height="36" loading="lazy"></div>
-          <h3>Core Web Vitals Optimization</h3>
-          <p>Targeted improvements to LCP, FID, and CLS  the Google ranking signals that directly affect your search position and user experience scores.</p>
+          <div class="card-icon"><img src="/images/icons/opt/921591.webp" alt="Inventory" width="36" height="36" loading="lazy"></div>
+          <h3>Inventory Management</h3>
+          <p>Real-time stock tracking, automated low-stock alerts, variant management, and shipping integration. Keep your operations running smoothly at any scale.</p>
         </div>
         <div class="card">
-          <div class="card-icon"><img src="/images/icons/opt/2997954.webp" alt="Report" width="36" height="36" loading="lazy"></div>
-          <h3>Before/After Speed Report</h3>
-          <p>Comprehensive performance benchmarking before and after optimization. Every engagement includes documented proof of improvements with GTmetrix and PageSpeed data.</p>
+          <div class="card-icon"><img src="/images/icons/opt/2997954.webp" alt="Analytics" width="36" height="36" loading="lazy"></div>
+          <h3>Sales Analytics</h3>
+          <p>Comprehensive dashboards tracking revenue, conversion rates, abandoned carts, and customer behavior. Data-driven insights to grow your online sales.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Core Protection -->
-  <section class="section" id="protection">
+  <!-- LMS Platform -->
+  <section class="section" id="lms">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Service 02</span>
-        <h2 class="section-title">Core Protection</h2>
+        <h2 class="section-title">LMS Platform</h2>
         <p class="section-description">
-          Three-layer active defense: block threats at the perimeter, scan for infections daily, and control
-          every access point. Powered by Sucuri's enterprise security platform.
+          Build complete learning management systems with courses, quizzes, certifications,
+          and membership tiers — all integrated into your website and managed by our team.
         </p>
       </div>
 
-      <div>
-        <div style="display: grid; gap: 2rem;">
-          <div class="card" style="border-left: 4px solid #475568;">
-            <div class="process-step">
-              <div style="min-width:50px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><img src="/images/icons/opt/599694.webp" alt="WAF" width="36" height="36" loading="lazy"></div>
-              <div>
-                <h3>Active Shield  Web Application Firewall</h3>
-                <p style="color:var(--text-secondary);">Cloud-based WAF actively blocks SQL injections, XSS, brute force attacks, DDoS floods, and zero-day exploits via virtual patching  before they reach your server. Geo-blocking available for high-risk regions.</p>
-              </div>
+      <div style="display: grid; gap: 2rem;">
+        <div class="card svc-process-card">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
+            <div style="min-width:50px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><img src="/images/icons/opt/599694.webp" alt="Courses" width="36" height="36" loading="lazy"></div>
+            <div>
+              <h3>Course Builder & Content Delivery</h3>
+              <p style="color:var(--text-secondary);margin:0;">Create structured courses with lessons, modules, and multimedia content. Video hosting, PDF materials, and interactive elements — all delivered through a polished student experience.</p>
             </div>
           </div>
+        </div>
 
-          <div class="card" style="border-left: 4px solid #475568;">
-            <div class="process-step">
-              <div style="min-width:50px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><img src="/images/icons/opt/3655768.webp" alt="Scan" width="36" height="36" loading="lazy"></div>
-              <div>
-                <h3>Threat Scanning  Daily Malware Detection</h3>
-                <p style="color:var(--text-secondary);">Sucuri's comprehensive scanning engine checks your files, database, and external blocklist status. Scan frequency from every 30 minutes. Uptime, DNS, and SEO spam monitoring included.</p>
-              </div>
+        <div class="card svc-process-card">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
+            <div style="min-width:50px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><img src="/images/icons/opt/3655768.webp" alt="Quiz" width="36" height="36" loading="lazy"></div>
+            <div>
+              <h3>Quizzes, Certificates & Progress Tracking</h3>
+              <p style="color:var(--text-secondary);margin:0;">Automated assessments with customizable quiz formats, pass/fail criteria, and certificate generation. Students track their progress with visual dashboards and completion badges.</p>
             </div>
           </div>
+        </div>
 
-          <div class="card" style="border-left: 4px solid #475568;">
-            <div class="process-step">
-              <div style="min-width:50px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><img src="/images/icons/opt/1680173.webp" alt="Access" width="36" height="36" loading="lazy"></div>
-              <div>
-                <h3>Access Control  Authentication Hardening</h3>
-                <p style="color:var(--text-secondary);">Login protection with brute force rate limiting, two-factor authentication setup, admin account audit and permission review, and Website user role hardening to eliminate unauthorized access vectors.</p>
-              </div>
+        <div class="card svc-process-card">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
+            <div style="min-width:50px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><img src="/images/icons/opt/1680173.webp" alt="Membership" width="36" height="36" loading="lazy"></div>
+            <div>
+              <h3>Membership & Subscription Tiers</h3>
+              <p style="color:var(--text-secondary);margin:0;">Flexible membership levels with tiered access control. Free trials, monthly/annual subscriptions, and one-time purchases — integrated with your payment gateway for automated billing.</p>
             </div>
           </div>
         </div>
@@ -160,156 +189,152 @@
     </div>
   </section>
 
-  <!-- Efficient Caching -->
-  <section class="section" id="caching" style="background-color: var(--bg-secondary);">
+  <!-- CMS & Web Management -->
+  <section class="section" id="cms" style="background-color: var(--bg-secondary);">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Service 03</span>
-        <h2 class="section-title">Efficient Caching</h2>
+        <h2 class="section-title">CMS & Web Management</h2>
         <p class="section-description">
-          Six caching layers working in concert to eliminate database load, reduce server response times,
-          and deliver content at global CDN speed  all configured to work without conflicts.
+          WordPress and modern web applications fully managed — from content publishing and SEO
+          to design updates and performance optimization. Your website, expertly maintained.
         </p>
       </div>
 
       <div class="card-grid">
         <div class="card">
-          <h3><img src="/images/icons/opt/2721593.webp" alt="Page" width="20" height="20" style="vertical-align:middle;margin-right:0.5rem;" loading="lazy">Page Caching</h3>
-          <p>Serve static HTML to visitors instead of dynamically generating each page on request. Eliminates PHP and database processing for the majority of your traffic.</p>
+          <h3><img src="/images/icons/opt/2721593.webp" alt="Design" width="20" height="20" style="vertical-align:middle;margin-right:0.5rem;" loading="lazy">Website Design & Build</h3>
+          <p>Professional website design with modern frameworks. Responsive layouts, brand-aligned aesthetics, and conversion-focused UX — built to perform on every device.</p>
         </div>
         <div class="card">
-          <h3><img src="/images/icons/opt/2906274.webp" alt="DB" width="20" height="20" style="vertical-align:middle;margin-right:0.5rem;" loading="lazy">Database Query Caching</h3>
-          <p>Cache frequent database query results in memory. Dramatically reduces database load and speeds up page generation for logged-in users and dynamic content.</p>
+          <h3><img src="/images/icons/opt/2906274.webp" alt="Content" width="20" height="20" style="vertical-align:middle;margin-right:0.5rem;" loading="lazy">Content Management</h3>
+          <p>Full content lifecycle management — publishing, scheduling, revision control, and media optimization. WordPress or custom CMS configured for your workflow.</p>
         </div>
         <div class="card">
-          <h3><img src="/images/icons/opt/3786576.webp" alt="Memory" width="20" height="20" style="vertical-align:middle;margin-right:0.5rem;" loading="lazy">Object Persistence</h3>
-          <p>Store complex PHP objects in persistent memory (Redis/Memcached). Eliminates redundant computation across page loads and dramatically improves TTFB.</p>
+          <h3><img src="/images/icons/opt/3786576.webp" alt="SEO" width="20" height="20" style="vertical-align:middle;margin-right:0.5rem;" loading="lazy">SEO & Performance</h3>
+          <p>On-page SEO, Core Web Vitals optimization, caching, image compression, and CDN configuration. Your site loads fast and ranks higher in search results.</p>
         </div>
         <div class="card">
-          <h3><img src="/images/icons/opt/921490.webp" alt="CDN" width="20" height="20" style="vertical-align:middle;margin-right:0.5rem;" loading="lazy">Global CDN Distribution</h3>
-          <p>Distribute your static assets across global edge nodes via Sucuri's Anycast CDN. Serve content from the closest location to each visitor for 60–80% faster delivery.</p>
+          <h3><img src="/images/icons/opt/921490.webp" alt="Updates" width="20" height="20" style="vertical-align:middle;margin-right:0.5rem;" loading="lazy">Updates & Maintenance</h3>
+          <p>Core, theme, and plugin updates with compatibility testing. Security patches, backups, and uptime monitoring — all handled by our team so you don't have to.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Database Health -->
-  <section class="section" id="database">
+  <!-- CRM & Automation -->
+  <section class="section" id="crm">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Service 04</span>
-        <h2 class="section-title">Database Health</h2>
+        <h2 class="section-title">CRM & Automation</h2>
         <p class="section-description">
-          The optimized engine for peak site performance. A poorly maintained database is the most
-          common hidden cause of slow Website sites  and it's entirely fixable.
+          Integrated customer relationship management with automated workflows — track leads,
+          nurture customers, and drive revenue growth with data-driven intelligence.
         </p>
       </div>
 
-      <div>
-        <div class="card" style="padding: 3rem;">
-          <div class="feature-grid">
-            <div>
-              <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">Precise Data Refining</h4>
-              <p style="color:var(--text-secondary);">Remove post revisions, spam comments, transients, and orphaned metadata that accumulate over time and bloat your database without purpose.</p>
-            </div>
-            <div>
-              <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">Rapid Query Path</h4>
-              <p style="color:var(--text-secondary);">Systematic index creation and query analysis to eliminate slow queries. We identify and resolve the specific database calls slowing your site down.</p>
-            </div>
-            <div>
-              <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">Structural Optimization</h4>
-              <p style="color:var(--text-secondary);">Table fragmentation reduction and storage engine optimization. A defragmented, properly structured database responds faster under load.</p>
-            </div>
-            <div>
-              <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">Integrity Verification</h4>
-              <p style="color:var(--text-secondary);">Full database integrity check to identify and repair corrupted tables, inconsistent data references, and structural issues before they cause errors.</p>
-            </div>
+      <div class="card" style="padding: 3rem;">
+        <div class="svc-feature-grid">
+          <div>
+            <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">Lead Tracking & Pipeline</h4>
+            <p style="color:var(--text-secondary);">Capture leads from forms, chatbot, and landing pages. Visual pipeline management with deal stages, probability tracking, and automated follow-up reminders.</p>
+          </div>
+          <div>
+            <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">Email Campaigns</h4>
+            <p style="color:var(--text-secondary);">Automated email sequences triggered by customer actions. Welcome series, abandoned cart recovery, re-engagement campaigns — all personalized and performance-tracked.</p>
+          </div>
+          <div>
+            <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">Customer Segmentation</h4>
+            <p style="color:var(--text-secondary);">Group customers by behavior, purchase history, engagement level, and demographics. Deliver targeted messaging that resonates with each segment.</p>
+          </div>
+          <div>
+            <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">Analytics & Reporting</h4>
+            <p style="color:var(--text-secondary);">Comprehensive dashboards showing customer lifetime value, conversion funnels, campaign ROI, and growth trends — actionable insights for strategic decisions.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SSL -->
-  <section class="section" id="ssl" style="background-color: var(--bg-secondary);">
+  <!-- AI Chatbot -->
+  <section class="section" id="ai-chatbot" style="background-color: var(--bg-secondary);">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Service 05</span>
-        <h2 class="section-title">Secure Socket (SSL)</h2>
+        <h2 class="section-title">AI Chatbot Service</h2>
         <p class="section-description">
-          Advanced encryption for private data transmission. SSL is not just a trust signal  it is a
-          search ranking factor, a user requirement, and a legal obligation for sites handling personal data.
+          Our proprietary AI chatbot integrates directly into your website — handling customer inquiries,
+          lead capture, and support automation 24/7 without additional staffing costs.
         </p>
       </div>
 
-      <div class="card-grid">
+      <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
         <div class="card">
-          <div class="card-icon"><img src="/images/icons/opt/3000777.webp" alt="SSL" width="36" height="36" loading="lazy"></div>
-          <h3>SSL Certificate Deployment</h3>
-          <p>Installation and configuration of SSL certificates with automatic renewal. Full HTTPS enforcement with proper 301 redirects and mixed content resolution.</p>
+          <div class="card-icon"><img src="/images/icons/opt/3000777.webp" alt="AI" width="36" height="36" loading="lazy"></div>
+          <h3>Intelligent Conversations</h3>
+          <p>Natural language understanding powered by advanced AI. Your chatbot answers product questions, guides users, and resolves common issues — just like a trained support agent.</p>
         </div>
         <div class="card">
-          <div class="card-icon"><img src="/images/icons/opt/4121798.webp" alt="Growth" width="36" height="36" loading="lazy"></div>
-          <h3>SEO & Rankings Benefit</h3>
-          <p>Google uses HTTPS as a ranking signal. Proper SSL setup with HSTS headers ensures your site receives the full search ranking benefit of secure connections.</p>
+          <div class="card-icon"><img src="/images/icons/opt/4121798.webp" alt="Leads" width="36" height="36" loading="lazy"></div>
+          <h3>Lead Qualification & Capture</h3>
+          <p>Automatically qualify visitors, collect contact information, and route hot leads to your sales team. Convert website traffic into actionable business opportunities 24/7.</p>
         </div>
         <div class="card">
-          <div class="card-icon"><img src="/images/icons/opt/7515734.webp" alt="Privacy" width="36" height="36" loading="lazy"></div>
-          <h3>Data Privacy Protection</h3>
-          <p>Encrypt all data transmitted between your visitors and server  login credentials, form submissions, payment data. Prevent man-in-the-middle interception.</p>
+          <div class="card-icon"><img src="/images/icons/opt/7515734.webp" alt="Integration" width="36" height="36" loading="lazy"></div>
+          <h3>CRM & Store Integration</h3>
+          <p>Seamlessly connects with your CRM and e-commerce platform. Customer data, order status, and conversation history all synchronized for a unified experience.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Automatic Backup -->
-  <section class="section" id="backup">
+  <!-- Cloud Hosting -->
+  <section class="section" id="hosting">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Service 06</span>
-        <h2 class="section-title">Automatic Backup</h2>
+        <h2 class="section-title">Cloud Hosting & Infrastructure</h2>
         <p class="section-description">
-          Triple backup across cloud servers with instant restore capability. When disaster strikes 
-          whether from malware, a failed update, or accidental deletion  your data is always recoverable.
+          Enterprise-grade hosting on Cloudflare and Vultr — delivering speed, security, and reliability
+          with 99.9% uptime guarantee and global edge delivery.
         </p>
       </div>
 
-      <div>
-        <div style="display:grid;gap:1.5rem;">
-          <div class="card" style="border-left:4px solid #475568;">
-            <div class="process-step">
-              <div class="process-num">01</div>
-              <div>
-                <h3>Triple Cloud Redundancy</h3>
-                <p style="color:var(--text-secondary);margin:0;">Backups stored across three separate cloud locations simultaneously. No single point of failure  your data survives even complete server loss.</p>
-              </div>
+      <div style="display:grid;gap:1.5rem;">
+        <div class="card svc-process-card">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
+            <div class="svc-process-num">01</div>
+            <div>
+              <h3>Cloudflare Edge Network</h3>
+              <p style="color:var(--text-secondary);margin:0;">300+ global data centers with CDN, DDoS protection, WAF, and SSL. Your content loads instantly from the nearest edge node — 60-80% faster than traditional hosting.</p>
             </div>
           </div>
-          <div class="card" style="border-left:4px solid #475568;">
-            <div class="process-step">
-              <div class="process-num">02</div>
-              <div>
-                <h3>Instant Restore Capability</h3>
-                <p style="color:var(--text-secondary);margin:0;">One-click restore to any previous backup point. We can restore your complete site  files and database  within minutes of a critical failure.</p>
-              </div>
+        </div>
+        <div class="card svc-process-card">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
+            <div class="svc-process-num">02</div>
+            <div>
+              <h3>Vultr High-Performance Servers</h3>
+              <p style="color:var(--text-secondary);margin:0;">NVMe SSD cloud compute across 32 worldwide locations. Dedicated resources with automatic scaling — your site stays fast even during traffic spikes.</p>
             </div>
           </div>
-          <div class="card" style="border-left:4px solid #475568;">
-            <div class="process-step">
-              <div class="process-num">03</div>
-              <div>
-                <h3>Integrity Verification</h3>
-                <p style="color:var(--text-secondary);margin:0;">Every backup is automatically verified for completeness and integrity. We confirm your backup is actually restorable  not just a file that exists.</p>
-              </div>
+        </div>
+        <div class="card svc-process-card">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
+            <div class="svc-process-num">03</div>
+            <div>
+              <h3>Automated Backups & Recovery</h3>
+              <p style="color:var(--text-secondary);margin:0;">Daily backups stored across multiple cloud locations. One-click restore capability — your data is always safe and recoverable within minutes.</p>
             </div>
           </div>
-          <div class="card" style="border-left:4px solid #475568;">
-            <div class="process-step">
-              <div class="process-num">04</div>
-              <div>
-                <h3>Selective Restore Policies</h3>
-                <p style="color:var(--text-secondary);margin:0;">Restore only specific files, the database, or individual tables without touching the rest of your site. Surgical recovery when precision matters.</p>
-              </div>
+        </div>
+        <div class="card svc-process-card">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
+            <div class="svc-process-num">04</div>
+            <div>
+              <h3>Security & SSL Included</h3>
+              <p style="color:var(--text-secondary);margin:0;">SSL certificates, firewall, brute force protection, and malware scanning — all included. Enterprise security without enterprise pricing.</p>
             </div>
           </div>
         </div>
@@ -318,17 +343,17 @@
   </section>
 
   <!-- CTA -->
-  <section class="section">
+  <section class="section svc-cta">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">Not Sure Which Service You Need?</h2>
         <p class="section-description">
-          Free initial consultations  we assess your site and recommend the right combination
-          of services for your specific situation. No obligation.
+          Free initial consultations — we assess your needs and recommend the right combination
+          of WaaS services for your specific situation. No obligation.
         </p>
         <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
           <button class="btn-primary" onclick="location.href='/contact'"><span class="btn-desk">Book Free Consultation</span><span class="btn-mob">Consult</span></button>
-          <button class="btn-secondary" onclick="location.href='/solution'"><span class="btn-desk">Emergency Malware Help</span><span class="btn-mob">Emergency</span></button>
+          <button class="btn-secondary" onclick="location.href='/solution'"><span class="btn-desk">See How WaaS Works</span><span class="btn-mob">WaaS</span></button>
         </div>
       </div>
     </div>
@@ -345,72 +370,12 @@
     var ctx=c.getContext('2d');
     var W,H;
     function resize(){W=c.width=c.offsetWidth*2;H=c.height=c.offsetHeight*2;}
-    resize();
-    window.addEventListener('resize',resize);
-
-    var palettes=[
-      ['#ff6b6b','#4ecdc4','#45b7d1','#96ceb4'],
-      ['#a18cd1','#fbc2eb','#f6d365','#fda085'],
-      ['#667eea','#764ba2','#f093fb','#4facfe'],
-      ['#43e97b','#38f9d7','#fa709a','#fee140'],
-      ['#a1c4fd','#c2e9fb','#d4fc79','#96e6a1'],
-      ['#ffecd2','#fcb69f','#a1c4fd','#c2e9fb']
-    ];
-
-    var blobs=[];
-    var blobCount=5;
-
-    function makeBlob(instant){
-      var pal=palettes[Math.floor(Math.random()*palettes.length)];
-      var col=pal[Math.floor(Math.random()*pal.length)];
-      var r=parseInt(col.slice(1,3),16),g=parseInt(col.slice(3,5),16),b=parseInt(col.slice(5,7),16);
-      var blob={
-        x:Math.random()*W,y:Math.random()*H,
-        vx:(Math.random()-0.5)*0.8,vy:(Math.random()-0.5)*0.8,
-        radius:W*0.2+Math.random()*W*0.25,
-        r:r,g:g,b:b,
-        opacity:instant?0.25+Math.random()*0.15:0,
-        targetOpacity:0.25+Math.random()*0.15,
-        fadeIn:true,
-        life:0,
-        maxLife:600+Math.random()*800
-      };
-      return blob;
-    }
-
+    resize();window.addEventListener('resize',resize);
+    var palettes=[['#ff6b6b','#4ecdc4','#45b7d1','#96ceb4'],['#a18cd1','#fbc2eb','#f6d365','#fda085'],['#667eea','#764ba2','#f093fb','#4facfe'],['#43e97b','#38f9d7','#fa709a','#fee140'],['#a1c4fd','#c2e9fb','#d4fc79','#96e6a1'],['#ffecd2','#fcb69f','#a1c4fd','#c2e9fb']];
+    var blobs=[],blobCount=5;
+    function makeBlob(instant){var pal=palettes[Math.floor(Math.random()*palettes.length)];var col=pal[Math.floor(Math.random()*pal.length)];var r=parseInt(col.slice(1,3),16),g=parseInt(col.slice(3,5),16),b=parseInt(col.slice(5,7),16);return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.8,vy:(Math.random()-0.5)*0.8,radius:W*0.2+Math.random()*W*0.25,r:r,g:g,b:b,opacity:instant?0.25+Math.random()*0.15:0,targetOpacity:0.25+Math.random()*0.15,fadeIn:true,life:0,maxLife:600+Math.random()*800};}
     for(var i=0;i<blobCount;i++){blobs.push(makeBlob(true));}
-
-    function draw(){
-      ctx.clearRect(0,0,W,H);
-
-      for(var i=blobs.length-1;i>=0;i--){
-        var b=blobs[i];
-        b.x+=b.vx;b.y+=b.vy;
-        b.life++;
-
-        if(b.x<-b.radius)b.x=W+b.radius;
-        if(b.x>W+b.radius)b.x=-b.radius;
-        if(b.y<-b.radius)b.y=H+b.radius;
-        if(b.y>H+b.radius)b.y=-b.radius;
-
-        if(b.fadeIn){
-          b.opacity+=0.002;
-          if(b.opacity>=b.targetOpacity){b.opacity=b.targetOpacity;b.fadeIn=false;}
-        }
-        if(b.life>b.maxLife){
-          b.opacity-=0.003;
-          if(b.opacity<=0){blobs.splice(i,1);blobs.push(makeBlob(false));continue;}
-        }
-
-        var grad=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.radius);
-        grad.addColorStop(0,'rgba('+b.r+','+b.g+','+b.b+','+b.opacity+')');
-        grad.addColorStop(1,'rgba('+b.r+','+b.g+','+b.b+',0)');
-        ctx.fillStyle=grad;
-        ctx.fillRect(b.x-b.radius,b.y-b.radius,b.radius*2,b.radius*2);
-      }
-
-      requestAnimationFrame(draw);
-    }
+    function draw(){ctx.clearRect(0,0,W,H);for(var i=blobs.length-1;i>=0;i--){var b=blobs[i];b.x+=b.vx;b.y+=b.vy;b.life++;if(b.x<-b.radius)b.x=W+b.radius;if(b.x>W+b.radius)b.x=-b.radius;if(b.y<-b.radius)b.y=H+b.radius;if(b.y>H+b.radius)b.y=-b.radius;if(b.fadeIn){b.opacity+=0.002;if(b.opacity>=b.targetOpacity){b.opacity=b.targetOpacity;b.fadeIn=false;}}if(b.life>b.maxLife){b.opacity-=0.003;if(b.opacity<=0){blobs.splice(i,1);blobs.push(makeBlob(false));continue;}}var grad=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.radius);grad.addColorStop(0,'rgba('+b.r+','+b.g+','+b.b+','+b.opacity+')');grad.addColorStop(1,'rgba('+b.r+','+b.g+','+b.b+',0)');ctx.fillStyle=grad;ctx.fillRect(b.x-b.radius,b.y-b.radius,b.radius*2,b.radius*2);}requestAnimationFrame(draw);}
     draw();
   })();
   </script>

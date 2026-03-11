@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Professional Malware Removal Service powered by Sucuri. Emergency Website security and malware cleaning with 24-hour response time.">
-  <title>Malware Care Service - Noteracker Ltd.</title>
+  <meta name="description" content="How WaaS Works - Noteracker's all-in-one Website as a Service platform. From onboarding to launch, powered by Cloudflare & Vultr with AI chatbot integration.">
+  <title>How WaaS Works - Noteracker Ltd.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -22,27 +22,55 @@
   <section class="hero hero-malware-care" style="min-height: 700px; height: 700px; overflow:hidden;">
     <canvas id="mc-hero-grad" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
     <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(28,34,40,0.6);z-index:1;"></div>
-    <div class="hero-container" style="padding-left: 80px; position:relative; z-index:2;">
+    <div class="hero-container" style="position:relative; z-index:2;">
       <div class="hero-content">
-        <span class="hero-badge">Emergency Malware Response</span>
+        <span class="hero-badge">How WaaS Works</span>
         <h1 style="color: #fff;">
-          Malware Removal<br>
-          <span class="hero-highlight">Within 24 Hours</span>
+          Your Business Online<br>
+          <span class="hero-highlight">In Days, Not Months</span>
         </h1>
         <p>
-          Detect, remove, and prevent malware with Sucuri enterprise security.
+          From concept to launch — our WaaS platform handles everything so you can focus on growth.
         </p>
         <div class="hero-buttons" style="margin-top: 2rem;">
           <button class="btn-primary" onclick="location.href='/contact'">
-            <span class="btn-desk">Get Emergency Help Now</span><span class="btn-mob">Get Help</span>
+            <span class="btn-desk">Start Free Consultation</span><span class="btn-mob">Start</span>
           </button>
           <button class="btn-secondary" onclick="document.getElementById('process').scrollIntoView({behavior: 'smooth'})">
             <span class="btn-desk">See How It Works</span><span class="btn-mob">How It Works</span>
           </button>
         </div>
       </div>
-      <div class="hero-animation" style="margin-top: 40px;">
-        <div id="malware-animation"></div>
+      <!-- Right: Lottie-style widget -->
+      <div class="sol-lottie">
+        <div class="lottie-wrap" id="sol-lottie-widget">
+          <div class="lstep lstep-active" data-step="0">
+            <div class="sol-lstep-title">Design & Build</div>
+            <div class="sol-lstep-row"><div class="sol-lstep-icon"><img src="/images/icons/opt/2721593.webp" alt="" width="20" height="20"></div><div class="sol-lstep-text"><strong>Custom Design</strong> — Brand-aligned aesthetics</div></div>
+            <div class="sol-lstep-row"><div class="sol-lstep-icon"><img src="/images/icons/opt/3250757.webp" alt="" width="20" height="20"></div><div class="sol-lstep-text"><strong>Cloud Setup</strong> — Cloudflare + Vultr</div></div>
+            <div class="sol-lstep-row"><div class="sol-lstep-icon"><img src="/images/icons/opt/1375106.webp" alt="" width="20" height="20"></div><div class="sol-lstep-text"><strong>E-Commerce</strong> — Store & payments ready</div></div>
+            <div class="sol-lstep-bar"><div class="sol-lstep-bar-fill"></div></div>
+          </div>
+          <div class="lstep" data-step="1">
+            <div class="sol-lstep-title">Launch & Optimize</div>
+            <div class="sol-lstep-row"><div class="sol-lstep-icon"><img src="/images/icons/opt/3786576.webp" alt="" width="20" height="20"></div><div class="sol-lstep-text"><strong>SEO Ready</strong> — Core Web Vitals optimized</div></div>
+            <div class="sol-lstep-row"><div class="sol-lstep-icon"><img src="/images/icons/opt/595764.webp" alt="" width="20" height="20"></div><div class="sol-lstep-text"><strong>Security</strong> — SSL, WAF & DDoS protection</div></div>
+            <div class="sol-lstep-row"><div class="sol-lstep-icon"><img src="/images/icons/opt/2997954.webp" alt="" width="20" height="20"></div><div class="sol-lstep-text"><strong>Analytics</strong> — Performance dashboards</div></div>
+            <div class="sol-lstep-bar"><div class="sol-lstep-bar-fill"></div></div>
+          </div>
+          <div class="lstep" data-step="2">
+            <div class="sol-lstep-title">Manage & Grow</div>
+            <div class="sol-lstep-row"><div class="sol-lstep-icon"><img src="/images/icons/opt/3000777.webp" alt="" width="20" height="20"></div><div class="sol-lstep-text"><strong>AI Chatbot</strong> — 24/7 automated support</div></div>
+            <div class="sol-lstep-row"><div class="sol-lstep-icon"><img src="/images/icons/opt/4121798.webp" alt="" width="20" height="20"></div><div class="sol-lstep-text"><strong>CRM</strong> — Lead tracking & automation</div></div>
+            <div class="sol-lstep-row"><div class="sol-lstep-icon"><img src="/images/icons/opt/921490.webp" alt="" width="20" height="20"></div><div class="sol-lstep-text"><strong>Updates</strong> — Continuous maintenance</div></div>
+            <div class="sol-lstep-bar"><div class="sol-lstep-bar-fill"></div></div>
+          </div>
+          <div class="lnav">
+            <button class="lnav-btn active" data-target="0"></button>
+            <button class="lnav-btn" data-target="1"></button>
+            <button class="lnav-btn" data-target="2"></button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -51,113 +79,101 @@
   <section class="section" style="background-color: var(--bg-secondary);">
     <div class="container">
       <div class="section-header">
-        <span class="section-badge warning-badge">Warning Signs</span>
-        <h2 class="section-title">Is Your Website Infected?</h2>
+        <span class="section-badge warning-badge">Common Pain Points</span>
+        <h2 class="section-title">Is Your Web Operation Holding You Back?</h2>
         <p class="section-description">
-          Don't wait until it's too late. These symptoms indicate your site needs immediate attention.
+          These are the signs that your current web setup is costing you time, money, and growth.
         </p>
       </div>
 
       <div class="card-grid">
         <div class="card warning-card">
-          <h3>Google Blacklist Warning</h3>
+          <h3>Too Many Vendors</h3>
           <p>
-            Your site displays "This site may be hacked" or "Deceptive site ahead" warnings in search results.
-            This destroys your rankings, credibility, and can result in 95% traffic loss overnight.
+            Hosting provider, security service, design agency, SEO consultant, email marketing tool —
+            juggling multiple vendors means higher costs, slower communication, and integration headaches.
           </p>
         </div>
 
         <div class="card warning-card">
-          <h3>Unauthorized Redirects</h3>
+          <h3>Slow & Outdated Website</h3>
           <p>
-            Users or search engines are redirected to spam sites, pharmaceutical pages, or adult content.
-            Classic injection attack that damages reputation and SEO while generating revenue for attackers.
+            Your site loads slowly, looks dated, and doesn't work well on mobile. Visitors leave,
+            search rankings drop, and competitors with modern sites capture your potential customers.
           </p>
         </div>
 
         <div class="card warning-card">
-          <h3>Hosting Suspension</h3>
+          <h3>No Customer Automation</h3>
           <p>
-            Your hosting provider has suspended your account or sent warnings about malicious activity detected
-            on your server. Time is criticalpermanent data loss possible within 24-48 hours.
+            Manual customer support, no lead tracking, no email automation — you're spending hours on
+            tasks that an AI chatbot and CRM could handle automatically while you sleep.
           </p>
         </div>
 
         <div class="card warning-card">
-          <h3>Unknown Admin Accounts</h3>
+          <h3>Escalating Costs</h3>
           <p>
-            Mysterious administrator accounts appear in your Website dashboard, or you can't log in with
-            your credentials. Full site compromiseattackers have complete control of your website.
+            Hosting fees, plugin licenses, security subscriptions, developer hourly rates — costs keep
+            climbing while results stay flat. WaaS consolidates everything into one predictable fee.
           </p>
         </div>
       </div>
 
       <div style="text-align: center; margin-top: 3rem;">
         <p style="font-size: 1.2rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 1.5rem;">
-          Experiencing any of these symptoms? Act now to minimize damage.
+          Sound familiar? WaaS solves all of these — in one subscription.
         </p>
         <button class="btn-primary" onclick="location.href='/contact'">
-          <span class="btn-desk">Request Emergency Cleanup</span><span class="btn-mob">Get Help</span>
+          <span class="btn-desk">Start Free Consultation</span><span class="btn-mob">Consult</span>
         </button>
       </div>
     </div>
   </section>
 
-  <!-- Powered by Sucuri Section -->
+  <!-- Powered by Cloudflare & Vultr Section -->
   <section class="section">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Our Technology</span>
-        <h2 class="section-title">Powered by Sucuri Security</h2>
+        <h2 class="section-title">Powered by Cloudflare & Vultr</h2>
         <p class="section-description">
-          We leverage Sucuri's enterprise-grade security platformtrusted by Fortune 500 companies and
-          major websites worldwideto deliver institutional-quality malware removal services.
+          We leverage enterprise-grade cloud infrastructure — Cloudflare's global edge network and
+          Vultr's high-performance compute — to deliver fast, secure, and reliable web services.
         </p>
       </div>
 
-      <div>
-        <div class="card" style="padding: 3rem; background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary)); border: 2px solid var(--accent-primary);">
-          <div class="mc-featured-card-grid">
-            <div>
-              <h3 style="color: var(--text-primary); font-size: 2rem; margin-bottom: 1.5rem;">Why Sucuri?</h3>
-              <p style="margin-bottom: 1.5rem;">
-                Sucuri is the industry standard for website security, providing comprehensive protection
-                against all types of malware, backdoors, and vulnerabilities.
-              </p>
-              <ul style="list-style: none; padding: 0;">
-                <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
-                  ✓ Real-time threat detection and monitoring
-                </li>
-                <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
-                  ✓ Advanced malware signature database
-                </li>
-                <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
-                  ✓ Zero-day vulnerability protection
-                </li>
-                <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
-                  ✓ Post-cleanup hardening and protection
-                </li>
-                <li style="padding: 0.75rem 0; color: var(--text-secondary);">
-                  ✓ Continuous security monitoring
-                </li>
-              </ul>
-            </div>
+      <div class="card" style="padding: 3rem; background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary)); border: 2px solid var(--accent-primary); box-shadow: var(--shadow-glow);">
+        <div class="mc-featured-card-grid">
+          <div>
+            <h3 style="color: var(--text-primary); font-size: 2rem; margin-bottom: 1.5rem;">Why This Stack?</h3>
+            <p style="margin-bottom: 1.5rem;">
+              Cloudflare + Vultr is the optimal combination for modern web services — delivering
+              enterprise performance at a fraction of traditional infrastructure costs.
+            </p>
+            <ul class="sol-check-list">
+              <li>300+ Cloudflare edge locations worldwide</li>
+              <li>NVMe SSD servers with dedicated resources</li>
+              <li>Built-in DDoS protection and WAF</li>
+              <li>Automatic SSL and security updates</li>
+              <li>99.9% uptime guarantee with auto-scaling</li>
+            </ul>
+          </div>
 
-            <div style="background-color: var(--bg-secondary); padding: 2rem; border-radius: 12px;">
-              <h4 style="color: var(--text-primary); margin-bottom: 1.5rem; text-align: center;">By The Numbers</h4>
-              <div style="display: grid; gap: 1.5rem;">
-                <div style="text-align: center;">
-                  <div style="font-size: 2.5rem; font-weight: 800; color: #C2CBD7;">6M+</div>
-                  <div style="color: var(--text-secondary);">Sites Protected</div>
-                </div>
-                <div style="text-align: center;">
-                  <div style="font-size: 2.5rem; font-weight: 800; color: #C2CBD7;">450K+</div>
-                  <div style="color: var(--text-secondary);">Malware Infections Cleaned</div>
-                </div>
-                <div style="text-align: center;">
-                  <div style="font-size: 2.5rem; font-weight: 800; color: #C2CBD7;">24/7</div>
-                  <div style="color: var(--text-secondary);">Security Operations Center</div>
-                </div>
+          <div style="background-color: var(--bg-elevated); padding: 2.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+            <h4 style="color: var(--text-primary); margin-bottom: 2rem; text-align: center;">By The Numbers</h4>
+            <div style="display: grid; gap: 2rem;">
+              <div style="text-align: center;">
+                <div class="sol-stat-num">300+</div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem;">Cloudflare Edge Locations</div>
+              </div>
+              <div style="text-align: center;">
+                <div class="sol-stat-num">32</div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem;">Vultr Server Locations</div>
+              </div>
+              <div style="text-align: center;">
+                <div class="sol-stat-num">99.9%</div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem;">Uptime Guarantee</div>
               </div>
             </div>
           </div>
@@ -171,122 +187,122 @@
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Step-by-Step</span>
-        <h2 class="section-title">Our Malware Removal Process</h2>
+        <h2 class="section-title">Our WaaS Onboarding Process</h2>
         <p class="section-description">
-          A proven, systematic approach that ensures complete malware removal and prevents reinfection.
+          A proven, systematic approach that takes your business from concept to fully managed web platform.
         </p>
       </div>
 
       <div class="two-col-grid">
-        <div class="card" style="border-left: 4px solid #475568;">
-          <div class="process-step">
+        <div class="card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
             <div class="mc-process-num">01</div>
             <div>
-              <h3>Emergency Assessment</h3>
+              <h3>Discovery & Consultation</h3>
               <p>
-                Within 1 hour of your request, our team conducts a comprehensive security audit using Sucuri's
-                scanning tools. We identify all infected files, backdoors, and vulnerabilities.
+                We start with a thorough consultation to understand your business goals, target audience,
+                and technical requirements. We audit your existing web presence and identify opportunities.
               </p>
               <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                <li>Complete file system scan</li>
-                <li>Database integrity check</li>
-                <li>External blacklist status review</li>
-                <li>Entry point identification</li>
+                <li>Business goals & audience analysis</li>
+                <li>Current website audit</li>
+                <li>Service requirements mapping</li>
+                <li>Technology stack recommendation</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <div class="card" style="border-left: 4px solid #475568;">
-          <div class="process-step">
+        <div class="card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
             <div class="mc-process-num">02</div>
             <div>
-              <h3>Secure Backup Creation</h3>
+              <h3>Design & Architecture</h3>
               <p>
-                Before any cleanup work begins, we create a complete backup of your current site state.
-                This ensures we can restore if needed (though we rarely need to).
+                Our team designs your website, sets up the architecture, and configures all requested
+                services — shopping, LMS, CRM, and AI chatbot — on Cloudflare + Vultr infrastructure.
               </p>
               <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                <li>Full file system backup</li>
-                <li>Complete database export</li>
-                <li>Configuration files snapshot</li>
-                <li>Secure off-site storage</li>
+                <li>Custom website design & branding</li>
+                <li>Cloud server provisioning</li>
+                <li>Service module configuration</li>
+                <li>CDN & security setup</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <div class="card" style="border-left: 4px solid #475568;">
-          <div class="process-step">
+        <div class="card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
             <div class="mc-process-num">03</div>
             <div>
-              <h3>Malware Removal & Cleanup</h3>
+              <h3>Development & Integration</h3>
               <p>
-                Our experts manually remove all malicious code, backdoors, and infected files. We don't use
-                automated tools aloneevery cleanup is verified by human security professionals.
+                We build your site with all integrated services — e-commerce products, LMS courses,
+                CRM workflows, and AI chatbot training — fully tested before going live.
               </p>
               <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                <li>Remove all malware and backdoors</li>
-                <li>Clean infected core files</li>
-                <li>Sanitize database tables</li>
-                <li>Remove unauthorized admin accounts</li>
+                <li>Full website development</li>
+                <li>E-commerce & payment integration</li>
+                <li>CRM & automation workflows</li>
+                <li>AI chatbot training & deployment</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <div class="card" style="border-left: 4px solid #475568;">
-          <div class="process-step">
+        <div class="card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
             <div class="mc-process-num">04</div>
             <div>
-              <h3>Security Hardening</h3>
+              <h3>Testing & Quality Assurance</h3>
               <p>
-                Cleaning isn't enoughwe harden your site to prevent reinfection. This includes patching
-                vulnerabilities, updating software, and implementing security best practices.
+                Rigorous testing across devices and browsers. Performance benchmarks, security scans,
+                and user experience validation ensure your platform is launch-ready.
               </p>
               <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                <li>Update Website core, themes, plugins</li>
-                <li>Patch identified vulnerabilities</li>
-                <li>Strengthen file permissions</li>
-                <li>Install security plugins and firewalls</li>
+                <li>Cross-device & browser testing</li>
+                <li>Performance & speed benchmarks</li>
+                <li>Security audit & penetration testing</li>
+                <li>User acceptance testing</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <div class="card" style="border-left: 4px solid #475568;">
-          <div class="process-step">
+        <div class="card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
             <div class="mc-process-num">05</div>
             <div>
-              <h3>Blacklist Removal</h3>
+              <h3>Launch & Go Live</h3>
               <p>
-                If your site has been blacklisted by Google, Norton, or other security vendors, we handle the
-                entire delisting process on your behalf.
+                DNS configuration, SSL activation, and final deployment. Your site goes live on
+                Cloudflare's global edge network — instantly fast and secure worldwide.
               </p>
               <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                <li>Submit reconsideration requests</li>
-                <li>Provide required documentation</li>
-                <li>Follow up until delisted</li>
-                <li>Monitor for re-listing</li>
+                <li>DNS & domain configuration</li>
+                <li>SSL certificate activation</li>
+                <li>CDN & caching deployment</li>
+                <li>Go-live checklist verification</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <div class="card" style="border-left: 4px solid #475568;">
-          <div class="process-step">
-            <div style="font-size: 2.5rem; font-weight: 800; color: #C2CBD7; min-width: 60px;">06</div>
+        <div class="card" style="border-left: 4px solid var(--accent-primary);">
+          <div style="display:flex;gap:1.5rem;padding:1.5rem;align-items:flex-start;">
+            <div class="mc-process-num">06</div>
             <div>
-              <h3>Monitoring & Prevention</h3>
+              <h3>Ongoing Management & Growth</h3>
               <p>
-                Post-cleanup, we monitor your site for 30 days to ensure complete recovery. We also provide
-                detailed reports and recommendations for ongoing security.
+                Post-launch, our team continuously manages your platform — updates, security,
+                content changes, and performance optimization are all included in your plan.
               </p>
               <ul style="color: var(--text-secondary); margin-top: 1rem;">
-                <li>30-day security monitoring</li>
-                <li>Detailed cleanup report</li>
-                <li>Security recommendations</li>
-                <li>Optional ongoing protection plans</li>
+                <li>Continuous updates & maintenance</li>
+                <li>Monthly performance reports</li>
+                <li>Content & design updates</li>
+                <li>Growth strategy recommendations</li>
               </ul>
             </div>
           </div>
@@ -300,58 +316,58 @@
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Technical Expertise</span>
-        <h2 class="section-title">What We Can Remove</h2>
+        <h2 class="section-title">What We Build & Manage</h2>
         <p class="section-description">
-          Our team has experience with all types of Website malware and security compromises.
+          Our team has deep experience across all major web platforms and business applications.
         </p>
       </div>
 
       <div class="card-grid">
         <div class="card">
-          <h3 style="color: var(--text-primary);">Malware Types</h3>
-          <ul style="list-style: none; padding: 0; color: var(--text-secondary);">
-            <li style="padding: 0.5rem 0;">✓ Backdoor shells</li>
-            <li style="padding: 0.5rem 0;">✓ SEO spam injections</li>
-            <li style="padding: 0.5rem 0;">✓ Pharma hacks</li>
-            <li style="padding: 0.5rem 0;">✓ Japanese keyword hack</li>
-            <li style="padding: 0.5rem 0;">✓ Credit card skimmers</li>
-            <li style="padding: 0.5rem 0;">✓ Drive-by downloads</li>
+          <h3 style="color: var(--text-primary);">Website Types</h3>
+          <ul class="sol-check-list">
+            <li>Corporate & business sites</li>
+            <li>E-commerce & online stores</li>
+            <li>Portfolio & creative sites</li>
+            <li>Blog & media platforms</li>
+            <li>Landing pages & funnels</li>
+            <li>Multi-language sites</li>
           </ul>
         </div>
 
         <div class="card">
-          <h3 style="color: var(--text-primary);">Compromises</h3>
-          <ul style="list-style: none; padding: 0; color: var(--text-secondary);">
-            <li style="padding: 0.5rem 0;">✓ Brute force attacks</li>
-            <li style="padding: 0.5rem 0;">✓ Unauthorized admin access</li>
-            <li style="padding: 0.5rem 0;">✓ Database injections</li>
-            <li style="padding: 0.5rem 0;">✓ Plugin vulnerabilities</li>
-            <li style="padding: 0.5rem 0;">✓ Theme exploits</li>
-            <li style="padding: 0.5rem 0;">✓ Server-side infections</li>
+          <h3 style="color: var(--text-primary);">E-Commerce</h3>
+          <ul class="sol-check-list">
+            <li>WooCommerce stores</li>
+            <li>Custom e-commerce solutions</li>
+            <li>Payment gateway integration</li>
+            <li>Inventory management</li>
+            <li>Subscription commerce</li>
+            <li>Multi-currency support</li>
           </ul>
         </div>
 
         <div class="card">
-          <h3 style="color: var(--text-primary);">Redirects</h3>
-          <ul style="list-style: none; padding: 0; color: var(--text-secondary);">
-            <li style="padding: 0.5rem 0;">✓ JavaScript redirects</li>
-            <li style="padding: 0.5rem 0;">✓ .htaccess manipulation</li>
-            <li style="padding: 0.5rem 0;">✓ Meta refresh redirects</li>
-            <li style="padding: 0.5rem 0;">✓ PHP header redirects</li>
-            <li style="padding: 0.5rem 0;">✓ Conditional redirects</li>
-            <li style="padding: 0.5rem 0;">✓ Mobile-only redirects</li>
+          <h3 style="color: var(--text-primary);">LMS & Education</h3>
+          <ul class="sol-check-list">
+            <li>Course creation & delivery</li>
+            <li>Quiz & assessment systems</li>
+            <li>Certificate generation</li>
+            <li>Membership management</li>
+            <li>Student progress tracking</li>
+            <li>Video hosting & streaming</li>
           </ul>
         </div>
 
         <div class="card">
-          <h3 style="color: var(--text-primary);">Injections</h3>
-          <ul style="list-style: none; padding: 0; color: var(--text-secondary);">
-            <li style="padding: 0.5rem 0;">✓ SQL injection attacks</li>
-            <li style="padding: 0.5rem 0;">✓ Cross-site scripting (XSS)</li>
-            <li style="padding: 0.5rem 0;">✓ Code injection</li>
-            <li style="padding: 0.5rem 0;">✓ Content injection</li>
-            <li style="padding: 0.5rem 0;">✓ Link injection</li>
-            <li style="padding: 0.5rem 0;">✓ Hidden iframe injection</li>
+          <h3 style="color: var(--text-primary);">CRM & AI</h3>
+          <ul class="sol-check-list">
+            <li>Lead tracking & pipeline</li>
+            <li>Email automation</li>
+            <li>Customer segmentation</li>
+            <li>AI chatbot deployment</li>
+            <li>Analytics & reporting</li>
+            <li>Workflow automation</li>
           </ul>
         </div>
       </div>
@@ -362,18 +378,18 @@
   <section class="section cta-gradient">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title" style="font-size: 2.5rem;">Don't Let Malware Destroy Your Business</h2>
+        <h2 class="section-title" style="font-size: 2.5rem;">Ready to Simplify Your Web Operations?</h2>
         <p class="section-description" style="font-size: 1.2rem;">
-          Every hour your site remains infected costs you traffic, revenue, and reputation.
-          Our emergency response team is standing by.
+          Stop overpaying for scattered services. Get everything you need in one managed platform —
+          website, store, CRM, LMS, and AI chatbot.
         </p>
         <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
           <button class="btn-primary" onclick="location.href='/contact'" style="white-space: nowrap;">
-            <span class="btn-desk">Get Help Now - Response in 1 Hour</span><span class="btn-mob">Get Help Now</span>
+            <span class="btn-desk">Start Free Consultation Today</span><span class="btn-mob">Get Started</span>
           </button>
         </div>
         <p style="margin-top: 2rem; color: var(--text-muted);">
-          Or email us directly: <a href="/cdn-cgi/l/email-protection#562523262639242216383922332437353d33247835393b" style="color: #C2CBD7; font-weight: 600;"><span class="__cf_email__" data-cfemail="80f3f5f0f0eff2f4c0eeeff4e5f2e1e3ebe5f2aee3efed">[email&#160;protected]</span></a>
+          Or email us directly: <a href="mailto:support@noteracker.com" style="color: var(--accent-primary); font-weight: 600;">support@noteracker.com</a>
         </p>
       </div>
     </div>
@@ -391,54 +407,11 @@
     var W,H;
     function resize(){W=c.width=c.offsetWidth*2;H=c.height=c.offsetHeight*2;}
     resize();window.addEventListener('resize',resize);
-    var palettes=[
-      ['#dc143c','#8b0000','#ff4500','#b22222'],
-      ['#c0392b','#e74c3c','#ff6347','#cd5c5c'],
-      ['#800020','#a52a2a','#d63031','#e17055']
-    ];
+    var palettes=[['#e6b802','#fde68a','#899e2e','#d4a017'],['#f6d365','#fda085','#e6b802','#fbc2eb'],['#ffecd2','#fcb69f','#e6b802','#899e2e']];
     var blobs=[],count=5,t=0;
-    var flashBlobs=[];
-    function makeBlob(instant){
-      var pal=palettes[Math.floor(Math.random()*palettes.length)];
-      var col=pal[Math.floor(Math.random()*pal.length)];
-      var r=parseInt(col.slice(1,3),16),g=parseInt(col.slice(3,5),16),b=parseInt(col.slice(5,7),16);
-      return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.7,vy:(Math.random()-0.5)*0.7,
-        radius:W*0.18+Math.random()*W*0.22,r:r,g:g,b:b,
-        opacity:instant?0.2+Math.random()*0.12:0,targetOpacity:0.2+Math.random()*0.12,
-        fadeIn:true,life:0,maxLife:400+Math.random()*500,
-        throb:0.01+Math.random()*0.008,throbPhase:Math.random()*Math.PI*2};
-    }
+    function makeBlob(instant){var pal=palettes[Math.floor(Math.random()*palettes.length)];var col=pal[Math.floor(Math.random()*pal.length)];var r=parseInt(col.slice(1,3),16),g=parseInt(col.slice(3,5),16),b=parseInt(col.slice(5,7),16);return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.7,vy:(Math.random()-0.5)*0.7,radius:W*0.18+Math.random()*W*0.22,r:r,g:g,b:b,opacity:instant?0.2+Math.random()*0.12:0,targetOpacity:0.2+Math.random()*0.12,fadeIn:true,life:0,maxLife:400+Math.random()*500,throb:0.01+Math.random()*0.008,throbPhase:Math.random()*Math.PI*2};}
     for(var i=0;i<count;i++)blobs.push(makeBlob(true));
-    function makeFlash(){
-      return{x:Math.random()*W,y:Math.random()*H,radius:W*0.1+Math.random()*W*0.15,
-        opacity:0.3+Math.random()*0.2,decay:0.008+Math.random()*0.005};
-    }
-    function draw(){
-      ctx.clearRect(0,0,W,H);t++;
-      for(var i=blobs.length-1;i>=0;i--){
-        var b=blobs[i];b.x+=b.vx;b.y+=b.vy;b.life++;
-        var scale=1+Math.sin(t*b.throb+b.throbPhase)*0.12;
-        if(b.x<-b.radius)b.x=W+b.radius;if(b.x>W+b.radius)b.x=-b.radius;
-        if(b.y<-b.radius)b.y=H+b.radius;if(b.y>H+b.radius)b.y=-b.radius;
-        if(b.fadeIn){b.opacity+=0.003;if(b.opacity>=b.targetOpacity){b.opacity=b.targetOpacity;b.fadeIn=false;}}
-        if(b.life>b.maxLife){b.opacity-=0.004;if(b.opacity<=0){blobs.splice(i,1);blobs.push(makeBlob(false));continue;}}
-        var rad=b.radius*scale;
-        var grad=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,rad);
-        grad.addColorStop(0,'rgba('+b.r+','+b.g+','+b.b+','+b.opacity+')');
-        grad.addColorStop(1,'rgba('+b.r+','+b.g+','+b.b+',0)');
-        ctx.fillStyle=grad;ctx.fillRect(b.x-rad,b.y-rad,rad*2,rad*2);
-      }
-      for(var j=flashBlobs.length-1;j>=0;j--){
-        var f=flashBlobs[j];f.opacity-=f.decay;
-        if(f.opacity<=0){flashBlobs.splice(j,1);continue;}
-        var fg=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.radius);
-        fg.addColorStop(0,'rgba(255,80,60,'+f.opacity+')');
-        fg.addColorStop(1,'rgba(255,80,60,0)');
-        ctx.fillStyle=fg;ctx.fillRect(f.x-f.radius,f.y-f.radius,f.radius*2,f.radius*2);
-      }
-      if(Math.random()<0.005&&flashBlobs.length<3)flashBlobs.push(makeFlash());
-      requestAnimationFrame(draw);
-    }
+    function draw(){ctx.clearRect(0,0,W,H);t++;for(var i=blobs.length-1;i>=0;i--){var b=blobs[i];b.x+=b.vx;b.y+=b.vy;b.life++;var scale=1+Math.sin(t*b.throb+b.throbPhase)*0.12;if(b.x<-b.radius)b.x=W+b.radius;if(b.x>W+b.radius)b.x=-b.radius;if(b.y<-b.radius)b.y=H+b.radius;if(b.y>H+b.radius)b.y=-b.radius;if(b.fadeIn){b.opacity+=0.003;if(b.opacity>=b.targetOpacity){b.opacity=b.targetOpacity;b.fadeIn=false;}}if(b.life>b.maxLife){b.opacity-=0.004;if(b.opacity<=0){blobs.splice(i,1);blobs.push(makeBlob(false));continue;}}var rad=b.radius*scale;var grad=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,rad);grad.addColorStop(0,'rgba('+b.r+','+b.g+','+b.b+','+b.opacity+')');grad.addColorStop(1,'rgba('+b.r+','+b.g+','+b.b+',0)');ctx.fillStyle=grad;ctx.fillRect(b.x-rad,b.y-rad,rad*2,rad*2);}requestAnimationFrame(draw);}
     draw();
   })();
   </script>
