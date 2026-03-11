@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Blog – Noteracker</title>
+  <meta name="description" id="page-desc" content="Noteracker Blog" />
+  <meta name="keywords" content="malware removal, website security, vulnerability, threat detection, security hardening, incident response" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/blog-post.css" />
+</head>
+<body>
+
+  <div id="header-one"></div>
+
+  <!-- POST HERO -->
+  <section id="post-hero">
+    <div class="post-hero-bg" id="hero-bg"></div>
+    <div class="post-hero-overlay"></div>
+    <div class="container">
+      <div class="post-hero-inner">
+        <div class="post-breadcrumb">
+          <a href="/blog.html">Blog</a>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span id="hero-category">General</span>
+        </div>
+        <h1 class="post-hero-title" id="hero-title">Loading…</h1>
+        <div class="post-hero-meta">
+          <span class="meta-author" id="hero-author"></span>
+          <span class="meta-sep" id="sep-author" style="display:none;">·</span>
+          <span class="meta-date" id="hero-date"></span>
+          <span class="meta-sep">·</span>
+          <span class="meta-readtime" id="hero-readtime"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3-COLUMN POST LAYOUT -->
+  <div class="post-wrap">
+    <div class="container">
+      <div class="post-layout">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar-left">
+          <div class="sidebar-block">
+            <div class="sidebar-label">Recent Posts</div>
+            <ul class="recent-posts-list" id="recent-posts">
+              <li class="recent-post-skeleton"></li>
+              <li class="recent-post-skeleton"></li>
+              <li class="recent-post-skeleton"></li>
+            </ul>
+          </div>
+          <!-- SHOP PROMO: left sidebar (동적 로드) -->
+          <div class="sidebar-block" id="sidebar-left-product">
+            <div class="sidebar-shop-label">From Our Shop</div>
+            <div class="sidebar-shop-nophoto">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </div>
+            <a href="https://n0005.wonseok413.workers.dev/shop.html" class="btn sidebar-btn">Visit Shop →</a>
+          </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <article class="post-body">
+
+          <!-- FEATURED IMAGE -->
+          <div class="post-featured-wrap" id="featured-img-wrap">
+            <div class="post-featured-placeholder" id="featured-placeholder"></div>
+            <img class="post-featured-img" id="featured-img" alt=""
+              style="opacity:0;transition:opacity .4s;"
+              onload="this.style.opacity='1';document.getElementById('featured-placeholder').style.display='none';"
+              onerror="this.style.display='none';" />
+          </div>
+
+          <!-- DATE -->
+          <div class="post-date-line" id="post-date-line"></div>
+
+          <!-- CONTENT -->
+          <div class="post-content" id="post-content"></div>
+
+          <!-- CTA BANNER -->
+          <div class="post-cta-banner">
+            <div class="post-cta-inner">
+              <div class="post-cta-text">
+                <strong>Need help securing your website?</strong>
+                <p>Noteracker offers professional security monitoring, malware removal, and incident response services.</p>
+              </div>
+              <a href="/contact" class="btn">Contact Us →</a>
+            </div>
+          </div>
+
+          <!-- AUTHOR BLOCK -->
+          <div class="post-author-block">
+            <div class="author-avatar-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            </div>
+            <div class="author-info">
+              <div class="author-name" id="author-name">Noteracker Security Team</div>
+              <div class="author-bio">Expert cybersecurity professionals specializing in malware removal, vulnerability analysis, and website protection.</div>
+              <a href="/blog.html" class="btn btn-ghost btn-sm">All Posts</a>
+            </div>
+          </div>
+
+          <!-- SOCIAL SHARE -->
+          <div class="post-share">
+            <div class="share-label">Share this post</div>
+            <div class="share-buttons">
+              <button class="share-btn" onclick="sharePost('twitter')">
+                <svg viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48z"/></svg>
+                X (Twitter)
+              </button>
+              <button class="share-btn" onclick="sharePost('facebook')">
+                <svg viewBox="0 0 800 800"><path fill="currentColor" d="M768 0H32C14.3 0 0 14.3 0 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32zm-92.4 233.5h-63.9c-50.1 0-59.8 23.8-59.8 58.8v77.1h119.6l-15.6 120.7h-104V800H427.2V490.2H322.9V369.4h104.3v-89c0-103.3 63.1-159.6 155.3-159.6 44.2 0 82.1 3.3 93.2 4.8v107.9z"/></svg>
+                Facebook
+              </button>
+              <button class="share-btn" onclick="sharePost('linkedin')">
+                <svg viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243a38.5 38.5 0 110-77 38.5 38.5 0 010 77zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+                LinkedIn
+              </button>
+              <button class="share-btn" onclick="sharePost('email')">
+                <svg viewBox="0 0 20 16"><path fill="currentColor" d="M18 0H2C.9 0 0 .9 0 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V2l8 5 8-5v2z"/></svg>
+                Email
+              </button>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- RIGHT SIDEBAR (sticky) -->
+        <aside class="sidebar-right">
+          <div class="sidebar-sticky">
+            <!-- SHOP PROMO: right sidebar (동적 로드) -->
+            <div class="sidebar-block" id="sidebar-right-product" style="display:none;"></div>
+            <div class="sidebar-block">
+              <div class="sidebar-label">Monthly WP Care Plans</div>
+              <p class="sidebar-desc">Performance, security, and peace of mind all in one plan.</p>
+              <ul class="sidebar-features">
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  Secure backups
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  Performance optimization
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  24/7 monitoring
+                </li>
+              </ul>
+              <a href="/pricing.html" class="btn sidebar-btn">View Plans</a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-one"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" defer></script>
+  <script src="/js/main.js"></script>
+  <script>
+    /* ══════════════════════════════════════════════
+       N0005 상품 마케팅 — n0005와 동일한 구조
+       ══════════════════════════════════════════════ */
+    var N5 = 'https://noteracker.com';
+
+    /* ── 작성자 정보 ── */
+    var AUTHORS = [
+      {
+        name: 'Rafferty Hale',
+        role: 'Founder of Noteracker',
+        photo: '/images/Rafferty Hale.webp',
+        bio: 'Rafferty founded Noteracker to give WordPress site owners a straightforward path to better security and reliable maintenance — without the technical headaches. He writes to share the thinking behind Noteracker\'s approach and to help site owners make confident decisions about their WordPress setup.'
+      },
+      {
+        name: 'Sarah Jones',
+        role: 'Noteracker Community Contributor',
+        photo: '/images/Sarah Jones.webp',
+        bio: 'A Noteracker community contributor passionate about helping small business owners get more from their WordPress sites. Sarah covers topics ranging from website care to everyday security — always with a focus on clear, no-nonsense guidance.'
+      }
+    ];
+
+    /* 슬러그 기반 결정적 작성자 선택 — 같은 포스트는 항상 같은 작성자 표시 */
+    function _pickAuthor(slug) {
+      if (!slug) return AUTHORS[Math.floor(Math.random() * AUTHORS.length)];
+      var hash = 0;
+      for (var i = 0; i < slug.length; i++) {
+        hash = (hash * 31 + slug.charCodeAt(i)) & 0x7fffffff;
+      }
+      return AUTHORS[hash % AUTHORS.length];
+    }
+
+    /* HTML 이스케이프 */
+    function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    /* 상품 목록 — 로컬 프록시 사용 (noteracker.com → n0004 → 브라우저) */
+    var _shopProds = fetch('/api/shop/products')
+      .then(function(r) { return r.ok ? r.json() : { products: [] }; })
+      .then(function(d) { return d.products || []; })
+      .catch(function() { return []; });
+
+    /* 가격 포맷 */
+    function _fmtPrice(cents) {
+      if (!cents && cents !== 0) return '';
+      return '$' + (cents / 100).toFixed(2);
+    }
+
+    /* 한국어 포함 시 빈 문자열 반환 (영문 전용 표시용) */
+    function _enOnly(s) {
+      if (!s) return '';
+      return /[\uAC00-\uD7A3\u3131-\u318E\u1100-\u11FF]/.test(s) ? '' : s;
+    }
+
+    /* 상품 URL — n0005 결제 페이지로 연결 */
+    function _productUrl(p) {
+      if (!p || !p.slug) return N5 + '/shop.html';
+      return N5 + '/product-download-1.html?slug=' + encodeURIComponent(p.slug);
+    }
+
+    /* 썸네일 없을 때 기본 아이콘 */
+    function _photoIcon() {
+      return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:40px;height:40px;stroke:var(--text-dim);opacity:.3;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+    }
+
+    /* 사이드바 상품 카드 빌더 */
+    function _buildCard(p, label) {
+      var url = _productUrl(p);
+      var tid = 'sst-' + (p.slug || Math.random().toString(36).slice(2));
+      var thumbCls = p.thumbnail_url ? 'sidebar-shop-thumb' : 'sidebar-shop-nophoto';
+      var thumbInner = p.thumbnail_url
+        ? '<img src="' + esc(N5 + p.thumbnail_url) + '" alt="' + esc(_enOnly(p.name) || 'Product') + '" loading="lazy">'
+        : _photoIcon();
+      var price = p.price_cents ? '<span class="sidebar-shop-price" style="margin-left:8px;">' + _fmtPrice(p.price_cents) + '</span>' : '';
+      var displayName = _enOnly(p.name) || 'Digital Product';
+      return '<div class="sidebar-shop-label">' + esc(label) + '</div>' +
+        '<a href="' + esc(url) + '" class="sidebar-shop-card-link" target="_blank" rel="noopener">' +
+          '<div class="' + thumbCls + '" id="' + esc(tid) + '">' + thumbInner + '</div>' +
+          '<div class="sidebar-shop-name-row">' +
+            '<span class="sidebar-shop-name">' + esc(displayName) + '</span>' + price +
+          '</div>' +
+        '</a>';
+    }
+
+    /* Lottie JSON 사전 로드 캐시 — 페이지 로드 직후 백그라운드 fetch */
+    var _lottieCache = {};
+    function _preloadLottieJson(slug) {
+      if (!slug || _lottieCache[slug]) return;
+      _lottieCache[slug] = fetch('/api/lottie/' + encodeURIComponent(slug) + '.json')
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .catch(function() { return null; });
+    }
+
+    /* Lottie 호버 애니메이션 연결 — 캐시된 animationData 사용으로 즉각 재생 */
+    function _attachLottieHover(thumbEl, p) {
+      if (!thumbEl || !p.slug) return;
+      /* 연결 시점에 즉시 JSON 사전 로드 시작 */
+      _preloadLottieJson(p.slug);
+      var origHtml = thumbEl.innerHTML;
+      var anim = null;
+      thumbEl.addEventListener('mouseenter', function() {
+        if (!window.lottie) return;
+        if (anim) { anim.destroy(); anim = null; }
+        var dataPromise = _lottieCache[p.slug] || Promise.resolve(null);
+        dataPromise.then(function(animationData) {
+          if (!animationData) return;               /* 로드 실패 시 썸네일 유지 */
+          if (!thumbEl.matches(':hover')) return;   /* 이미 마우스 떠난 경우 스킵 */
+          thumbEl.innerHTML = '';
+          anim = window.lottie.loadAnimation({
+            container: thumbEl, renderer: 'svg', loop: true, autoplay: true,
+            animationData: animationData            /* path 대신 캐시 데이터 즉시 사용 */
+          });
+          anim.addEventListener('DOMLoaded', function() {
+            var svg = thumbEl.querySelector('svg');
+            if (svg) svg.style.cssText = 'position:absolute!important;top:0!important;left:0!important;width:100%!important;height:100%!important;display:block;';
+          });
+          anim.addEventListener('data_failed', function() { anim = null; thumbEl.innerHTML = origHtml; });
+          anim.addEventListener('error',       function() { anim = null; thumbEl.innerHTML = origHtml; });
+        });
+      });
+      thumbEl.addEventListener('mouseleave', function() {
+        if (anim) { anim.destroy(); anim = null; }
+        thumbEl.innerHTML = origHtml;
+      });
+    }
+
+    /* ── 사이드바 좌/우 상품 카드 로드 ── */
+    async function loadShopPromos() {
+      try {
+        var products = await _shopProds;
+        if (!products.length) return;
+        var shuffled = products.slice().sort(function() { return Math.random() - 0.5; });
+
+        /* 왼쪽 사이드바 */
+        var leftEl = document.getElementById('sidebar-left-product');
+        if (leftEl) {
+          leftEl.innerHTML = _buildCard(shuffled[0], 'From Our Shop');
+          var leftThumb = leftEl.querySelector('[id^="sst-"]');
+          if (leftThumb) _attachLottieHover(leftThumb, shuffled[0]);
+        }
+
+        /* 오른쪽 사이드바 */
+        var rightEl = document.getElementById('sidebar-right-product');
+        if (rightEl) {
+          var rp = shuffled[1] || shuffled[0];
+          rightEl.innerHTML = _buildCard(rp, 'Digital Products');
+          var rightThumb = rightEl.querySelector('[id^="sst-"]');
+          if (rightThumb) _attachLottieHover(rightThumb, rp);
+          rightEl.style.display = '';
+        }
+      } catch(e) {}
+    }
+
+    /* ── 본문 내 마케팅 배너 + H2 버튼 삽입 ── */
+    async function injectContentPromos(products) {
+      var content = document.getElementById('post-content');
+      if (!content || !products.length) return;
+      var shuffled = products.slice().sort(function() { return Math.random() - 0.5; });
+      var p1 = shuffled[0];
+      var p2 = shuffled[1] || shuffled[0];
+      var p3 = shuffled[2] || shuffled[0];
+
+      var blocks = Array.from(content.querySelectorAll('p, h2, ul, ol'));
+      if (blocks.length < 2) return;
+
+      /* ② 본문 50% 지점 광고 배너 삽입 */
+      var idxBanner = Math.max(1, Math.floor(blocks.length * 0.50));
+      var url1 = _productUrl(p1);
+      var bannerName = _enOnly(p1.name) || 'Digital Product';
+      var thumbBanner = p1.thumbnail_url
+        ? '<a href="' + esc(url1) + '" class="content-shop-banner-thumb" target="_blank" rel="noopener"><img src="' + esc(N5 + p1.thumbnail_url) + '" alt="' + esc(bannerName) + '" loading="lazy"></a>'
+        : '<a href="' + esc(url1) + '" class="content-shop-banner-nophoto" target="_blank" rel="noopener">' + _photoIcon() + '</a>';
+      var rawDesc = _enOnly(p1.description || '').replace(/<[^>]*>/g, '');
+      var descBanner = rawDesc
+        ? '<p class="content-shop-banner-desc">' + esc(rawDesc.slice(0, 90) + (rawDesc.length > 90 ? '…' : '')) + '</p>'
+        : '';
+      var priceTag = p1.price_cents ? ' &nbsp;·&nbsp; <span style="color:var(--focus);font-weight:700;">' + _fmtPrice(p1.price_cents) + '</span>' : '';
+      var btnLabel = p1.price_cents ? 'Download — ' + _fmtPrice(p1.price_cents) : 'Download Now →';
+
+      var banner = document.createElement('div');
+      banner.className = 'content-shop-banner';
+      banner.innerHTML =
+        thumbBanner +
+        '<div class="content-shop-banner-text">' +
+          '<div class="content-shop-banner-tag">Lottie File' + priceTag + '</div>' +
+          '<a href="' + esc(url1) + '" class="content-shop-banner-name" style="text-decoration:none;display:block;" target="_blank" rel="noopener">' + esc(bannerName) + '</a>' +
+          descBanner +
+        '</div>' +
+        '<a href="' + esc(url1) + '" class="btn btn-olive" target="_blank" rel="noopener">' + btnLabel + '</a>';
+
+      var bannerTarget = blocks[Math.min(idxBanner, blocks.length - 1)];
+      if (bannerTarget) bannerTarget.after(banner);
+
+      /* ③ 2번째·3번째 H2에 인라인 상품 버튼 부착 */
+      var h2s = Array.from(content.querySelectorAll('h2'));
+      function _attachH2Btn(h2El, product) {
+        if (!h2El) return;
+        h2El.style.display = 'flex';
+        h2El.style.alignItems = 'center';
+        h2El.style.justifyContent = 'space-between';
+        h2El.style.gap = '12px';
+        var btn = document.createElement('a');
+        btn.href = _productUrl(product);
+        btn.target = '_blank';
+        btn.rel = 'noopener';
+        btn.className = 'content-h2-btn';
+        btn.textContent = _enOnly(product.name) || 'Get This File';
+        h2El.appendChild(btn);
+      }
+      _attachH2Btn(h2s[1], p2); /* 2번째 H2 */
+      _attachH2Btn(h2s[2], p3); /* 3번째 H2 */
+    }
+
+    /* ══════════════════════════════════════════════
+       포스트 로더
+       ══════════════════════════════════════════════ */
+    async function loadPost() {
+      var params = new URLSearchParams(location.search);
+      var slug = params.get('slug');
+      if (!slug) {
+        document.getElementById('hero-title').textContent = 'Post not found';
+        document.getElementById('post-content').innerHTML = '<p style="color:var(--text-muted);">No post slug provided.</p>';
+        return;
+      }
+      try {
+        var res = await fetch('/api/blog/' + encodeURIComponent(slug));
+        var data = await res.json();
+        if (!data.post) { document.getElementById('hero-title').textContent = 'Post not found'; return; }
+        var post = data.post;
+
+        document.getElementById('page-title').textContent = (post.title || '') + ' – Noteracker';
+        document.getElementById('page-desc').content = post.excerpt || '';
+        document.getElementById('hero-title').textContent = post.title || '';
+
+        /* 히어로 배경 이미지 */
+        var bodyImgMatch = (post.content || '').match(/<img[^>]+src=["']([^"']+)["']/);
+        var heroImg = (bodyImgMatch && bodyImgMatch[1]) ? bodyImgMatch[1] : post.featured_image;
+        if (heroImg) document.getElementById('hero-bg').style.backgroundImage = "url('" + heroImg + "')";
+
+        /* 작성자 — 슬러그 기반으로 두 필자 중 한 명 선택 */
+        var author = _pickAuthor(slug);
+        document.getElementById('hero-author').textContent = 'By ' + author.name;
+        document.getElementById('sep-author').style.display = '';
+        document.getElementById('author-name').textContent = author.name;
+        /* 아바타 이미지 교체 */
+        var avatarWrap = document.querySelector('.author-avatar-wrap');
+        if (avatarWrap) {
+          avatarWrap.innerHTML = '<img src="' + author.photo + '" alt="' + esc(author.name) + '" class="author-avatar-img">';
+        }
+        /* role 표시 — author-name 바로 뒤에 삽입 (중복 방지) */
+        var existingRole = document.getElementById('author-role');
+        if (existingRole) existingRole.remove();
+        if (author.role) {
+          var roleEl = document.createElement('div');
+          roleEl.id = 'author-role';
+          roleEl.className = 'author-role';
+          roleEl.textContent = author.role;
+          var nameEl = document.getElementById('author-name');
+          if (nameEl && nameEl.nextSibling) nameEl.parentNode.insertBefore(roleEl, nameEl.nextSibling);
+          else if (nameEl) nameEl.parentNode.appendChild(roleEl);
+        }
+        /* 바이오 업데이트 */
+        var bioEl = document.querySelector('.author-bio');
+        if (bioEl) bioEl.textContent = author.bio;
+
+        /* 발행일 */
+        if (post.published_at) {
+          var d = new Date(post.published_at);
+          var fmt = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+          document.getElementById('hero-date').textContent = fmt;
+          document.getElementById('post-date-line').textContent = fmt;
+        }
+
+        /* 읽기 시간 */
+        var words = (post.content || '').replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length;
+        document.getElementById('hero-readtime').textContent = Math.max(1, Math.round(words / 200)) + ' min read';
+
+        /* 대표 이미지 */
+        if (post.featured_image) {
+          document.getElementById('featured-img').src = post.featured_image;
+          document.getElementById('featured-img').alt = post.title || '';
+        } else {
+          document.getElementById('featured-img-wrap').style.display = 'none';
+        }
+
+        /* 본문 */
+        document.getElementById('post-content').innerHTML = post.content || post.excerpt || '';
+
+        /* 카테고리 */
+        if (post.category) document.getElementById('hero-category').textContent = post.category;
+
+        /* 본문 로드 후 → 상품 배너 + H2 버튼 삽입 */
+        _shopProds.then(function(products) {
+          if (products.length) injectContentPromos(products);
+        });
+
+      } catch (e) {
+        document.getElementById('hero-title').textContent = 'Failed to load post';
+      }
+    }
+
+    /* ── 최근 포스트 (왼쪽 사이드바) ── */
+    async function loadRecentPosts() {
+      try {
+        var res = await fetch('/api/blog');
+        var data = await res.json();
+        var posts = (data.posts || []).slice(0, 7);
+        var ul = document.getElementById('recent-posts');
+        if (!posts.length) { ul.innerHTML = '<li style="color:var(--text-muted);font-size:13px;">No posts yet.</li>'; return; }
+        ul.innerHTML = posts.map(function(p) {
+          return '<li class="recent-post-item"><a href="/blog-post.html?slug=' + encodeURIComponent(p.slug) + '">' + esc(p.title || 'Untitled') + '</a></li>';
+        }).join('');
+      } catch (e) {}
+    }
+
+    /* ── 소셜 공유 ── */
+    function sharePost(network) {
+      var url = encodeURIComponent(location.href);
+      var title = encodeURIComponent(document.getElementById('hero-title').textContent || document.title);
+      var map = {
+        twitter:  'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+        facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + url,
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+        email:    'mailto:?subject=' + title + '&body=' + url
+      };
+      if (network === 'email') { location.href = map.email; }
+      else { window.open(map[network], '_blank', 'width=600,height=400'); }
+    }
+
+    /* ── 실행 ── */
+    loadPost();
+    loadRecentPosts();
+    loadShopPromos();
+  </script>
+</body>
+</html>

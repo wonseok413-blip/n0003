@@ -1,0 +1,43 @@
+/* Services Page  Page-specific Styles */
+
+/* Pricing grid (3 plan cards) */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Process steps (boxed, standalone  not inside .card) */
+.process-step {
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+/* Step number badge */
+.process-num {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #C2CBD7;
+  min-width: 50px;
+  flex-shrink: 0;
+}
+
+/* Feature grid (rebuild reasons) */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}

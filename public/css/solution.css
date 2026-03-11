@@ -1,0 +1,48 @@
+/* Malware Care Page  Page-specific Styles */
+
+/* Hero gradient background */
+.hero-malware-care {
+  background: var(--bg-primary);
+}
+
+/* Warning section badge (dark theme) */
+.warning-badge {
+  background-color: rgba(71, 85, 104, 0.25) !important;
+  border-color: #475568 !important;
+  color: #c7cdc6 !important;
+}
+
+/* Warning cards (left dark border) */
+.warning-card {
+  border-left: 4px solid #475568;
+}
+
+/* Process step number (larger than services variant) */
+.mc-process-num {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #C2CBD7;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+/* Sucuri featured card inner grid */
+.mc-featured-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+/* Final CTA section gradient */
+.cta-gradient {
+  background: var(--bg-secondary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .mc-featured-card-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

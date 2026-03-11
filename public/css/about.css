@@ -1,0 +1,19 @@
+/* About Page  Page-specific Styles */
+
+/* Circular team member avatar wrapper */
+.team-avatar {
+  width: 120px;
+  height: 120px;
+  background: transparent;
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-avatar img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}

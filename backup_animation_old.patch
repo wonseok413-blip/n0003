@@ -1,0 +1,634 @@
+diff --git a/public/js/main.js b/public/js/main.js
+index 05e2031..dc5cba1 100644
+--- a/public/js/main.js
++++ b/public/js/main.js
+@@ -180,220 +180,442 @@ function initCounterAnimation() {
+   });
+ }
+ 
+-// Enhanced 4-Stage Malware Animation (400x400px)
++// Enhanced 4-Stage Malware Animation (450x450px)
+ function createMalwareAnimation() {
+   const container = document.getElementById('malware-animation');
+   if (!container) return;
+ 
+-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+-  svg.setAttribute('width', '400');
+-  svg.setAttribute('height', '400');
+-  svg.setAttribute('viewBox', '0 0 400 400');
+-  svg.style.maxWidth = '400px';
++  const NS = 'http://www.w3.org/2000/svg';
++  const W = 450, H = 450;
++
++  const svg = document.createElementNS(NS, 'svg');
++  svg.setAttribute('width', W);
++  svg.setAttribute('height', H);
++  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
++  svg.style.maxWidth = W + 'px';
+   svg.style.margin = '0 auto';
+   svg.style.display = 'block';
+ 
+-  // Stage 1: Infected Website (Red)
+-  const stage1 = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+-  stage1.setAttribute('id', 'stage-1');
+-  stage1.setAttribute('opacity', '0');
+-
+-  const infectedSite = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+-  infectedSite.setAttribute('x', '80');
+-  infectedSite.setAttribute('y', '100');
+-  infectedSite.setAttribute('width', '240');
+-  infectedSite.setAttribute('height', '200');
+-  infectedSite.setAttribute('rx', '12');
+-  infectedSite.setAttribute('fill', '#252b30');
+-  infectedSite.setAttribute('stroke', '#ff4444');
+-  infectedSite.setAttribute('stroke-width', '4');
+-
+-  const warningIcon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+-  warningIcon.setAttribute('x', '200');
+-  warningIcon.setAttribute('y', '210');
+-  warningIcon.setAttribute('text-anchor', 'middle');
+-  warningIcon.setAttribute('font-size', '48');
+-  warningIcon.textContent = '\u26A0\uFE0F';
+-
+-  const infectedLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+-  infectedLabel.setAttribute('x', '200');
+-  infectedLabel.setAttribute('y', '330');
+-  infectedLabel.setAttribute('text-anchor', 'middle');
+-  infectedLabel.setAttribute('fill', '#ff4444');
+-  infectedLabel.setAttribute('font-size', '20');
+-  infectedLabel.setAttribute('font-weight', 'bold');
+-  infectedLabel.textContent = 'INFECTED';
+-
+-  stage1.appendChild(infectedSite);
+-  stage1.appendChild(warningIcon);
+-  stage1.appendChild(infectedLabel);
+-
+-  // Malware particles
+-  for (let i = 0; i < 8; i++) {
+-    const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+-    const angle = (i / 8) * Math.PI * 2;
+-    particle.setAttribute('cx', 200 + Math.cos(angle) * 80);
+-    particle.setAttribute('cy', 200 + Math.sin(angle) * 80);
+-    particle.setAttribute('r', '5');
+-    particle.setAttribute('fill', '#ff4444');
+-    particle.setAttribute('class', 'malware-particle');
+-    stage1.appendChild(particle);
++  // === Helper functions ===
++  function el(tag, attrs) {
++    const e = document.createElementNS(NS, tag);
++    for (const [k, v] of Object.entries(attrs || {})) e.setAttribute(k, v);
++    return e;
++  }
++
++  // === Shared browser mockup builder ===
++  function createBrowserMockup(borderColor, glowClass) {
++    const g = el('g');
++
++    // Browser window frame
++    const frame = el('rect', { x: 55, y: 40, width: 340, height: 280, rx: 12, fill: '#1c2228', stroke: borderColor, 'stroke-width': 3 });
++    if (glowClass) frame.setAttribute('class', glowClass);
++    g.appendChild(frame);
++
++    // Title bar background
++    g.appendChild(el('rect', { x: 55, y: 40, width: 340, height: 36, rx: '12', fill: '#323841' }));
++    // Clip bottom corners of title bar
++    g.appendChild(el('rect', { x: 55, y: 64, width: 340, height: 12, rx: '0', fill: '#323841' }));
++
++    // Window dots (close, minimize, maximize)
++    g.appendChild(el('circle', { cx: 76, cy: 58, r: 5, fill: '#ff5f57' }));
++    g.appendChild(el('circle', { cx: 94, cy: 58, r: 5, fill: '#febc2e' }));
++    g.appendChild(el('circle', { cx: 112, cy: 58, r: 5, fill: '#28c840' }));
++
++    // URL bar
++    g.appendChild(el('rect', { x: 135, y: 48, width: 200, height: 20, rx: 6, fill: '#252b30' }));
++    const urlText = el('text', { x: 165, y: 62, fill: '#616161', 'font-size': 10, 'font-family': 'monospace' });
++    urlText.textContent = 'yoursite.com';
++    g.appendChild(urlText);
++    // Lock icon placeholder
++    g.appendChild(el('rect', { x: 141, y: 52, width: 12, height: 12, rx: 2, fill: '#475568' }));
++
++    // Content area — sidebar
++    g.appendChild(el('rect', { x: 62, y: 84, width: 70, height: 228, rx: 4, fill: '#252b30' }));
++
++    // Sidebar nav items
++    for (let i = 0; i < 5; i++) {
++      g.appendChild(el('rect', { x: 70, y: 96 + i * 28, width: 50, height: 8, rx: 3, fill: '#3a4049' }));
++    }
++
++    // Main content lines
++    for (let i = 0; i < 7; i++) {
++      const lineW = 180 - (i % 3) * 30;
++      g.appendChild(el('rect', { x: 145, y: 96 + i * 28, width: lineW, height: 8, rx: 3, fill: '#3a4049', class: 'content-line-' + i }));
++    }
++
++    // Header bar in content
++    g.appendChild(el('rect', { x: 145, y: 84, width: 100, height: 6, rx: 3, fill: '#475568' }));
++
++    return g;
+   }
+ 
+-  // Stage 2: Treatment (Yellow - Noteracker working)
+-  const stage2 = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+-  stage2.setAttribute('id', 'stage-2');
+-  stage2.setAttribute('opacity', '0');
+-
+-  const treatingSite = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+-  treatingSite.setAttribute('x', '80');
+-  treatingSite.setAttribute('y', '100');
+-  treatingSite.setAttribute('width', '240');
+-  treatingSite.setAttribute('height', '200');
+-  treatingSite.setAttribute('rx', '12');
+-  treatingSite.setAttribute('fill', '#252b30');
+-  treatingSite.setAttribute('stroke', '#e6b802');
+-  treatingSite.setAttribute('stroke-width', '4');
+-
+-  const syringe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+-  syringe.setAttribute('x', '200');
+-  syringe.setAttribute('y', '210');
+-  syringe.setAttribute('text-anchor', 'middle');
+-  syringe.setAttribute('font-size', '48');
+-  syringe.textContent = '\uD83D\uDC89';
+-
+-  const treatingLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+-  treatingLabel.setAttribute('x', '200');
+-  treatingLabel.setAttribute('y', '330');
+-  treatingLabel.setAttribute('text-anchor', 'middle');
+-  treatingLabel.setAttribute('fill', '#e6b802');
+-  treatingLabel.setAttribute('font-size', '20');
+-  treatingLabel.setAttribute('font-weight', 'bold');
+-  treatingLabel.textContent = 'TREATING...';
+-
+-  stage2.appendChild(treatingSite);
+-  stage2.appendChild(syringe);
+-  stage2.appendChild(treatingLabel);
+-
+-  // Stage 3: Cleaned (Green)
+-  const stage3 = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+-  stage3.setAttribute('id', 'stage-3');
+-  stage3.setAttribute('opacity', '0');
+-
+-  const cleanSite = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+-  cleanSite.setAttribute('x', '80');
+-  cleanSite.setAttribute('y', '100');
+-  cleanSite.setAttribute('width', '240');
+-  cleanSite.setAttribute('height', '200');
+-  cleanSite.setAttribute('rx', '12');
+-  cleanSite.setAttribute('fill', '#252b30');
+-  cleanSite.setAttribute('stroke', '#899e2e');
+-  cleanSite.setAttribute('stroke-width', '4');
+-
+-  const checkIcon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+-  checkIcon.setAttribute('x', '200');
+-  checkIcon.setAttribute('y', '210');
+-  checkIcon.setAttribute('text-anchor', 'middle');
+-  checkIcon.setAttribute('font-size', '48');
+-  checkIcon.textContent = '\u2705';
+-
+-  const cleanLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+-  cleanLabel.setAttribute('x', '200');
+-  cleanLabel.setAttribute('y', '330');
+-  cleanLabel.setAttribute('text-anchor', 'middle');
+-  cleanLabel.setAttribute('fill', '#899e2e');
+-  cleanLabel.setAttribute('font-size', '20');
+-  cleanLabel.setAttribute('font-weight', 'bold');
+-  cleanLabel.textContent = 'CLEANED';
+-
+-  stage3.appendChild(cleanSite);
+-  stage3.appendChild(checkIcon);
+-  stage3.appendChild(cleanLabel);
+-
+-  // Stage 4: Active & Secure (Green with animated cursor)
+-  const stage4 = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+-  stage4.setAttribute('id', 'stage-4');
+-  stage4.setAttribute('opacity', '0');
+-
+-  const activeSite = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+-  activeSite.setAttribute('x', '80');
+-  activeSite.setAttribute('y', '100');
+-  activeSite.setAttribute('width', '240');
+-  activeSite.setAttribute('height', '200');
+-  activeSite.setAttribute('rx', '12');
+-  activeSite.setAttribute('fill', '#252b30');
+-  activeSite.setAttribute('stroke', '#899e2e');
+-  activeSite.setAttribute('stroke-width', '4');
+-
+-  const shieldIcon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+-  shieldIcon.setAttribute('x', '200');
+-  shieldIcon.setAttribute('y', '210');
+-  shieldIcon.setAttribute('text-anchor', 'middle');
+-  shieldIcon.setAttribute('font-size', '48');
+-  shieldIcon.textContent = '\uD83D\uDEE1\uFE0F';
+-
+-  const activeLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+-  activeLabel.setAttribute('x', '200');
+-  activeLabel.setAttribute('y', '330');
+-  activeLabel.setAttribute('text-anchor', 'middle');
+-  activeLabel.setAttribute('fill', '#899e2e');
+-  activeLabel.setAttribute('font-size', '20');
+-  activeLabel.setAttribute('font-weight', 'bold');
+-  activeLabel.textContent = 'SECURED';
+-
+-  // Animated cursor
+-  const cursor = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+-  cursor.setAttribute('x', '250');
+-  cursor.setAttribute('y', '150');
+-  cursor.setAttribute('font-size', '24');
+-  cursor.setAttribute('class', 'animated-cursor');
+-  cursor.textContent = '\uD83D\uDC46';
+-
+-  stage4.appendChild(activeSite);
+-  stage4.appendChild(shieldIcon);
+-  stage4.appendChild(activeLabel);
+-  stage4.appendChild(cursor);
+-
+-  // Add all stages to SVG
++  // =====================================================
++  // STAGE 1: INFECTED
++  // =====================================================
++  const stage1 = el('g', { id: 'stage-1', opacity: 0 });
++  const browser1 = createBrowserMockup('#ff4444', 'glow-red');
++  stage1.appendChild(browser1);
++
++  // Infected content lines (some red)
++  const infectedLines = browser1.querySelectorAll('[class^="content-line-"]');
++  [1, 3, 5].forEach(i => {
++    const line = infectedLines[i];
++    if (line) { line.setAttribute('fill', '#ff4444'); line.setAttribute('opacity', '0.7'); }
++  });
++
++  // Warning icon
++  const warn1 = el('text', { x: 260, y: 220, 'text-anchor': 'middle', 'font-size': 40, class: 'shake-anim' });
++  warn1.textContent = '\u26A0\uFE0F';
++  stage1.appendChild(warn1);
++
++  // Malware particles — varying sizes & orbits
++  for (let i = 0; i < 10; i++) {
++    const angle = (i / 10) * Math.PI * 2;
++    const radius = 140 + (i % 3) * 20;
++    const size = 3 + (i % 4) * 1.5;
++    const p = el('circle', {
++      cx: 225 + Math.cos(angle) * radius,
++      cy: 200 + Math.sin(angle) * radius,
++      r: size,
++      fill: '#ff4444',
++      class: 'malware-particle-' + (i % 3)
++    });
++    stage1.appendChild(p);
++  }
++
++  // Virus skull icons floating
++  const virusPositions = [[80, 160], [370, 140], [90, 310], [380, 280]];
++  virusPositions.forEach(([vx, vy], idx) => {
++    const v = el('text', { x: vx, y: vy, 'font-size': 18, opacity: 0.6, class: 'virus-float-' + (idx % 2) });
++    v.textContent = '\uD83E\uDDA0';
++    stage1.appendChild(v);
++  });
++
++  // Label
++  const label1 = el('text', { x: 225, y: 358, 'text-anchor': 'middle', fill: '#ff4444', 'font-size': 18, 'font-weight': 'bold', 'font-family': 'Noto Sans, sans-serif', class: 'blink-anim' });
++  label1.textContent = 'INFECTED';
++  stage1.appendChild(label1);
++
++  // Status bar
++  const statusBar1 = el('rect', { x: 145, y: 370, width: 160, height: 4, rx: 2, fill: '#ff4444', opacity: 0.5 });
++  stage1.appendChild(statusBar1);
++
++  // =====================================================
++  // STAGE 2: TREATING
++  // =====================================================
++  const stage2 = el('g', { id: 'stage-2', opacity: 0 });
++  const browser2 = createBrowserMockup('#e6b802', '');
++  stage2.appendChild(browser2);
++
++  // Scan line (horizontal, animated top to bottom)
++  const scanLine = el('rect', { x: 62, y: 84, width: 326, height: 2, fill: '#e6b802', opacity: 0.9, class: 'scan-line-anim' });
++  stage2.appendChild(scanLine);
++
++  // Syringe icon
++  const syringe2 = el('text', { x: 260, y: 195, 'text-anchor': 'middle', 'font-size': 32 });
++  syringe2.textContent = '\uD83D\uDC89';
++  stage2.appendChild(syringe2);
++
++  // Progress bar background
++  g2progressBg = el('rect', { x: 145, y: 270, width: 200, height: 12, rx: 6, fill: '#323841' });
++  stage2.appendChild(g2progressBg);
++
++  // Progress bar fill (animated)
++  const progressFill = el('rect', { x: 145, y: 270, width: 0, height: 12, rx: 6, fill: '#e6b802', class: 'progress-fill-anim' });
++  stage2.appendChild(progressFill);
++
++  // Progress percentage text
++  const progressText = el('text', { x: 245, y: 300, 'text-anchor': 'middle', fill: '#e6b802', 'font-size': 12, 'font-family': 'Noto Sans, sans-serif', class: 'progress-text-anim' });
++  progressText.textContent = 'Scanning...';
++  stage2.appendChild(progressText);
++
++  // Particles fading out (fewer than stage 1)
++  for (let i = 0; i < 5; i++) {
++    const angle = (i / 5) * Math.PI * 2;
++    const p = el('circle', {
++      cx: 225 + Math.cos(angle) * 150,
++      cy: 200 + Math.sin(angle) * 150,
++      r: 3,
++      fill: '#ff4444',
++      opacity: 0.4,
++      class: 'particle-fade-out'
++    });
++    stage2.appendChild(p);
++  }
++
++  // Label
++  const label2 = el('text', { x: 225, y: 358, 'text-anchor': 'middle', fill: '#e6b802', 'font-size': 18, 'font-weight': 'bold', 'font-family': 'Noto Sans, sans-serif' });
++  label2.textContent = 'TREATING...';
++  stage2.appendChild(label2);
++
++  // =====================================================
++  // STAGE 3: CLEANED
++  // =====================================================
++  const stage3 = el('g', { id: 'stage-3', opacity: 0 });
++  const browser3 = createBrowserMockup('#899e2e', '');
++  stage3.appendChild(browser3);
++
++  // All content lines restored to clean color
++  browser3.querySelectorAll('[class^="content-line-"]').forEach(line => {
++    line.setAttribute('fill', '#4a5260');
++  });
++
++  // Checkmark (SVG path with stroke-dasharray animation)
++  const checkG = el('g', { transform: 'translate(210, 175)' });
++  const checkCircle = el('circle', { cx: 0, cy: 0, r: 28, fill: 'none', stroke: '#899e2e', 'stroke-width': 3, class: 'check-circle-draw' });
++  checkG.appendChild(checkCircle);
++  const checkPath = el('path', { d: 'M-12,2 L-4,10 L14,-8', fill: 'none', stroke: '#899e2e', 'stroke-width': 3.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', class: 'check-draw' });
++  checkG.appendChild(checkPath);
++  stage3.appendChild(checkG);
++
++  // Sparkle particles
++  const sparklePositions = [[100, 130], [350, 120], [80, 280], [370, 260], [180, 100], [300, 100], [120, 200], [340, 200]];
++  sparklePositions.forEach(([sx, sy], idx) => {
++    const sp = el('text', { x: sx, y: sy, 'font-size': 14, opacity: 0, class: 'sparkle-anim-' + (idx % 3) });
++    sp.textContent = '\u2728';
++    stage3.appendChild(sp);
++  });
++
++  // Label
++  const label3 = el('text', { x: 225, y: 358, 'text-anchor': 'middle', fill: '#899e2e', 'font-size': 18, 'font-weight': 'bold', 'font-family': 'Noto Sans, sans-serif' });
++  label3.textContent = 'CLEANED';
++  stage3.appendChild(label3);
++
++  // Green status bar
++  stage3.appendChild(el('rect', { x: 145, y: 370, width: 160, height: 4, rx: 2, fill: '#899e2e', opacity: 0.6 }));
++
++  // =====================================================
++  // STAGE 4: SECURED
++  // =====================================================
++  const stage4 = el('g', { id: 'stage-4', opacity: 0 });
++  const browser4 = createBrowserMockup('#899e2e', '');
++  stage4.appendChild(browser4);
++
++  // Shield icon (center of browser content)
++  const shield4 = el('text', { x: 225, y: 210, 'text-anchor': 'middle', 'font-size': 44 });
++  shield4.textContent = '\uD83D\uDEE1\uFE0F';
++  stage4.appendChild(shield4);
++
++  // Shield pulse rings
++  for (let i = 0; i < 3; i++) {
++    const ring = el('circle', { cx: 225, cy: 195, r: 40 + i * 25, fill: 'none', stroke: '#899e2e', 'stroke-width': 1.5, opacity: 0, class: 'shield-pulse-' + i });
++    stage4.appendChild(ring);
++  }
++
++  // Protection dashed circle
++  const protCircle = el('circle', { cx: 225, cy: 195, r: 130, fill: 'none', stroke: '#899e2e', 'stroke-width': 1.5, 'stroke-dasharray': '8,6', opacity: 0.4, class: 'rotate-slow' });
++  stage4.appendChild(protCircle);
++
++  // Lock icon (top-left of browser)
++  const lock4 = el('text', { x: 48, y: 38, 'font-size': 16, opacity: 0.8 });
++  lock4.textContent = '\uD83D\uDD12';
++  stage4.appendChild(lock4);
++
++  // Heartbeat / monitoring line
++  const hbLine = el('polyline', {
++    points: '60,385 90,385 105,375 115,395 130,370 140,385 160,385 190,385 205,375 215,395 230,370 240,385 260,385 290,385 305,375 315,395 330,370 340,385 390,385',
++    fill: 'none', stroke: '#899e2e', 'stroke-width': 2, opacity: 0.6, class: 'heartbeat-draw'
++  });
++  stage4.appendChild(hbLine);
++
++  // Label
++  const label4 = el('text', { x: 225, y: 358, 'text-anchor': 'middle', fill: '#899e2e', 'font-size': 18, 'font-weight': 'bold', 'font-family': 'Noto Sans, sans-serif' });
++  label4.textContent = 'SECURED';
++  stage4.appendChild(label4);
++
++  // Active monitoring text
++  const monText = el('text', { x: 225, y: 412, 'text-anchor': 'middle', fill: '#616161', 'font-size': 11, 'font-family': 'Noto Sans, sans-serif' });
++  monText.textContent = 'Active Monitoring';
++  stage4.appendChild(monText);
++
++  // =====================================================
++  // Assemble SVG
++  // =====================================================
+   svg.appendChild(stage1);
+   svg.appendChild(stage2);
+   svg.appendChild(stage3);
+   svg.appendChild(stage4);
+-
+   container.appendChild(svg);
+ 
+-  // Animation sequence (10 second loop)
++  // =====================================================
++  // Animation sequence (12 second loop)
++  // =====================================================
++  let animTimer = null;
+   function animate() {
+-    setTimeout(() => { stage1.setAttribute('opacity', '1'); }, 0);
+-    setTimeout(() => { stage1.setAttribute('opacity', '0'); stage2.setAttribute('opacity', '1'); }, 2000);
+-    setTimeout(() => { stage2.setAttribute('opacity', '0'); stage3.setAttribute('opacity', '1'); }, 4000);
+-    setTimeout(() => { stage3.setAttribute('opacity', '0'); stage4.setAttribute('opacity', '1'); }, 6000);
+-    setTimeout(() => { stage4.setAttribute('opacity', '0'); animate(); }, 10000);
++    const timers = [];
++    timers.push(setTimeout(() => { stage1.setAttribute('opacity', '1'); }, 0));
++    timers.push(setTimeout(() => { stage1.setAttribute('opacity', '0'); stage2.setAttribute('opacity', '1'); }, 2500));
++    timers.push(setTimeout(() => { stage2.setAttribute('opacity', '0'); stage3.setAttribute('opacity', '1'); }, 5000));
++    timers.push(setTimeout(() => { stage3.setAttribute('opacity', '0'); stage4.setAttribute('opacity', '1'); }, 7500));
++    timers.push(setTimeout(() => { stage4.setAttribute('opacity', '0'); animate(); }, 12000));
+   }
+-
+   animate();
+ 
+-  // Add CSS animations
++  // =====================================================
++  // Inject CSS keyframe animations
++  // =====================================================
+   const style = document.createElement('style');
+   style.textContent = `
+     #malware-animation g {
+-      transition: opacity 0.5s ease;
++      transition: opacity 0.6s ease;
++    }
++
++    /* Stage 1: Red glow pulse */
++    .glow-red {
++      animation: pulse-glow-red 1s ease-in-out infinite alternate;
++    }
++    @keyframes pulse-glow-red {
++      0% { filter: drop-shadow(0 0 4px rgba(255,68,68,0.3)); }
++      100% { filter: drop-shadow(0 0 12px rgba(255,68,68,0.7)); }
++    }
++
++    /* Shake animation */
++    .shake-anim {
++      animation: shake 0.4s ease-in-out infinite;
++      transform-origin: center;
+     }
+-    .malware-particle {
+-      animation: particle-float 2s ease-in-out infinite;
++    @keyframes shake {
++      0%, 100% { transform: translate(0, 0) rotate(0deg); }
++      25% { transform: translate(-3px, 0) rotate(-3deg); }
++      75% { transform: translate(3px, 0) rotate(3deg); }
+     }
+-    @keyframes particle-float {
++
++    /* Blink label */
++    .blink-anim {
++      animation: blink-text 1.2s ease-in-out infinite;
++    }
++    @keyframes blink-text {
++      0%, 100% { opacity: 1; }
++      50% { opacity: 0.4; }
++    }
++
++    /* Malware particles — 3 speed variants */
++    .malware-particle-0 {
++      animation: particle-orbit-0 2.5s ease-in-out infinite;
++    }
++    .malware-particle-1 {
++      animation: particle-orbit-1 3s ease-in-out infinite;
++    }
++    .malware-particle-2 {
++      animation: particle-orbit-2 2s ease-in-out infinite;
++    }
++    @keyframes particle-orbit-0 {
++      0%, 100% { transform: translate(0, 0); opacity: 0.5; }
++      50% { transform: translate(12px, -8px); opacity: 1; }
++    }
++    @keyframes particle-orbit-1 {
++      0%, 100% { transform: translate(0, 0); opacity: 0.4; }
++      50% { transform: translate(-10px, 12px); opacity: 0.9; }
++    }
++    @keyframes particle-orbit-2 {
+       0%, 100% { transform: translate(0, 0); opacity: 0.6; }
+-      50% { transform: translate(10px, -10px); opacity: 1; }
++      50% { transform: translate(8px, 10px); opacity: 1; }
++    }
++
++    /* Virus floating */
++    .virus-float-0 {
++      animation: virus-bob-0 2.2s ease-in-out infinite;
++    }
++    .virus-float-1 {
++      animation: virus-bob-1 2.8s ease-in-out infinite;
++    }
++    @keyframes virus-bob-0 {
++      0%, 100% { transform: translateY(0); }
++      50% { transform: translateY(-8px); }
++    }
++    @keyframes virus-bob-1 {
++      0%, 100% { transform: translateY(0); }
++      50% { transform: translateY(6px); }
++    }
++
++    /* Stage 2: Scan line */
++    .scan-line-anim {
++      animation: scan-sweep 2.5s linear infinite;
++    }
++    @keyframes scan-sweep {
++      0% { transform: translateY(0); opacity: 0.9; }
++      90% { transform: translateY(220px); opacity: 0.9; }
++      100% { transform: translateY(0); opacity: 0; }
++    }
++
++    /* Progress bar fill */
++    .progress-fill-anim {
++      animation: progress-grow 2.5s ease-in-out infinite;
++    }
++    @keyframes progress-grow {
++      0% { width: 0; }
++      80% { width: 200px; }
++      100% { width: 200px; }
++    }
++
++    /* Particles fading out */
++    .particle-fade-out {
++      animation: fade-shrink 2.5s ease-out infinite;
++    }
++    @keyframes fade-shrink {
++      0% { opacity: 0.4; r: 3; }
++      50% { opacity: 0.2; r: 2; }
++      100% { opacity: 0; r: 0; }
++    }
++
++    /* Stage 3: Check draw */
++    .check-draw {
++      stroke-dasharray: 50;
++      stroke-dashoffset: 50;
++      animation: draw-check 1s ease-out 0.3s forwards;
++    }
++    .check-circle-draw {
++      stroke-dasharray: 180;
++      stroke-dashoffset: 180;
++      animation: draw-circle 0.8s ease-out forwards;
++    }
++    @keyframes draw-check {
++      to { stroke-dashoffset: 0; }
+     }
+-    .animated-cursor {
+-      animation: cursor-move 2s ease-in-out infinite;
++    @keyframes draw-circle {
++      to { stroke-dashoffset: 0; }
++    }
++
++    /* Sparkle animations — 3 delay variants */
++    .sparkle-anim-0 { animation: sparkle-pop 2s ease-in-out 0.2s infinite; }
++    .sparkle-anim-1 { animation: sparkle-pop 2s ease-in-out 0.7s infinite; }
++    .sparkle-anim-2 { animation: sparkle-pop 2s ease-in-out 1.2s infinite; }
++    @keyframes sparkle-pop {
++      0%, 100% { opacity: 0; transform: scale(0.5); }
++      30% { opacity: 1; transform: scale(1.2); }
++      60% { opacity: 0.8; transform: scale(1); }
++    }
++
++    /* Stage 4: Shield pulse rings */
++    .shield-pulse-0 { animation: shield-ring 2.5s ease-out 0s infinite; }
++    .shield-pulse-1 { animation: shield-ring 2.5s ease-out 0.8s infinite; }
++    .shield-pulse-2 { animation: shield-ring 2.5s ease-out 1.6s infinite; }
++    @keyframes shield-ring {
++      0% { opacity: 0.6; transform: scale(1); }
++      100% { opacity: 0; transform: scale(1.8); }
++    }
++
++    /* Rotating dashed protection circle */
++    .rotate-slow {
++      animation: slow-rotate 20s linear infinite;
++      transform-origin: 225px 195px;
++    }
++    @keyframes slow-rotate {
++      0% { transform: rotate(0deg); }
++      100% { transform: rotate(360deg); }
++    }
++
++    /* Heartbeat line draw */
++    .heartbeat-draw {
++      stroke-dasharray: 600;
++      stroke-dashoffset: 600;
++      animation: draw-heartbeat 3s linear infinite;
+     }
+-    @keyframes cursor-move {
+-      0%, 100% { transform: translate(0, 0); }
+-      25% { transform: translate(-20px, 20px); }
+-      50% { transform: translate(20px, -20px); }
+-      75% { transform: translate(-10px, -10px); }
++    @keyframes draw-heartbeat {
++      0% { stroke-dashoffset: 600; }
++      80% { stroke-dashoffset: 0; }
++      100% { stroke-dashoffset: 0; }
+     }
+   `;
+   document.head.appendChild(style);

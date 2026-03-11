@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>블로그 에디터 – Noteracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/blog-editor.css" />
+</head>
+</head>
+<body>
+
+<!-- ══ TOPBAR ══ -->
+<div id="topbar">
+  <div class="tb-left">
+    <button class="tb-back" onclick="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      돌아가기
+    </button>
+    <div>
+      <div class="tb-title" id="tb-title">새 포스트</div>
+      <div class="tb-subtitle" id="tb-status">Draft</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <button class="btn btn-ghost" onclick="saveDraft()" id="btn-save">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      저장
+    </button>
+    <div style="display:flex;align-items:center;gap:6px;background:var(--card);border-radius:22px;padding:3px 4px;">
+      <label style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:12px;color:#d9d9d9;padding:4px 10px;border-radius:18px;transition:all .2s;" id="lbl-immediate">
+        <input type="radio" name="publish-mode" value="immediate" checked onchange="toggleSchedule()" style="display:none;"/> 즉시발행
+      </label>
+      <label style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:12px;color:#d9d9d9;padding:4px 10px;border-radius:18px;transition:all .2s;" id="lbl-scheduled">
+        <input type="radio" name="publish-mode" value="scheduled" onchange="toggleSchedule()" style="display:none;"/> 예약발행
+      </label>
+      <input type="datetime-local" id="schedule-datetime" style="display:none;background:var(--bg);color:#d9d9d9;border:1px solid var(--border);border-radius:14px;padding:3px 8px;font-size:12px;"/>
+    </div>
+    <button class="btn btn-ai" onclick="runAIReview()" id="btn-ai-top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+      AI SEO
+    </button>
+    <button class="btn btn-publish" onclick="openPublishModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      발행
+    </button>
+  </div>
+</div>
+
+<!-- ══ TOOLBAR ══ -->
+<div id="toolbar">
+  <button class="tbtn" title="Heading 1" onclick="insertMd('# ')">H1</button>
+  <button class="tbtn" title="Heading 2" onclick="insertMd('## ')">H2</button>
+  <button class="tbtn" title="Heading 3" onclick="insertMd('### ')">H3</button>
+  <button class="tbtn" title="Heading 4" onclick="insertMd('#### ')">H4</button>
+  <button class="tbtn" title="Heading 5" onclick="insertMd('##### ')">H5</button>
+  <button class="tbtn" title="Heading 6" onclick="insertMd('###### ')">H6</button>
+  <button class="tbtn" title="본문 단락" onclick="insertParagraph()">P</button>
+  <div class="tb-sep"></div>
+  <button class="tbtn" title="굵게" onclick="wrapMd('**','**')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 010 8H6zM6 12h9a4 4 0 010 8H6z"/></svg>
+  </button>
+  <button class="tbtn" title="기울임" onclick="wrapMd('*','*')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg>
+  </button>
+  <button class="tbtn" title="취소선" onclick="wrapMd('~~','~~')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><path d="M16 6C16 6 14.5 4 12 4C9.5 4 7 5.5 7 8C7 10 8.5 11 10 11.5"/><path d="M8 18C8 18 9.5 20 12 20C14.5 20 17 18.5 17 16C17 14 15.5 13 14 12.5"/></svg>
+  </button>
+  <div class="tb-sep"></div>
+  <button class="tbtn" title="Inline Code" onclick="wrapMd('`','`')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+  </button>
+  <button class="tbtn" title="코드 블록" onclick="insertMd('\n```\n','```\n')">```</button>
+  <button class="tbtn" title="인용구" onclick="insertMd('> ')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+  </button>
+  <div class="tb-sep"></div>
+  <button class="tbtn" title="글머리 기호" onclick="insertMd('- ')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
+  </button>
+  <button class="tbtn" title="번호 목록" onclick="insertMd('1. ')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button class="tbtn" title="구분선" onclick="insertMd('\n---\n')">HR</button>
+  <div class="tb-sep"></div>
+  <button class="tbtn" title="링크" onclick="insertLink()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+  </button>
+  <button class="tbtn" title="이미지 삽입 (파일 업로드 또는 드래그 앤 드롭)" onclick="insertImage()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+  </button>
+  <div class="tb-sep"></div>
+  <button class="tbtn" title="표" onclick="insertTable()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+  </button>
+  <div class="tb-sep"></div>
+  <button class="tbtn active" id="btn-split" title="분할 보기" onclick="setView('split')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+  </button>
+  <button class="tbtn" id="btn-edit-only" title="편집만" onclick="setView('edit')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+  </button>
+  <button class="tbtn" id="btn-preview-only" title="미리보기만" onclick="setView('preview')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+  </button>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <span style="font-size:13px;color:var(--muted);">핵심 키워드:</span>
+    <input id="focus-keyword" type="text" placeholder="예) 노터래커 앱"
+      style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--white);font-size:13px;outline:none;width:180px;"
+      oninput="runSEO()"/>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div id="main">
+
+  <!-- ── Editor ── -->
+  <div id="editor-wrap">
+    <input id="title-input" type="text" placeholder="포스트 제목…" oninput="onTitleChange()" autocomplete="off"/>
+    <div id="editor-container" ondrop="onEditorDrop(event)" ondragover="onEditorDragOver(event)" ondragleave="onEditorDragLeave(event)">
+      <textarea id="md-input" placeholder="Start writing in Markdown…&#10;&#10;Use ## for headings, **bold**, *italic*, `code`, etc." oninput="onContentChange()" onpaste="onPaste(event)"></textarea>
+      <div id="md-preview"></div>
+      <div id="drop-overlay">여기에 이미지를 놓으세요</div>
+    </div>
+  </div>
+
+  <!-- Hidden file input -->
+  <input type="file" id="image-file-input" accept="image/*" style="display:none;" onchange="onImageFileSelected(event)"/>
+
+  <!-- ── Right Panel ── -->
+  <div id="panel">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="seo" onclick="switchTab('seo')">SEO</div>
+      <div class="panel-tab" data-tab="ai" onclick="switchTab('ai')">이미지</div>
+      <div class="panel-tab" data-tab="style" onclick="switchTab('style')">스타일</div>
+      <div class="panel-tab" data-tab="i18n" onclick="switchTab('i18n')">다국어</div>
+      <div class="panel-tab" data-tab="meta" onclick="switchTab('meta')">메타</div>
+    </div>
+
+    <!-- SEO Tab -->
+    <div class="panel-body active" id="tab-seo">
+      <div class="panel-content">
+        <div class="seo-score-ring">
+          <div class="ring-wrap">
+            <svg width="60" height="60" viewBox="0 0 60 60">
+              <circle class="ring-bg" cx="30" cy="30" r="26"/>
+              <circle class="ring-fill" id="seo-ring" cx="30" cy="30" r="26"
+                stroke-dasharray="163.4" stroke-dashoffset="163.4" stroke="var(--red)"/>
+            </svg>
+            <div class="ring-text" id="seo-ring-val">0</div>
+          </div>
+          <div class="seo-score-info">
+            <div class="seo-score-label">SEO 점수</div>
+            <div class="seo-score-grade grade-poor" id="seo-grade">개선 필요</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px;" id="seo-pass-count">0 / 7 항목</div>
+          </div>
+        </div>
+        <div class="seo-check-list" id="seo-checks">
+          <!-- JS renders -->
+        </div>
+        <button class="btn btn-secondary" style="width:100%;" onclick="runSEO()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+          SEO 재검사
+        </button>
+
+        <!-- AI SEO Result Section -->
+        <div id="ai-seo-section" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:none;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+            <span style="font-size:13px;font-weight:700;color:#a855f7;">AI SEO 분석 결과</span>
+          </div>
+          <div class="ai-score-row" id="ai-scores" style="display:none;margin-bottom:10px;">
+            <div class="ai-score-item"><div class="ai-score-val" id="ai-s-readability">—</div><div class="ai-score-lbl">가독성</div></div>
+            <div class="ai-score-item"><div class="ai-score-val" id="ai-s-seo">—</div><div class="ai-score-lbl">SEO</div></div>
+            <div class="ai-score-item"><div class="ai-score-val" id="ai-s-tone">—</div><div class="ai-score-lbl">문체</div></div>
+          </div>
+          <div class="ai-result empty" id="ai-result">상단 <strong>AI SEO</strong> 버튼을 클릭하면 GPT-4o-mini가 글을 분석하여 SEO 개선 제안을 합니다.</div>
+          <div class="ai-tags" id="ai-suggested-tags" style="display:none;"></div>
+          <button class="btn btn-secondary" style="width:100%;display:none;margin-top:8px;" id="ai-apply-tags-btn" onclick="applyAITags()">
+            추천 태그 적용
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Tab -->
+    <div class="panel-body" id="tab-ai">
+      <div class="panel-content">
+        <div class="pf-label" style="margin-bottom:10px;">대표 이미지</div>
+        <div id="feat-img-preview" style="width:100%;aspect-ratio:16/9;background:var(--bg);border:1px dashed var(--border);border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-bottom:10px;cursor:pointer;" onclick="uploadFeaturedImage()">
+          <span id="feat-img-placeholder" style="font-size:13px;color:var(--muted);text-align:center;line-height:1.5;">클릭하여 이미지 업로드<br/>또는 아래 URL 직접 입력</span>
+          <img id="feat-img-thumb" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;"/>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:8px;">
+          <input class="pf-input" id="meta-img" placeholder="이미지 URL (https://…)" style="flex:1;" oninput="updateFeatImgPreview()"/>
+          <button type="button" onclick="uploadFeaturedImage()" style="background:#e6b802;color:#1c2228;border:none;border-radius:22px;padding:6px 14px;font-size:13px;cursor:pointer;white-space:nowrap;">업로드</button>
+        </div>
+        <input type="file" id="featured-img-input" accept="image/*" style="display:none;" onchange="onFeaturedImgSelected(event)"/>
+        <div class="pf-row" style="margin-top:4px;">
+          <div class="pf-label">Alt 태그 <span style="font-weight:400;color:var(--muted);">(SEO·접근성)</span></div>
+          <input class="pf-input" id="meta-img-alt" placeholder="이미지를 설명하는 텍스트 (예: Noteracker 대시보드 스크린샷)"/>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px;font-style:italic;">
+          💡 대표 이미지는 블로그 목록, SNS 공유(og:image), 검색결과에 표시됩니다. Alt 태그는 SEO와 접근성에 필수입니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- Style Tab -->
+    <div class="panel-body" id="tab-style">
+      <div class="panel-content">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">
+          제목(H1~H6) 및 본문(P) 스타일을 커스터마이징하세요.
+        </div>
+
+        <!-- H1 Settings -->
+        <div class="style-box">
+          <div class="pf-label" style="margin-bottom:8px;">H1 제목</div>
+          <div class="style-grid">
+            <div><label>크기</label><input type="number" id="h1-size" value="28" min="12" max="48" oninput="updateStylePreview()"/></div>
+            <div><label>색상</label><input type="text" id="h1-color" value="#ffffff" placeholder="#ffffff" maxlength="7" oninput="updateStylePreview()" style="font-family:monospace;"/></div>
+            <div><label>줄 높이</label><input type="number" id="h1-lh" value="1.3" min="1" max="2" step="0.1" oninput="updateStylePreview()"/></div>
+            <div><label>굵기</label>
+              <select id="h1-weight" onchange="updateStylePreview()">
+                <option value="200">Extra Light (200)</option>
+                <option value="300">Light (300)</option>
+                <option value="400">Regular (400)</option>
+                <option value="500">Medium (500)</option>
+                <option value="600">Semi Bold (600)</option>
+                <option value="700">Bold (700)</option>
+                <option value="800" selected>Extra Bold (800)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- H2 Settings -->
+        <div class="style-box">
+          <div class="pf-label" style="margin-bottom:8px;">H2 제목</div>
+          <div class="style-grid">
+            <div><label>크기</label><input type="number" id="h2-size" value="24" min="12" max="40" oninput="updateStylePreview()"/></div>
+            <div><label>색상</label><input type="text" id="h2-color" value="#ffffff" placeholder="#ffffff" maxlength="7" oninput="updateStylePreview()" style="font-family:monospace;"/></div>
+            <div><label>줄 높이</label><input type="number" id="h2-lh" value="1.3" min="1" max="2" step="0.1" oninput="updateStylePreview()"/></div>
+            <div><label>굵기</label>
+              <select id="h2-weight" onchange="updateStylePreview()">
+                <option value="200">Extra Light (200)</option>
+                <option value="300">Light (300)</option>
+                <option value="400">Regular (400)</option>
+                <option value="500">Medium (500)</option>
+                <option value="600">Semi Bold (600)</option>
+                <option value="700" selected>Bold (700)</option>
+                <option value="800">Extra Bold (800)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- H3 Settings -->
+        <div class="style-box">
+          <div class="pf-label" style="margin-bottom:8px;">H3 제목</div>
+          <div class="style-grid">
+            <div><label>크기</label><input type="number" id="h3-size" value="20" min="12" max="40" oninput="updateStylePreview()"/></div>
+            <div><label>색상</label><input type="text" id="h3-color" value="#ffffff" placeholder="#ffffff" maxlength="7" oninput="updateStylePreview()" style="font-family:monospace;"/></div>
+            <div><label>줄 높이</label><input type="number" id="h3-lh" value="1.3" min="1" max="2" step="0.1" oninput="updateStylePreview()"/></div>
+            <div><label>굵기</label>
+              <select id="h3-weight" onchange="updateStylePreview()">
+                <option value="200">Extra Light (200)</option>
+                <option value="300">Light (300)</option>
+                <option value="400">Regular (400)</option>
+                <option value="500">Medium (500)</option>
+                <option value="600">Semi Bold (600)</option>
+                <option value="700" selected>Bold (700)</option>
+                <option value="800">Extra Bold (800)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- H4 Settings -->
+        <div class="style-box">
+          <div class="pf-label" style="margin-bottom:8px;">H4 제목</div>
+          <div class="style-grid">
+            <div><label>크기</label><input type="number" id="h4-size" value="18" min="12" max="40" oninput="updateStylePreview()"/></div>
+            <div><label>색상</label><input type="text" id="h4-color" value="#c6cdc6" placeholder="#ffffff" maxlength="7" oninput="updateStylePreview()" style="font-family:monospace;"/></div>
+            <div><label>줄 높이</label><input type="number" id="h4-lh" value="1.3" min="1" max="2" step="0.1" oninput="updateStylePreview()"/></div>
+            <div><label>굵기</label>
+              <select id="h4-weight" onchange="updateStylePreview()">
+                <option value="200">Extra Light (200)</option>
+                <option value="300">Light (300)</option>
+                <option value="400">Regular (400)</option>
+                <option value="500">Medium (500)</option>
+                <option value="600">Semi Bold (600)</option>
+                <option value="700" selected>Bold (700)</option>
+                <option value="800">Extra Bold (800)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- H5 Settings -->
+        <div class="style-box">
+          <div class="pf-label" style="margin-bottom:8px;">H5 제목</div>
+          <div class="style-grid">
+            <div><label>크기</label><input type="number" id="h5-size" value="16" min="12" max="40" oninput="updateStylePreview()"/></div>
+            <div><label>색상</label><input type="text" id="h5-color" value="#c6cdc6" placeholder="#ffffff" maxlength="7" oninput="updateStylePreview()" style="font-family:monospace;"/></div>
+            <div><label>줄 높이</label><input type="number" id="h5-lh" value="1.3" min="1" max="2" step="0.1" oninput="updateStylePreview()"/></div>
+            <div><label>굵기</label>
+              <select id="h5-weight" onchange="updateStylePreview()">
+                <option value="200">Extra Light (200)</option>
+                <option value="300">Light (300)</option>
+                <option value="400">Regular (400)</option>
+                <option value="500">Medium (500)</option>
+                <option value="600">Semi Bold (600)</option>
+                <option value="700" selected>Bold (700)</option>
+                <option value="800">Extra Bold (800)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- H6 Settings -->
+        <div class="style-box">
+          <div class="pf-label" style="margin-bottom:8px;">H6 제목</div>
+          <div class="style-grid">
+            <div><label>크기</label><input type="number" id="h6-size" value="14" min="12" max="40" oninput="updateStylePreview()"/></div>
+            <div><label>색상</label><input type="text" id="h6-color" value="#9e9e9e" placeholder="#ffffff" maxlength="7" oninput="updateStylePreview()" style="font-family:monospace;"/></div>
+            <div><label>줄 높이</label><input type="number" id="h6-lh" value="1.3" min="1" max="2" step="0.1" oninput="updateStylePreview()"/></div>
+            <div><label>굵기</label>
+              <select id="h6-weight" onchange="updateStylePreview()">
+                <option value="200">Extra Light (200)</option>
+                <option value="300">Light (300)</option>
+                <option value="400">Regular (400)</option>
+                <option value="500">Medium (500)</option>
+                <option value="600" selected>Semi Bold (600)</option>
+                <option value="700">Bold (700)</option>
+                <option value="800">Extra Bold (800)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paragraph (본문) Settings -->
+        <div class="style-box">
+          <div class="pf-label" style="margin-bottom:8px;">본문 (P)</div>
+          <div class="style-grid">
+            <div><label>크기</label><input type="number" id="p-size" value="15" min="12" max="20" oninput="updateStylePreview()"/></div>
+            <div><label>색상</label><input type="text" id="p-color" value="#c6cdc6" placeholder="#c6cdc6" maxlength="7" oninput="updateStylePreview()" style="font-family:monospace;"/></div>
+            <div><label>줄 높이</label><input type="number" id="p-lh" value="1.8" min="1" max="2.5" step="0.1" oninput="updateStylePreview()"/></div>
+            <div><label>글자 간격</label><input type="number" id="p-ls" value="0" min="-2" max="2" step="0.5" oninput="updateStylePreview()"/></div>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="style-box" style="border:1px solid var(--border);">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">미리보기</div>
+          <div id="style-preview" style="line-height:1.6;">
+            <div id="h1-preview" style="margin-bottom:12px;font-size:28px;color:#ffffff;font-weight:800;line-height:1.3;">H1 제목 미리보기</div>
+            <div id="h2-preview" style="margin-bottom:10px;font-size:24px;color:#ffffff;font-weight:700;line-height:1.3;">H2 제목 미리보기</div>
+            <div id="h3-preview" style="margin-bottom:10px;font-size:20px;color:#ffffff;font-weight:700;line-height:1.3;">H3 제목 미리보기</div>
+            <div id="h4-preview" style="margin-bottom:10px;font-size:18px;color:#c6cdc6;font-weight:700;line-height:1.3;">H4 제목 미리보기</div>
+            <div id="h5-preview" style="margin-bottom:10px;font-size:16px;color:#c6cdc6;font-weight:700;line-height:1.3;">H5 제목 미리보기</div>
+            <div id="h6-preview" style="margin-bottom:12px;font-size:14px;color:#9e9e9e;font-weight:600;line-height:1.3;">H6 제목 미리보기</div>
+            <div id="p-preview" style="margin-bottom:8px;font-size:15px;color:#c6cdc6;line-height:1.8;">본문 텍스트 미리보기입니다. 여기서 설정한 스타일이 실시간으로 적용됩니다. 글자 크기, 색상, 줄 높이 등을 조정하여 원하는 디자인을 만들 수 있습니다.</div>
+          </div>
+        </div>
+
+        <button class="btn btn-secondary" style="width:100%;" onclick="resetStyles()">기본값 복원</button>
+      </div>
+    </div>
+
+    <!-- i18n Tab -->
+    <div class="panel-body" id="tab-i18n">
+      <div class="panel-content">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;padding:12px;background:rgba(230,184,2,0.08);border-radius:8px;border-left:3px solid #e6b802;">
+          ✨ <strong>자동 다국어 번역</strong><br/>
+          발행 시 자동으로 23개국 언어로 번역됩니다.<br/>
+          별도의 설정이나 버튼이 필요 없습니다.
+        </div>
+        <div id="lang-rows" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px;">
+          <!-- JS renders 23 languages in 3 columns -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Meta Tab -->
+    <div class="panel-body" id="tab-meta">
+      <div class="panel-content">
+        <!-- Focus Keywords Section (NEW) -->
+        <div class="pf-row" style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div class="pf-label" style="margin-bottom:0;">포커스 키워드</div>
+            <button class="btn btn-primary btn-sm" id="btn-ai-optimize" onclick="runAIOptimize()" style="padding:5px 12px;font-size:13px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              검증
+            </button>
+          </div>
+          <div class="focus-keywords-grid" id="focus-keywords-container" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+            <!-- JS will render 5 keyword inputs -->
+          </div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;font-style:italic;">
+            💡 검증 버튼을 클릭하면 GPT-4o-mini가 글 제목과 내용을 분석하여 최적의 포커스 키워드 5개를 추천합니다.
+          </div>
+        </div>
+
+        <div class="pf-row">
+          <div class="pf-label">슬러그 <span id="slug-preview">/blog/—</span></div>
+          <input class="pf-input" id="meta-slug" placeholder="auto-generated" oninput="onSlugInput()"/>
+        </div>
+        <div class="pf-row">
+          <div class="pf-label">카테고리</div>
+          <select class="pf-select" id="meta-category">
+            <option value="">— 선택 —</option>
+            <option value="malware-removal">악성코드 제거</option>
+            <option value="website-security">웹사이트 보안</option>
+            <option value="vulnerability">취약점 분석</option>
+            <option value="threat-detection">위협 탐지</option>
+            <option value="security-hardening">보안 강화</option>
+            <option value="incident-response">사고 대응</option>
+          </select>
+        </div>
+        <div class="pf-row">
+          <div class="pf-label">태그 <span>쉼표로 구분</span></div>
+          <input class="pf-input" id="meta-tags" placeholder="예) seo, 콘텐츠, 마케팅"/>
+        </div>
+        <div class="pf-row">
+          <div class="pf-label">요약</div>
+          <textarea class="pf-textarea" id="meta-excerpt" rows="3" placeholder="목록에 표시될 짧은 요약…" oninput="countChars('meta-excerpt','exc-count',0,160)"></textarea>
+          <div class="pf-count" id="exc-count">0 chars</div>
+        </div>
+        <div class="pf-row">
+          <div class="pf-label">SEO 제목 <span id="seo-title-count">0/60</span></div>
+          <input class="pf-input" id="meta-seo-title" placeholder="검색엔진에 표시될 제목 (미입력 시 포스트 제목 사용)" oninput="onSeoTitleChange();runSEO()"/>
+        </div>
+        <div class="pf-row">
+          <div class="pf-label">메타 설명 <span id="meta-desc-count">0/160</span></div>
+          <textarea class="pf-textarea" id="meta-seo-desc" rows="3" placeholder="검색엔진용 설명 (최대 160자)…" oninput="onMetaDescChange();runSEO()"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PUBLISH MODAL ══ -->
+<div class="modal-overlay" id="modal-publish">
+  <div class="modal-box">
+    <div class="modal-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      발행하기
+    </div>
+    <div class="modal-desc">발행 전 설정을 확인하세요. 발행 즉시 공개됩니다.</div>
+    <div id="pub-seo-warn" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:7px;padding:10px 12px;font-size:13px;color:#fca5a5;margin-bottom:14px;display:none;">
+      ⚠ SEO 점수가 60 미만입니다. 발행 전 SEO를 개선하는 것을 권장합니다.
+    </div>
+    <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.8;">
+      <div><strong style="color:var(--white);">제목:</strong> <span id="pub-title">—</span></div>
+      <div><strong style="color:var(--white);">슬러그:</strong> <span id="pub-slug">—</span></div>
+      <div><strong style="color:var(--white);">카테고리:</strong> <span id="pub-cat">—</span></div>
+      <div><strong style="color:var(--white);">SEO 점수:</strong> <span id="pub-seo">—</span></div>
+      <div><strong style="color:var(--white);">AI 리뷰:</strong> <span id="pub-ai">—</span></div>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">자동 다국어 번역</div>
+    <div style="font-size:12px;color:var(--muted);background:rgba(230,184,2,0.08);border:1px solid rgba(230,184,2,0.2);border-radius:6px;padding:10px;line-height:1.6;">
+      ✨ 발행 즉시 <strong style="color:#e6b802;">23개국 언어</strong>로 자동 번역됩니다.
+      <br/>별도의 선택이나 설정이 필요 없습니다.
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-publish')">취소</button>
+      <button class="btn btn-publish" id="btn-do-publish" onclick="doPublish()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        지금 발행
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg"></span>
+</div>
+
+<!-- ══ SCRIPT ══ -->
+
+  <script src="/js/blog-editor.js" defer></script>
+</body>
+</html>

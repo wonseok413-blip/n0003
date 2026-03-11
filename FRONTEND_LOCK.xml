@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ⛔⛔⛔ N0004 프론트엔드 디자인/UI 절대 잠금 ⛔⛔⛔
+  생성일: 2026-03-09
+
+  아래 목록의 모든 파일은 완성된 디자인/UI 파일입니다.
+  어떤 AI 에이전트, 어떤 채팅 세션에서도 아래 규칙을 위반할 수 없습니다.
+
+  ██ 절대 금지 사항 ██
+  1. 수정 금지 — 한 글자, 한 줄도 변경 불가
+  2. 삭제 금지 — 파일 삭제, 내용 삭제, 부분 삭제 모두 금지
+  3. 재해석 금지 — "개선", "최적화", "리팩토링" 명목의 변경 금지
+  4. 재배포 금지 — 이 파일들의 내용을 다른 파일로 복사/이동/재구성 금지
+  5. 덮어쓰기 금지 — 어떤 이유로든 기존 내용을 새 내용으로 교체 금지
+
+  ██ 유일한 예외 ██
+  관리자가 명시적으로 "이 파일 수정해" 라고 파일명을 지정한 경우에만 해당 파일만 수정 가능.
+  그 외 모든 경우 절대 불가.
+-->
+<frontend-lock version="1.0" created="2026-03-09" status="ABSOLUTE_LOCK">
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- HTML 페이지 — 절대 수정/삭제/재해석 금지 -->
+  <!-- ═══════════════════════════════════════ -->
+  <locked-files category="HTML_PAGES">
+    <file path="public/index.html" role="홈페이지" />
+    <file path="public/about.html" role="About Us 페이지" />
+    <file path="public/services.html" role="Service 페이지" />
+    <file path="public/product.html" role="Product 페이지" />
+    <file path="public/solution.html" role="Solution 페이지" />
+    <file path="public/blog.html" role="Blog 페이지" />
+    <file path="public/contact.html" role="Contact 페이지" />
+    <file path="public/login.html" role="로그인 페이지" />
+    <file path="public/dashboard-admin.html" role="관리자 대시보드" />
+    <file path="public/blog-editor.html" role="블로그 에디터" />
+  </locked-files>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 공통 헤더/풋터 컴포넌트 — 절대 수정/삭제/재해석/재배포 금지 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--
+    ⛔ 공통 헤더/풋터 시스템 ⛔
+    - 모든 일반 페이지(7개)는 공통 헤더/풋터로 분리 관리됨
+    - 페이지 HTML에 <div id="header-one"></div>, <div id="footer-one"></div> 플레이스홀더만 존재
+    - src/worker.js의 HTMLRewriter가 HEADER_HTML, FOOTER_HTML로 교체 주입
+    - public/components/header.html, footer.html은 동기화용 원본
+
+    ██ 적용 페이지 ██
+    index.html, about.html, services.html, product.html,
+    solution.html, blog.html, contact.html
+
+    ██ 절대 금지 ██
+    1. 수정 금지 — 관리자의 명시적 파일명 지정 지시 없이 수정 불가
+    2. 분리 금지 — 공통 컴포넌트를 개별 페이지에 하드코딩 금지
+    3. 재해석 금지 — "개선", "최적화", "리팩토링" 명목의 구조 변경 금지
+    4. 재배포 금지 — 컴포넌트 내용을 다른 파일로 복사/이동/재구성 금지
+    5. 플레이스홀더 제거 금지 — 페이지 내 #header-one, #footer-one div 삭제 금지
+  -->
+  <locked-files category="COMMON_HEADER_FOOTER" status="ABSOLUTE_LOCK">
+    <file path="public/components/header.html" role="공통 헤더 원본" lock="수정/삭제/분리/재해석/재배포 절대 금지" />
+    <file path="public/components/footer.html" role="공통 풋터 원본" lock="수정/삭제/분리/재해석/재배포 절대 금지" />
+    <file path="src/worker.js" role="HEADER_HTML/FOOTER_HTML 주입 (HTMLRewriter)" lock="헤더/풋터 템플릿 수정 절대 금지. API 라우트 추가만 허용" />
+  </locked-files>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- CSS — 절대 수정/삭제/재해석 금지 -->
+  <!-- ═══════════════════════════════════════ -->
+  <locked-files category="CSS">
+    <file path="public/css/style.css" role="전역 스타일" />
+    <file path="public/css/index.css" role="홈페이지 CSS" />
+    <file path="public/css/about.css" role="About CSS" />
+    <file path="public/css/services.css" role="Service CSS" />
+    <file path="public/css/product.css" role="Product CSS" />
+    <file path="public/css/solution.css" role="Solution CSS" />
+    <file path="public/css/blog.css" role="Blog CSS" />
+    <file path="public/css/contact.css" role="Contact CSS" />
+    <file path="public/css/dashboard-admin.css" role="관리자 대시보드 CSS" />
+    <file path="public/css/blog-editor.css" role="블로그 에디터 CSS" />
+  </locked-files>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- JS — 절대 수정/삭제/재해석 금지 -->
+  <!-- ═══════════════════════════════════════ -->
+  <locked-files category="JS">
+    <file path="public/js/main.js" role="전역 JS (컴포넌트 로딩, 애니메이션)" />
+    <file path="public/js/blog.js" role="블로그 JS" />
+    <file path="public/js/blog-editor.js" role="블로그 에디터 JS" />
+    <file path="public/js/contact.js" role="Contact JS" />
+    <file path="public/js/dashboard-admin.js" role="관리자 대시보드 JS" />
+  </locked-files>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- 이미지/로고 — 절대 수정/삭제/교체 금지 -->
+  <!-- ═══════════════════════════════════════ -->
+  <locked-files category="IMAGES">
+    <file path="public/images/noteracker-logo-02.webp" role="메인 로고" />
+    <file path="public/images/noteracker-logo-02-opt.webp" role="최적화 로고" />
+    <file path="public/images/noteracker-studio-logo.svg" role="스튜디오 로고" />
+    <directory path="public/images/icons/" role="아이콘 전체" />
+    <directory path="public/images/icons/opt/" role="최적화 아이콘 전체" />
+  </locked-files>
+
+</frontend-lock>
