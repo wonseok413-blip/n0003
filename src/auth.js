@@ -1,5 +1,5 @@
 /**
- * auth.js — n0003 관리자 인증
+ * auth.js n0003 관리자 인증
  * n0005/src/auth.js 기반 (관리자 전용, Stripe/고객 제외)
  */
 

@@ -151,7 +151,7 @@ async function loadOverview() {
     // 최근 Stripe 이벤트
     const wRows = (data.recent_events || []).map(w => `
       <tr>
-        <td style="font-size:12px;color:var(--focus);">${w.type||'—'}</td>
+        <td style="font-size:12px;color:var(--focus);">${w.type||'-'}</td>
         <td><span class="badge ${w.processed ? 'badge-green' : w.error_msg ? 'badge-red' : 'badge-yellow'}">${w.processed ? '완료' : w.error_msg ? '오류' : '대기'}</span></td>
         <td>${formatTime(w.created_at)}</td>
       </tr>`).join('') || '<tr><td colspan="3" style="color:var(--text-muted);text-align:center;padding:16px;">이벤트 없음</td></tr>';
@@ -160,8 +160,8 @@ async function loadOverview() {
     // 최근 고객
     const cRows = (data.recent_customers || []).map(c => `
       <tr>
-        <td>${c.name||c.email||'—'}</td>
-        <td><span class="badge badge-blue">${c.plan_name||'—'}</span></td>
+        <td>${c.name||c.email||'-'}</td>
+        <td><span class="badge badge-blue">${c.plan_name||'-'}</span></td>
         <td>${formatTime(c.created_at)}</td>
       </tr>`).join('') || '<tr><td colspan="3" style="color:var(--text-muted);text-align:center;padding:16px;">No customers</td></tr>';
     document.getElementById('ov-customer-rows').innerHTML = cRows;
@@ -176,7 +176,7 @@ async function loadOverview() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// CUSTOMERS — 결제 고객 (Stripe 결제 완료, stripe_customer_id 있음)
+// CUSTOMERS 결제 고객 (Stripe 결제 완료, stripe_customer_id 있음)
 // ══════════════════════════════════════════════════════════════
 let allCustomers = [];
 let custAccData = {}; // rowId → customer 객체
@@ -215,10 +215,10 @@ function renderCustomers(list) {
     return `
       <tr class="cust-row" onclick="toggleCustAcc('${rid}')">
         <td style="color:var(--text-muted);font-size:12px;">${list.length - i}</td>
-        <td style="font-weight:600;">${c.name || '—'}</td>
+        <td style="font-weight:600;">${c.name || '-'}</td>
         <td style="font-size:13px;color:var(--text-muted);">${c.email}</td>
-        <td><span class="badge badge-blue">${c.plan_name || '—'}</span></td>
-        <td><span class="badge ${stCls}">${c.payment_status || '—'}</span></td>
+        <td><span class="badge badge-blue">${c.plan_name || '-'}</span></td>
+        <td><span class="badge ${stCls}">${c.payment_status || '-'}</span></td>
         <td><span class="badge ${c.is_active ? 'badge-green' : 'badge-red'}">${c.is_active ? '활성' : '비활성'}</span></td>
         <td style="width:32px;text-align:right;"><span class="cust-chevron" id="${rid}-chv">▶</span></td>
       </tr>
@@ -233,19 +233,19 @@ function renderCustomers(list) {
               </div>
               <div class="cust-info-cell">
                 <div class="cust-info-lbl">국가</div>
-                <div class="cust-info-val">${c.country ? flag(c.country) + c.country : '—'}</div>
+                <div class="cust-info-val">${c.country ? flag(c.country) + c.country : '-'}</div>
               </div>
               <div class="cust-info-cell">
                 <div class="cust-info-lbl">전화</div>
-                <div class="cust-info-val">${c.phone || '—'}</div>
+                <div class="cust-info-val">${c.phone || '-'}</div>
               </div>
               <div class="cust-info-cell">
                 <div class="cust-info-lbl">플랜 주기</div>
-                <div class="cust-info-val">${c.plan_interval || '—'}</div>
+                <div class="cust-info-val">${c.plan_interval || '-'}</div>
               </div>
               <div class="cust-info-cell">
                 <div class="cust-info-lbl">최근 결제금액</div>
-                <div class="cust-info-val">${c.last_amount ? '$' + (Number(c.last_amount)/100).toFixed(2) : '—'}</div>
+                <div class="cust-info-val">${c.last_amount ? '$' + (Number(c.last_amount)/100).toFixed(2) : '-'}</div>
               </div>
               <div class="cust-info-cell">
                 <div class="cust-info-lbl">최근 결제일시</div>
@@ -257,23 +257,23 @@ function renderCustomers(list) {
               </div>
               <div class="cust-info-cell">
                 <div class="cust-info-lbl">최근 로그인</div>
-                <div class="cust-info-val sub">${c.last_login ? formatTime(c.last_login) : '—'}</div>
+                <div class="cust-info-val sub">${c.last_login ? formatTime(c.last_login) : '-'}</div>
               </div>
               <div class="cust-info-cell span2">
                 <div class="cust-info-lbl">Stripe 고객 ID (cus_)</div>
-                <div class="cust-info-val muted">${c.stripe_customer_id || '—'}</div>
+                <div class="cust-info-val muted">${c.stripe_customer_id || '-'}</div>
               </div>
               <div class="cust-info-cell span2">
                 <div class="cust-info-lbl">구독 ID (sub_)</div>
-                <div class="cust-info-val muted">${c.stripe_subscription_id || '—'}</div>
+                <div class="cust-info-val muted">${c.stripe_subscription_id || '-'}</div>
               </div>
               <div class="cust-info-cell span2">
-                <div class="cust-info-lbl">인보이스 ID — 결제 ID (in_)</div>
-                <div class="cust-info-val muted">${c.last_invoice_id || '—'}</div>
+                <div class="cust-info-lbl">인보이스 ID 결제 ID (in_)</div>
+                <div class="cust-info-val muted">${c.last_invoice_id || '-'}</div>
               </div>
               <div class="cust-info-cell span2">
                 <div class="cust-info-lbl">결제 의향 ID (pi_)</div>
-                <div class="cust-info-val muted">${c.last_payment_intent_id || '—'}</div>
+                <div class="cust-info-val muted">${c.last_payment_intent_id || '-'}</div>
               </div>
             </div>
             <!-- 관리 액션 버튼 (가로 행) -->
@@ -354,24 +354,24 @@ async function toggleCustAcc(rid) {
 
       const rawIv = pay.interval
         || (/annual|yearly|year/i.test(pay.plan_name) ? 'year' : /month/i.test(pay.plan_name) ? 'month' : null);
-      const ivLabel = rawIv === 'year' ? '연간' : rawIv === 'month' ? '월간' : (rawIv || '—');
+      const ivLabel = rawIv === 'year' ? '연간' : rawIv === 'month' ? '월간' : (rawIv || '-');
       const stCls = pay.status === 'completed' ? 'badge-green' : pay.status === 'pending' ? 'badge-yellow' : pay.status === 'upgraded' ? 'badge-blue' : 'badge-gray';
-      const stLabel = pay.status === 'upgraded' ? '이전 플랜' : pay.status || '—';
+      const stLabel = pay.status === 'upgraded' ? '이전 플랜' : pay.status || '-';
       const rowOpacity = isUpgraded ? 'opacity:.55;' : '';
       const amtStyle = isUpgraded ? 'text-decoration:line-through;color:var(--text-muted);font-weight:400;' : 'font-weight:700;color:#fff;';
-      const amtStr = pay.amount != null ? '$' + (Number(pay.amount)/100).toFixed(2) : '—';
+      const amtStr = pay.amount != null ? '$' + (Number(pay.amount)/100).toFixed(2) : '-';
       const orderId = '#' + (pay.stripe_invoice_id || pay.stripe_payment_intent_id || pay.stripe_subscription_id || String(pay.id)).slice(-8).toUpperCase();
 
       return `
         <tr style="${rowOpacity}">
           <td style="color:var(--text-muted);">${pays.length - i}</td>
           <td style="font-size:13px;color:var(--focus);font-weight:700;font-family:monospace;">${orderId}</td>
-          <td>${pay.plan_name || '—'}</td>
+          <td>${pay.plan_name || '-'}</td>
           <td style="color:var(--text-muted);">${ivLabel}</td>
           <td style="${amtStyle}">${amtStr}</td>
           <td><span class="badge ${stCls}">${stLabel}</span></td>
           <td style="font-size:13px;color:var(--text-muted);">${formatTime(pay.paid_at || pay.created_at)}</td>
-          <td style="font-size:13px;color:${noteColor};">${note || '—'}</td>
+          <td style="font-size:13px;color:${noteColor};">${note || '-'}</td>
         </tr>`;
     }).join('');
 
@@ -486,11 +486,11 @@ async function showChangePlan(c) {
   document.getElementById('change-plan-customer-id').value = c.id || '';
   document.getElementById('change-plan-sub-id').value = c.stripe_subscription_id;
   document.getElementById('change-plan-customer-info').textContent =
-    (c.name ? c.name + ' ' : '') + '(' + (c.email || '—') + ')';
+    (c.name ? c.name + ' ' : '') + '(' + (c.email || '-') + ')';
 
   const intervalLabel = c.plan_interval === 'year' ? '연간' : c.plan_interval === 'month' ? '월간' : (c.plan_interval || '');
   document.getElementById('change-plan-current-info').textContent =
-    (c.plan_name || '—') + (intervalLabel ? ' / ' + intervalLabel : '');
+    (c.plan_name || '-') + (intervalLabel ? ' / ' + intervalLabel : '');
 
   // 플랜 목록 로드 (캐시)
   if (!_planPricesCache) {
@@ -557,7 +557,7 @@ async function applyPlanChange() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// MEMBERS — 회원 가입자 (join.html로 직접 가입, stripe_customer_id 없음)
+// MEMBERS 회원 가입자 (join.html로 직접 가입, stripe_customer_id 없음)
 // ══════════════════════════════════════════════════════════════
 let allMembers = [];
 async function loadMembers() {
@@ -580,8 +580,8 @@ function renderMembers(list) {
   tbody.innerHTML = list.map(c => `
     <tr>
       <td>${c.id}</td>
-      <td><strong style="color:#fff;">${c.username||'—'}</strong></td>
-      <td>${c.name||'—'}</td>
+      <td><strong style="color:#fff;">${c.username||'-'}</strong></td>
+      <td>${c.name||'-'}</td>
       <td>${c.email}</td>
       <td><span class="badge ${c.last_payment_at?'badge-green':'badge-gray'}">${c.last_payment_at?'연동됨':'미결제'}</span></td>
       <td>${formatTime(c.last_login)}</td>
@@ -664,9 +664,9 @@ async function loadPayments() {
     tbody.innerHTML = list.map(p => `
       <tr>
         <td style="font-size:12px;color:var(--focus);">PI_${(p.stripe_payment_intent_id||p.stripe_subscription_id||String(p.id)).slice(-8)}</td>
-        <td>${p.customer_email||'—'}</td>
-        <td>${p.plan_name||'—'}</td>
-        <td><span class="badge ${p.type==='subscription'?'badge-blue':'badge-yellow'}">${p.type||'—'}</span></td>
+        <td>${p.customer_email||'-'}</td>
+        <td>${p.plan_name||'-'}</td>
+        <td><span class="badge ${p.type==='subscription'?'badge-blue':'badge-yellow'}">${p.type||'-'}</span></td>
         <td>$${((p.amount||0)/100).toFixed(2)}</td>
         <td><span class="badge ${statusBadge(p.status)}">${p.status}</span></td>
         <td>${formatTime(p.created_at)}</td>
@@ -696,16 +696,16 @@ async function loadStripeEvents() {
     });
     const tbody = document.getElementById('stripe-events-tbody');
     if (!filtered.length) {
-      tbody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted);text-align:center;padding:30px;">Stripe 이벤트 없음 — pricing.html 결제 후 표시됩니다</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted);text-align:center;padding:30px;">Stripe 이벤트 없음 pricing.html 결제 후 표시됩니다</td></tr>';
       return;
     }
     tbody.innerHTML = filtered.map(e => `
       <tr>
         <td style="font-size:11px;color:var(--text-muted);">${(e.id||'').slice(-12)}</td>
-        <td style="font-size:12px;color:var(--focus);">${e.type||'—'}</td>
+        <td style="font-size:12px;color:var(--focus);">${e.type||'-'}</td>
         <td><span class="badge ${e.processed ? 'badge-green' : e.error_msg ? 'badge-red' : 'badge-yellow'}">${e.processed ? '완료' : e.error_msg ? '오류' : '대기'}</span></td>
         <td style="font-size:12px;">${formatTime(e.created_at)}</td>
-        <td style="font-size:12px;color:var(--text-danger);">${e.error_msg||'—'}</td>
+        <td style="font-size:12px;color:var(--text-danger);">${e.error_msg||'-'}</td>
         <td><button class="payload-btn" onclick='showPayload(${JSON.stringify(e.payload||"")})'>JSON</button></td>
       </tr>`).join('');
   } catch {
@@ -836,14 +836,14 @@ async function loadBlogList() {
           const seoClass = seoScore>=90?'badge-green':seoScore>=50?'badge-yellow':'badge-red';
           const statusClass = p.status==='published'?'badge-green':p.status==='draft'?'badge-gray':'badge-yellow';
           const rewriteBtn = seoScore < 90
-            ? `<button class="btn btn-sm btn-rewrite-${p.id}" style="background:rgba(137,158,46,.15);color:#899e2e;border:1px solid rgba(137,158,46,.3);" onclick="runSeoRewrite(${p.id},this)" title="SEO ${seoScore}점 — AI 재작성"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 재작성</button>`
+            ? `<button class="btn btn-sm btn-rewrite-${p.id}" style="background:rgba(137,158,46,.15);color:#899e2e;border:1px solid rgba(137,158,46,.3);" onclick="runSeoRewrite(${p.id},this)" title="SEO ${seoScore}점 AI 재작성"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 재작성</button>`
             : '';
           return `<tr id="blog-row-${p.id}">
             <td>
               <div class="blog-item-title">${esc(p.title)}</div>
               <div class="blog-item-meta">/blog/${esc(p.slug)}</div>
             </td>
-            <td>${esc(p.category||'—')}</td>
+            <td>${esc(p.category||'-')}</td>
             <td><span class="badge ${statusClass}">${p.status}</span></td>
             <td>
               <span class="badge ${seoClass}" id="seo-badge-${p.id}" title="SEO Score">${seoScore}</span>
@@ -887,7 +887,7 @@ async function rescorePost(id) {
         const btn = document.createElement('button');
         btn.className = 'btn btn-sm btn-rewrite-' + id;
         btn.style.cssText = 'background:rgba(137,158,46,.15);color:#899e2e;border:1px solid rgba(137,158,46,.3);';
-        btn.title = 'SEO ' + score + '점 — AI 재작성';
+        btn.title = 'SEO ' + score + '점 AI 재작성';
         btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 재작성';
         btn.onclick = () => rewritePost(id);
         const copyrightBtn = actions.querySelector('[onclick*="copyrightCheckPost"]');
@@ -938,7 +938,7 @@ async function copyrightCheckPost(id, title) {
   panel.style.display = 'block';
   panel.innerHTML = `<div class="card" style="padding:20px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-      <div style="font-size:13px;font-weight:600;">🔍 저작권/라이센스 점검 — <span style="color:var(--focus);">${esc(title||'Post #'+id)}</span></div>
+      <div style="font-size:13px;font-weight:600;">🔍 저작권/라이센스 점검 <span style="color:var(--focus);">${esc(title||'Post #'+id)}</span></div>
       <button class="btn btn-secondary btn-sm" onclick="document.getElementById('copyright-result-panel').style.display='none'">✕ 닫기</button>
     </div>
     <div style="text-align:center;padding:24px;color:var(--text-muted);">분석 중...</div>
@@ -1113,7 +1113,7 @@ function renderSimilarityPanel(sim) {
   checks6.forEach(item => {
     const val = sim[item.key] || {};
     const risk = val.risk || 'low';
-    const desc = val.detail !== undefined ? val.detail : '—';
+    const desc = val.detail !== undefined ? val.detail : '-';
     html += `<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);">
       <span style="font-size:16px;flex-shrink:0;">${item.icon}</span>
       <span style="flex:1;font-size:14px;">${item.label}</span>
@@ -1214,7 +1214,7 @@ async function loadBlogAuto() {
             <td><div style="font-weight:600;">${esc(s.title||s.url||'(제목 없음)')}</div><div style="font-size:12px;color:var(--text-muted);">${esc(s.url||'')}</div></td>
             <td>${esc(s.category||'전체')}</td>
             <td>${esc(s.priority||'normal')}</td>
-            <td><div style="font-size:12px;">${esc(s.tags||'—')}</div><div style="font-size:11px;color:var(--text-muted);">${esc(s.notes||'')}</div></td>
+            <td><div style="font-size:12px;">${esc(s.tags||'-')}</div><div style="font-size:11px;color:var(--text-muted);">${esc(s.notes||'')}</div></td>
             <td>${s.word_count||0}</td>
             <td><span class="badge ${s.status==='active'?'badge-green':'badge-red'}">${s.status||'active'}</span></td>
             <td>${formatTime(s.created_at)}</td>
@@ -1229,7 +1229,7 @@ async function loadBlogAuto() {
       var apiEl = document.getElementById('auto-stat-api');
       if (token.valid) { apiEl.textContent = 'OK'; apiEl.style.color = '#22c55e'; }
       else { apiEl.textContent = token.code || 'Error'; apiEl.style.color = '#ef4444'; }
-    } catch { document.getElementById('auto-stat-api').textContent = '—'; }
+    } catch { document.getElementById('auto-stat-api').textContent = '-'; }
 
     /* 생성 현황 히스토리 로드 */
     loadAutoHistory();
@@ -1237,7 +1237,7 @@ async function loadBlogAuto() {
     /* 생성 규칙 설정 로드 */
     loadBlogSettings();
   } catch {
-    document.getElementById('auto-stat-total').textContent = '—';
+    document.getElementById('auto-stat-total').textContent = '-';
   }
 }
 
@@ -1334,9 +1334,9 @@ async function loadAutoHistory() {
           var statusBadge = l.status === 'success' ? '<span class="badge badge-green">완료</span>'
             : l.status === 'running' ? '<span class="badge badge-blue">진행중</span>'
             : '<span class="badge badge-red">실패</span>';
-          var titleLink = l.post_slug ? '<a href="/blog-post.html?slug=' + encodeURIComponent(l.post_slug) + '" target="_blank">' + esc(l.post_title||'—') + '</a>' : esc(l.post_title||'—');
-          var durationSec = l.duration_ms ? (l.duration_ms / 1000).toFixed(1) + '초' : '—';
-          return '<tr><td>' + formatTime(l.created_at) + '</td><td>' + esc(l.category||'—') + '</td><td>' + titleLink + '</td><td style="font-size:12px;">' + esc(l.focus_kw||'—') + '</td><td>' + statusBadge + '</td><td style="color:' + seoColor + ';font-weight:600;">' + (l.seo_score||'—') + '</td><td>' + durationSec + '</td></tr>';
+          var titleLink = l.post_slug ? '<a href="/blog-post.html?slug=' + encodeURIComponent(l.post_slug) + '" target="_blank">' + esc(l.post_title||'-') + '</a>' : esc(l.post_title||'-');
+          var durationSec = l.duration_ms ? (l.duration_ms / 1000).toFixed(1) + '초' : '-';
+          return '<tr><td>' + formatTime(l.created_at) + '</td><td>' + esc(l.category||'-') + '</td><td>' + titleLink + '</td><td style="font-size:12px;">' + esc(l.focus_kw||'-') + '</td><td>' + statusBadge + '</td><td style="color:' + seoColor + ';font-weight:600;">' + (l.seo_score||'-') + '</td><td>' + durationSec + '</td></tr>';
         }).join('')
       : '<tr><td colspan="7" style="color:var(--text-muted);text-align:center;padding:30px;">생성 기록 없음</td></tr>';
   } catch { /* 히스토리 로드 실패 무시 */ }
@@ -1387,7 +1387,7 @@ async function improveStyleWithAI() {
     var data = await API('/api/admin/blog-gen/improve-rules', { method: 'POST', body: JSON.stringify({ currentRules: current }) });
     if (data.suggested) {
       document.getElementById('rules-style-input').value = data.suggested;
-      toast('✅ AI 개선 완료 — 검토 후 저장하세요', 'success');
+      toast('✅ AI 개선 완료 검토 후 저장하세요', 'success');
     }
   } catch (e) { toast('❌ AI 개선 실패: ' + (e.message||''), 'error'); }
 }
@@ -1396,9 +1396,9 @@ async function improveStyleWithAI() {
 // API SETTINGS
 // ══════════════════════════════════════════════════════════════
 const API_KEYS_AI = [
-  { key: 'openai_api_key',       label: 'OpenAI API Key',        desc: 'ChatGPT / GPT-4 API key — SEO 검증 및 블로그 생성' },
-  { key: 'youtube_api_key',      label: 'YouTube API Key',       desc: 'YouTube Data API v3 — 유튜브 소스 스크립트 수집' },
-  { key: 'unsplash_access_key',  label: 'Unsplash Access Key',   desc: 'Unsplash API — 블로그 이미지 자동 삽입' },
+  { key: 'openai_api_key',       label: 'OpenAI API Key',        desc: 'ChatGPT / GPT-4 API key SEO 검증 및 블로그 생성' },
+  { key: 'youtube_api_key',      label: 'YouTube API Key',       desc: 'YouTube Data API v3 유튜브 소스 스크립트 수집' },
+  { key: 'unsplash_access_key',  label: 'Unsplash Access Key',   desc: 'Unsplash API 블로그 이미지 자동 삽입' },
   { key: 'gemini_api_key',       label: 'Gemini API Key',        desc: 'Google Gemini for blog AI review' },
   { key: 'sendgrid_api_key',     label: 'SendGrid API Key',      desc: 'SendGrid 이메일 발송 API 키' },
 ];
@@ -1416,8 +1416,8 @@ function toggleEye(inputId, btn) {
   }
 }
 const API_KEYS_PAY = [
-  { key: 'stripe_publishable_key',  label: 'Stripe 공개키 (pk_live_...)',    desc: '프론트엔드용 — pricing.html에서 사용' },
-  { key: 'stripe_secret_key',       label: 'Stripe 비밀키 (sk_live_...)',    desc: '백엔드 전용 — Workers 환경변수 우선 적용' },
+  { key: 'stripe_publishable_key',  label: 'Stripe 공개키 (pk_live_...)',    desc: '프론트엔드용 pricing.html에서 사용' },
+  { key: 'stripe_secret_key',       label: 'Stripe 비밀키 (sk_live_...)',    desc: '백엔드 전용 Workers 환경변수 우선 적용' },
   { key: 'stripe_webhook_secret',   label: 'Webhook Secret (whsec_...)',     desc: 'Stripe Dashboard → Webhooks에서 발급' },
   { key: 'r2_public_url',           label: 'R2 Public URL',                  desc: 'Cloudflare R2 버킷 공개 URL' },
 ];
@@ -1543,14 +1543,14 @@ async function checkEmailConnection() {
   ['email-step-1','email-step-2','email-step-3','email-step-4'].forEach(id => _setStep(id, '⏳', ''));
   document.getElementById('email-conn-msg').textContent = '';
   try {
-    // Step 1: Cloudflare Workers — always OK if we got here
+    // Step 1: Cloudflare Workers always OK if we got here
     _setStep('email-step-1', '✅', 'green');
     const d = await API('/api/admin/check-email');
     // Step 2: API 키 설정 여부
     if (!d.key_set) {
       _setStep('email-step-2', '❌', 'red');
-      _setStep('email-step-3', '—', '');
-      _setStep('email-step-4', '—', '');
+      _setStep('email-step-3', '-', '');
+      _setStep('email-step-4', '-', '');
       _setBadge('email-conn-badge', '키 미설정', 'red');
       document.getElementById('email-conn-msg').textContent = '⚠ API 키가 설정되지 않았습니다. 아래 SendGrid API Key를 입력 후 저장하세요.';
       document.getElementById('email-step-3-label').textContent = d.provider === 'NONE' ? 'SendGrid' : d.provider;
@@ -1561,16 +1561,16 @@ async function checkEmailConnection() {
     // Step 3: API 실제 연결
     if (!d.api_valid) {
       _setStep('email-step-3', '❌', 'red');
-      _setStep('email-step-4', '—', '');
+      _setStep('email-step-4', '-', '');
       _setBadge('email-conn-badge', '연결 실패', 'red');
-      document.getElementById('email-conn-msg').textContent = `❌ ${d.provider} API 키 인증 실패 (${d.error || '응답 오류'}) — 키를 재발급 후 저장하세요.`;
+      document.getElementById('email-conn-msg').textContent = `❌ ${d.provider} API 키 인증 실패 (${d.error || '응답 오류'}) 키를 재발급 후 저장하세요.`;
       return;
     }
     _setStep('email-step-3', '✅', 'green');
     // Step 4: 발송 준비 완료
     _setStep('email-step-4', '✅', 'green');
     _setBadge('email-conn-badge', '정상 연결', 'green');
-    document.getElementById('email-conn-msg').textContent = `✅ ${d.provider} 연결 정상 — 이메일 발송 준비 완료`;
+    document.getElementById('email-conn-msg').textContent = `✅ ${d.provider} 연결 정상 이메일 발송 준비 완료`;
     document.getElementById('email-conn-panel').style.borderColor = 'rgba(34,197,94,.4)';
   } catch(e) {
     _setBadge('email-conn-badge', '오류', 'red');
@@ -1589,7 +1589,7 @@ async function checkStripeConnection() {
     // Step 1: API 키 설정
     if (!d.stripe_key_set) {
       _setStep('stripe-step-1', '❌', 'red');
-      ['stripe-step-2','stripe-step-3','stripe-step-4'].forEach(id => _setStep(id, '—', ''));
+      ['stripe-step-2','stripe-step-3','stripe-step-4'].forEach(id => _setStep(id, '-', ''));
       _setBadge('stripe-conn-badge', '키 미설정', 'red');
       document.getElementById('stripe-conn-msg').textContent = '⚠ Stripe Secret Key가 설정되지 않았습니다.';
       return;
@@ -1598,9 +1598,9 @@ async function checkStripeConnection() {
     // Step 2: Stripe API 연결
     if (!d.stripe_api_valid) {
       _setStep('stripe-step-2', '❌', 'red');
-      ['stripe-step-3','stripe-step-4'].forEach(id => _setStep(id, '—', ''));
+      ['stripe-step-3','stripe-step-4'].forEach(id => _setStep(id, '-', ''));
       _setBadge('stripe-conn-badge', '인증 실패', 'red');
-      document.getElementById('stripe-conn-msg').textContent = `❌ Stripe API 키 인증 실패 (${d.error || '응답 오류'}) — 키를 확인하세요.`;
+      document.getElementById('stripe-conn-msg').textContent = `❌ Stripe API 키 인증 실패 (${d.error || '응답 오류'}) 키를 확인하세요.`;
       return;
     }
     _setStep('stripe-step-2', '✅', 'green');
@@ -1628,7 +1628,7 @@ async function checkStripeConnection() {
     }
     _setStep('stripe-step-4', '✅', 'green');
     _setBadge('stripe-conn-badge', '정상 연결', 'green');
-    document.getElementById('stripe-conn-msg').textContent = '✅ Stripe API + 웹훅 모두 정상 연결 — 결제 처리 준비 완료';
+    document.getElementById('stripe-conn-msg').textContent = '✅ Stripe API + 웹훅 모두 정상 연결 결제 처리 준비 완료';
     document.getElementById('stripe-conn-panel').style.borderColor = 'rgba(34,197,94,.4)';
   } catch(e) {
     _setBadge('stripe-conn-badge', '오류', 'red');
@@ -1691,7 +1691,7 @@ async function runDiagnose() {
       <div>
         <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">최근 Stripe 이벤트 (5건)</div>
         ${(d.recent_stripe_events || []).length === 0
-          ? '<div style="color:var(--text-muted);font-size:13px;">이벤트 없음 — 아직 결제가 없거나 Webhook 미연결</div>'
+          ? '<div style="color:var(--text-muted);font-size:13px;">이벤트 없음 아직 결제가 없거나 Webhook 미연결</div>'
           : (d.recent_stripe_events || []).map(e => `
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;">
               <span>${e.processed ? '✅' : (e.error_msg ? '❌' : '⏳')}</span>
@@ -1733,7 +1733,7 @@ async function sendTestEmail() {
           <span style="font-size:24px;">✅</span>
           <div>
             <div style="font-weight:700;color:#22c55e;margin-bottom:4px;">SendGrid 발송 성공!</div>
-            <div style="font-size:13px;color:var(--text-muted);">${esc(addr)} 로 발송됨 — 받은편지함(스팸 포함) 확인</div>
+            <div style="font-size:13px;color:var(--text-muted);">${esc(addr)} 로 발송됨 받은편지함(스팸 포함) 확인</div>
           </div>
         </div>`;
     } else {
@@ -1949,12 +1949,12 @@ function toast(msg, type = 'success') {
 }
 
 function formatTime(iso) {
-  if (!iso) return '—';
+  if (!iso) return '-';
   // SQLite datetime('now')는 'YYYY-MM-DD HH:MM:SS' (UTC, 타임존 없음)
   // → 'Z' 붙여 UTC로 명시 후 로컬(고객 브라우저 기준) / KST 각각 변환
   const utc = iso.includes('T') ? iso : iso.replace(' ', 'T') + 'Z';
   const d = new Date(utc);
-  if (isNaN(d.getTime())) return '—';
+  if (isNaN(d.getTime())) return '-';
 
   // 로컬 시간 (고객 브라우저 타임존 기준)
   const localDate = d.toLocaleDateString('en-GB');
@@ -2206,7 +2206,7 @@ function clearCacheLog() {
 }
 
 function timeAgo(isoStr) {
-  if (!isoStr) return '—';
+  if (!isoStr) return '-';
   const s = Math.floor((Date.now() - new Date(isoStr).getTime()) / 1000);
   if (s < 60)    return s + '초 전';
   if (s < 3600)  return Math.floor(s / 60) + '분 전';

@@ -167,7 +167,7 @@
   <script src="/js/main.js"></script>
   <script>
     /* ══════════════════════════════════════════════
-       N0005 상품 마케팅 — n0005와 동일한 구조
+       N0005 상품 마케팅 n0005와 동일한 구조
        ══════════════════════════════════════════════ */
     var N5 = 'https://noteracker.com';
 
@@ -177,17 +177,17 @@
         name: 'Rafferty Hale',
         role: 'Founder of Noteracker',
         photo: '/images/Rafferty Hale.webp',
-        bio: 'Rafferty founded Noteracker to give WordPress site owners a straightforward path to better security and reliable maintenance — without the technical headaches. He writes to share the thinking behind Noteracker\'s approach and to help site owners make confident decisions about their WordPress setup.'
+        bio: 'Rafferty founded Noteracker to give WordPress site owners a straightforward path to better security and reliable maintenance without the technical headaches. He writes to share the thinking behind Noteracker\'s approach and to help site owners make confident decisions about their WordPress setup.'
       },
       {
         name: 'Sarah Jones',
         role: 'Noteracker Community Contributor',
         photo: '/images/Sarah Jones.webp',
-        bio: 'A Noteracker community contributor passionate about helping small business owners get more from their WordPress sites. Sarah covers topics ranging from website care to everyday security — always with a focus on clear, no-nonsense guidance.'
+        bio: 'A Noteracker community contributor passionate about helping small business owners get more from their WordPress sites. Sarah covers topics ranging from website care to everyday security always with a focus on clear, no-nonsense guidance.'
       }
     ];
 
-    /* 슬러그 기반 결정적 작성자 선택 — 같은 포스트는 항상 같은 작성자 표시 */
+    /* 슬러그 기반 결정적 작성자 선택 같은 포스트는 항상 같은 작성자 표시 */
     function _pickAuthor(slug) {
       if (!slug) return AUTHORS[Math.floor(Math.random() * AUTHORS.length)];
       var hash = 0;
@@ -200,7 +200,7 @@
     /* HTML 이스케이프 */
     function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-    /* 상품 목록 — 로컬 프록시 사용 (noteracker.com → n0004 → 브라우저) */
+    /* 상품 목록 로컬 프록시 사용 (noteracker.com → n0004 → 브라우저) */
     var _shopProds = fetch('/api/shop/products')
       .then(function(r) { return r.ok ? r.json() : { products: [] }; })
       .then(function(d) { return d.products || []; })
@@ -218,7 +218,7 @@
       return /[\uAC00-\uD7A3\u3131-\u318E\u1100-\u11FF]/.test(s) ? '' : s;
     }
 
-    /* 상품 URL — n0005 결제 페이지로 연결 */
+    /* 상품 URL n0005 결제 페이지로 연결 */
     function _productUrl(p) {
       if (!p || !p.slug) return N5 + '/shop.html';
       return N5 + '/product-download-1.html?slug=' + encodeURIComponent(p.slug);
@@ -248,7 +248,7 @@
         '</a>';
     }
 
-    /* Lottie JSON 사전 로드 캐시 — 페이지 로드 직후 백그라운드 fetch */
+    /* Lottie JSON 사전 로드 캐시 페이지 로드 직후 백그라운드 fetch */
     var _lottieCache = {};
     function _preloadLottieJson(slug) {
       if (!slug || _lottieCache[slug]) return;
@@ -257,7 +257,7 @@
         .catch(function() { return null; });
     }
 
-    /* Lottie 호버 애니메이션 연결 — 캐시된 animationData 사용으로 즉각 재생 */
+    /* Lottie 호버 애니메이션 연결 캐시된 animationData 사용으로 즉각 재생 */
     function _attachLottieHover(thumbEl, p) {
       if (!thumbEl || !p.slug) return;
       /* 연결 시점에 즉시 JSON 사전 로드 시작 */
@@ -341,7 +341,7 @@
         ? '<p class="content-shop-banner-desc">' + esc(rawDesc.slice(0, 90) + (rawDesc.length > 90 ? '…' : '')) + '</p>'
         : '';
       var priceTag = p1.price_cents ? ' &nbsp;·&nbsp; <span style="color:var(--focus);font-weight:700;">' + _fmtPrice(p1.price_cents) + '</span>' : '';
-      var btnLabel = p1.price_cents ? 'Download — ' + _fmtPrice(p1.price_cents) : 'Download Now →';
+      var btnLabel = p1.price_cents ? 'Download ' + _fmtPrice(p1.price_cents) : 'Download Now →';
 
       var banner = document.createElement('div');
       banner.className = 'content-shop-banner';
@@ -403,7 +403,7 @@
         var heroImg = (bodyImgMatch && bodyImgMatch[1]) ? bodyImgMatch[1] : post.featured_image;
         if (heroImg) document.getElementById('hero-bg').style.backgroundImage = "url('" + heroImg + "')";
 
-        /* 작성자 — 슬러그 기반으로 두 필자 중 한 명 선택 */
+        /* 작성자 슬러그 기반으로 두 필자 중 한 명 선택 */
         var author = _pickAuthor(slug);
         document.getElementById('hero-author').textContent = 'By ' + author.name;
         document.getElementById('sep-author').style.display = '';
@@ -413,7 +413,7 @@
         if (avatarWrap) {
           avatarWrap.innerHTML = '<img src="' + author.photo + '" alt="' + esc(author.name) + '" class="author-avatar-img">';
         }
-        /* role 표시 — author-name 바로 뒤에 삽입 (중복 방지) */
+        /* role 표시 author-name 바로 뒤에 삽입 (중복 방지) */
         var existingRole = document.getElementById('author-role');
         if (existingRole) existingRole.remove();
         if (author.role) {

@@ -1,5 +1,5 @@
 /**
- * blog-gen.js — n0003 블로그 자동생성 엔진
+ * blog-gen.js n0003 블로그 자동생성 엔진
  * n0005 프로덕션 배포 코드에서 복사 (카테고리만 보안 6개로 변경)
  */
 
@@ -36,7 +36,7 @@ const CAT_EXTERNAL_REFS = {
   ],
   'vulnerability': [
     ['https://nvd.nist.gov/', 'NIST National Vulnerability Database'],
-    ['https://cve.mitre.org/', 'CVE — Common Vulnerabilities and Exposures'],
+    ['https://cve.mitre.org/', 'CVE Common Vulnerabilities and Exposures'],
   ],
   'threat-detection': [
     ['https://attack.mitre.org/', 'MITRE ATT&CK Framework'],
@@ -228,7 +228,7 @@ export async function blogGenRoute(request, url, env) {
     if (!type || !['youtube', 'website', 'file'].includes(type)) {
       return bad('type must be youtube, website, or file');
     }
-    /* URL 중복 방지 — 동일 URL이 이미 존재하면 거부 */
+    /* URL 중복 방지 동일 URL이 이미 존재하면 거부 */
     if (srcUrl && (type === 'website' || type === 'youtube')) {
       const dup = await env.DB.prepare(
         'SELECT id FROM blog_sources WHERE url = ? LIMIT 1'
@@ -266,8 +266,8 @@ export async function blogGenRoute(request, url, env) {
             errorMsg = 'YouTube 스크립트 수집 실패: ' + ytErr.message;
           }
         } else {
-          console.warn('[blog-gen] YouTube API Key 미설정 — URL만 저장');
-          errorMsg = 'YouTube API Key 미설정 — 스크립트 수집 불가, URL만 저장됨';
+          console.warn('[blog-gen] YouTube API Key 미설정 URL만 저장');
+          errorMsg = 'YouTube API Key 미설정 스크립트 수집 불가, URL만 저장됨';
         }
       } else if (type === 'file') {
         if (!manualContent) return bad('content is required for file type');
@@ -343,7 +343,7 @@ export async function blogGenRoute(request, url, env) {
 Current custom rules:
 ${currentRules || '(none set)'}
 
-The system already enforces these core requirements automatically — do NOT repeat them:
+The system already enforces these core requirements automatically do NOT repeat them:
 - Focus keyword in title, meta description, URL, first paragraph, at least one H2
 - Keyword density 1.0–1.5% (max 2%)
 - Content 1,500–2,000 words
@@ -484,7 +484,7 @@ async function generateSinglePost(env, category, sources, logId, useOpenAI) {
   const topic = topicSeeds[Math.floor(Math.random() * topicSeeds.length)];
   const focusKw = topic.toLowerCase().replace(/\s+/g, ' ').trim();
 
-  /* 소스 콘텐츠 준비 — 최소 3개 이상 소스 활용, 유튜브 스크립트 원문 명시 */
+  /* 소스 콘텐츠 준비 최소 3개 이상 소스 활용, 유튜브 스크립트 원문 명시 */
   let sourceContent = '';
   const sourceIds = [];
   if (sources.length) {
@@ -494,7 +494,7 @@ async function generateSinglePost(env, category, sources, logId, useOpenAI) {
       sourceIds.push(s.id);
       const isYT = s.type === 'youtube';
       const label = isYT
-        ? `[YouTube Transcript: ${s.title || 'Video'}] — 아래는 유튜브 영상의 원본 스크립트입니다. 이 스크립트를 다른 자료와 비교·대조하여 재구성하세요.`
+        ? `[YouTube Transcript: ${s.title || 'Video'}] 아래는 유튜브 영상의 원본 스크립트입니다. 이 스크립트를 다른 자료와 비교·대조하여 재구성하세요.`
         : `[Source: ${s.title || s.type}]`;
       const words = (s.content || '').split(/\s+/).slice(0, 600).join(' ');
       sourceContent += `${label}\n${words}\n\n---\n\n`;
@@ -524,7 +524,7 @@ async function generateSinglePost(env, category, sources, logId, useOpenAI) {
   const _koreanRe = /[\uAC00-\uD7A3\u3131-\u318E\u1100-\u11FF]/;
   const _hasKorean = (s) => _koreanRe.test(s || '');
   if (_hasKorean(post.title) || _hasKorean(post.content)) {
-    console.warn('[blog-gen] Korean detected — retrying with strict English-only prompt');
+    console.warn('[blog-gen] Korean detected retrying with strict English-only prompt');
     const _enPrompt = `CRITICAL: Write ONLY in English. No Korean, no other language.
 Write a blog post about "${topic}" in English. Focus keyword: "${focusKw}". Category: ${category}.
 Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in English only, 1000+ words","excerpt":"English excerpt","seo_title":"English SEO title","seo_description":"English meta description","focus_keyword":"${focusKw}","keywords":["kw1","kw2","kw3","kw4","kw5"],"img_alt_featured":"English alt text","img_alt_body":"English alt text"}`;
@@ -534,7 +534,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
       Object.assign(post, _enPost);
       console.log('[blog-gen] English retry succeeded');
     } else {
-      console.warn('[blog-gen] English retry still has Korean — stripping Korean characters');
+      console.warn('[blog-gen] English retry still has Korean stripping Korean characters');
       post.title = (post.title || '').replace(_koreanRe, '').trim() || topic;
       post.content = (post.content || '').replace(/[\uAC00-\uD7A3\u3131-\u318E\u1100-\u11FF\s]+/g, ' ');
     }
@@ -568,7 +568,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
         const fresh = ALT_OPENERS.find((o) => !usedOpeners.has(o.toLowerCase())) || ALT_OPENERS[Math.floor(Math.random() * ALT_OPENERS.length)];
         titleWords[0] = fresh;
         post.title = titleWords.join(' ');
-        console.log(`[blog-gen] Title prefix "${prefix}" overused (${prefixCount[prefix]}x) — replaced with "${fresh}"`);
+        console.log(`[blog-gen] Title prefix "${prefix}" overused (${prefixCount[prefix]}x) replaced with "${fresh}"`);
       }
     }
   } catch (_) {}
@@ -576,7 +576,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
   /* 본문 단어 수 부족 시 확장 */
   const _wc0 = post.content.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
   if (_wc0 < 1400) {
-    console.log(`[blog-gen] content only ${_wc0} words — expanding...`);
+    console.log(`[blog-gen] content only ${_wc0} words expanding...`);
     post.content = await expandContent(env, post.content, focusKw, _wc0);
   }
 
@@ -616,7 +616,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
   if (bodyImg) {
     const _stripHtml = (s) => (s || '').replace(/<[^>]+>/g, '').trim();
     const _rawAlt = _stripHtml(post.img_alt_body || '');
-    const imgAlt = _rawAlt.toLowerCase().includes(focusKw.toLowerCase()) ? _rawAlt : `${focusKw} — ${_rawAlt || focusKw}`;
+    const imgAlt = _rawAlt.toLowerCase().includes(focusKw.toLowerCase()) ? _rawAlt : `${focusKw} ${_rawAlt || focusKw}`;
     post.content = insertImageBeforeThirdH(post.content, bodyImg, imgAlt);
   }
 
@@ -669,7 +669,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
 
   /* ── SEO 90점 미만이면 1회 재생성 시도 ── */
   if (realSeoScore < 90 && useOpenAI) {
-    console.log(`[blog-gen] SEO score ${realSeoScore} < 90 — attempting regeneration...`);
+    console.log(`[blog-gen] SEO score ${realSeoScore} < 90 attempting regeneration...`);
     try {
       const retryPrompt = buildGenerationPrompt(topic, category, focusKw, sourceContent, customRules, writingStyle);
       const retryRes = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -695,7 +695,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
         if (bodyImg) {
           const _stripH = (s) => (s || '').replace(/<[^>]+>/g, '').trim();
           const _rAlt = _stripH(retryJson.img_alt_body || '');
-          const iAlt = _rAlt.toLowerCase().includes(focusKw.toLowerCase()) ? _rAlt : `${focusKw} — ${_rAlt || focusKw}`;
+          const iAlt = _rAlt.toLowerCase().includes(focusKw.toLowerCase()) ? _rAlt : `${focusKw} ${_rAlt || focusKw}`;
           retryJson.content = insertImageBeforeThirdH(retryJson.content, bodyImg, iAlt);
         }
         retryJson.content = injectExternalLinks(retryJson.content, category);
@@ -756,11 +756,11 @@ function buildGenerationPrompt(topic, category, focusKw, sourceContent, customRu
   const srcSection = sourceContent
     ? `══ REFERENCE MATERIAL (참고 자료) ══
 
-🚨 CRITICAL ORIGINALITY RULES — ZERO TOLERANCE FOR COPYING:
-1. COMPLETELY TRANSFORM every sentence from the source material — change EVERY word, phrase, and sentence structure without exception
-2. Do NOT copy ANY phrase from the sources — not even casual expressions like "it is important to", "you should", "one of the most common"
-3. Extract FACTS, numbers, and technical concepts ONLY — then express them entirely in your own original voice using completely different words
-4. Imagine you read all sources 2 weeks ago and are now writing purely from memory — you are NOT looking at them while writing
+🚨 CRITICAL ORIGINALITY RULES ZERO TOLERANCE FOR COPYING:
+1. COMPLETELY TRANSFORM every sentence from the source material change EVERY word, phrase, and sentence structure without exception
+2. Do NOT copy ANY phrase from the sources not even casual expressions like "it is important to", "you should", "one of the most common"
+3. Extract FACTS, numbers, and technical concepts ONLY then express them entirely in your own original voice using completely different words
+4. Imagine you read all sources 2 weeks ago and are now writing purely from memory you are NOT looking at them while writing
 5. If a sentence could appear verbatim in any source material, DELETE it and rewrite from scratch with completely different wording
 6. Synthesize and combine information from ALL sources to create unique perspectives not found in any single source
 7. TARGET: final content must share less than 15% word-level similarity with any single source
@@ -771,28 +771,28 @@ function buildGenerationPrompt(topic, category, focusKw, sourceContent, customRu
 - They do NOT know: server-level commands, PHP code, advanced hosting, CLI tools
 - Write AS IF explaining to a smart colleague who uses WordPress regularly but is NOT a developer
 
-📖 WRITING LEVEL (고등학교 1학년 수준 — Korean High School Freshman equivalent):
-- Use simple, everyday vocabulary — if a technical term is unavoidable, IMMEDIATELY explain it in plain words in the SAME sentence
+📖 WRITING LEVEL (고등학교 1학년 수준 Korean High School Freshman equivalent):
+- Use simple, everyday vocabulary if a technical term is unavoidable, IMMEDIATELY explain it in plain words in the SAME sentence
 - Keep sentences SHORT: 15–20 words maximum per sentence
 - ONE idea per sentence. ONE main concept per paragraph.
 - Replace technical jargon with plain words: "malicious code" → "harmful code planted by hackers", "vulnerability" → "security weak point", "authentication" → "login verification step"
 - Write as if explaining to a 15-year-old who is smart and curious but has no technical background
-- No academic phrasing — be direct, friendly, and practical
+- No academic phrasing be direct, friendly, and practical
 
-SOURCE MATERIAL (extract facts only — COMPLETELY transform ALL expressions, DO NOT copy any phrase):
+SOURCE MATERIAL (extract facts only COMPLETELY transform ALL expressions, DO NOT copy any phrase):
 ${sourceContent.slice(0, 5000)}`
     : `Write based on your knowledge about: ${topic}.
 🎯 TARGET AUDIENCE: WordPress intermediate users (1–3 years experience, knows plugin installation and dashboard use, but not server-level or coding concepts).
-📖 WRITING LEVEL: Simple and accessible — Korean high school freshman equivalent. Short sentences (15–20 words max), plain vocabulary, explain every technical term in plain words when first used.`;
+📖 WRITING LEVEL: Simple and accessible Korean high school freshman equivalent. Short sentences (15–20 words max), plain vocabulary, explain every technical term in plain words when first used.`;
   const rulesSection = customRules && customRules.trim()
-    ? `\nBASE WRITING REFERENCE (core style guidelines — apply to every sentence and paragraph):\n${customRules.trim()}\n` : '';
+    ? `\nBASE WRITING REFERENCE (core style guidelines apply to every sentence and paragraph):\n${customRules.trim()}\n` : '';
   const styleSection = writingStyle && writingStyle.trim()
     ? `\nWRITING STYLE & TONE (apply throughout the entire post):\n${writingStyle.trim()}\n` : '';
 
   return `You are an expert English content writer. Write a complete, SEO-optimized blog post targeting a RankMath score of 90+.
 
-LANGUAGE RULE (ABSOLUTE — ZERO EXCEPTIONS):
-- The ENTIRE post MUST be written in ENGLISH ONLY — title, content, headings, excerpt, seo_title, seo_description, all fields
+LANGUAGE RULE (ABSOLUTE ZERO EXCEPTIONS):
+- The ENTIRE post MUST be written in ENGLISH ONLY title, content, headings, excerpt, seo_title, seo_description, all fields
 - NEVER write in Korean, Japanese, Chinese, or any other language
 - If the topic appears to be in another language, write about it in English anyway
 - ALL JSON field values must be in English
@@ -804,44 +804,44 @@ FOCUS KEYWORD: "${focusKw}"
 ═══ WORD COUNT (ABSOLUTE REQUIREMENT) ═══
 - The content field MUST contain at least 1,500 words of visible text (count only words, not HTML tags)
 - Target: 1,600 – 2,000 words. Falling below 1,500 words is a FAILURE.
-- To reach 1,600 words: write EXACTLY 7 <h2> sections — each H2 block contributes ~200 words
-- Tone: professional, clear, practical — Grade 10 reading level
+- To reach 1,600 words: write EXACTLY 7 <h2> sections each H2 block contributes ~200 words
+- Tone: professional, clear, practical Grade 10 reading level
 
 ═══ HTML STRUCTURE (STRICTLY ENFORCED) ═══
 - Allowed tags ONLY: <h2>, <h3>, <p>, <ul>, <li>, <ol>, <strong>, <em>, <blockquote>
-- NEVER include <h1> tags — the page title is already H1
-- NEVER include <script>, <style>, <svg>, <i>, <span>, <div>, <img>, <a> tags — these are injected separately
+- NEVER include <h1> tags the page title is already H1
+- NEVER include <script>, <style>, <svg>, <i>, <span>, <div>, <img>, <a> tags these are injected separately
 - NEVER include icon elements, emoji icons, badge labels, or decorative HTML elements
-- REQUIRED structure — EXACTLY 7 <h2> sections (follow this pattern):
-    <p>intro paragraph — 80–100 words, includes focus keyword naturally</p>
+- REQUIRED structure EXACTLY 7 <h2> sections (follow this pattern):
+    <p>intro paragraph 80–100 words, includes focus keyword naturally</p>
     <h2>Section 1 Title [includes focus keyword]</h2>
-      <p>direct paragraph — 4+ lines, 80–100 words directly under H2 before any H3</p>
+      <p>direct paragraph 4+ lines, 80–100 words directly under H2 before any H3</p>
       <h3>Subsection 1.1</h3><p>…80+ words…</p>
     <h2>Section 2 Title</h2>
-      <p>direct paragraph — 4+ lines, 80–100 words directly under H2</p>
+      <p>direct paragraph 4+ lines, 80–100 words directly under H2</p>
       <h3>Subsection 2.1</h3><p>…80+ words…</p>
     <h2>Section 3 Title</h2>
-      <p>direct paragraph — 4+ lines, 80–100 words directly under H2</p>
+      <p>direct paragraph 4+ lines, 80–100 words directly under H2</p>
       <h3>Subsection 3.1</h3><p>…80+ words…</p>
     <h2>Section 4 Title</h2>
-      <p>direct paragraph — 4+ lines, 80–100 words directly under H2</p>
+      <p>direct paragraph 4+ lines, 80–100 words directly under H2</p>
       <h3>Subsection 4.1</h3><p>…80+ words…</p>
     <h2>Section 5 Title</h2>
-      <p>direct paragraph — 4+ lines, 80–100 words directly under H2</p>
-      <p>second paragraph — additional 60–80 words with practical detail</p>
+      <p>direct paragraph 4+ lines, 80–100 words directly under H2</p>
+      <p>second paragraph additional 60–80 words with practical detail</p>
     <h2>Section 6 Title</h2>
-      <p>direct paragraph — 4+ lines, 80–100 words directly under H2</p>
-      <p>second paragraph — additional 60–80 words</p>
+      <p>direct paragraph 4+ lines, 80–100 words directly under H2</p>
+      <p>second paragraph additional 60–80 words</p>
     <h2>Section 7 Title</h2>
-      <p>direct paragraph — 4+ lines, 80–100 words directly under H2</p>
-      <p>second paragraph — additional 60–80 words</p>
-    <p>conclusion paragraph — 60–80 words</p>
+      <p>direct paragraph 4+ lines, 80–100 words directly under H2</p>
+      <p>second paragraph additional 60–80 words</p>
+    <p>conclusion paragraph 60–80 words</p>
 - CRITICAL: Every <h2> MUST be followed IMMEDIATELY by a direct <p> paragraph (80+ words, 4+ lines) before any <h3>
-- FORBIDDEN: <h2>Heading</h2><h3>Sub</h3> — H2 must NEVER jump directly to H3 without a paragraph
-- FORBIDDEN: <h2>Heading</h2><p>One sentence.</p> — all H2 direct paragraphs must be 4+ lines
+- FORBIDDEN: <h2>Heading</h2><h3>Sub</h3> H2 must NEVER jump directly to H3 without a paragraph
+- FORBIDDEN: <h2>Heading</h2><p>One sentence.</p> all H2 direct paragraphs must be 4+ lines
 - FORBIDDEN: two heading tags with fewer than 40 words between them
 
-═══ EMPTY TAG RULE (CRITICAL — zero tolerance) ═══
+═══ EMPTY TAG RULE (CRITICAL zero tolerance) ═══
 - NEVER produce empty HTML tags of any kind
 - <strong></strong>  ← STRICTLY FORBIDDEN
 - <em></em>          ← STRICTLY FORBIDDEN
@@ -852,7 +852,7 @@ FOCUS KEYWORD: "${focusKw}"
 - Wrong:   <strong></strong>
 
 ═══ FOCUS KEYWORD PLACEMENT (STRICTLY ENFORCED) ═══
-- MUST appear in the very first <p> (intro paragraph) within the first 50 words — written naturally
+- MUST appear in the very first <p> (intro paragraph) within the first 50 words written naturally
 - MUST appear in the title field
 - MUST appear in at least one <h2> heading (verbatim or closely paraphrased)
 - MUST appear at least once in each major section (once per <h2> block)
@@ -861,10 +861,10 @@ FOCUS KEYWORD: "${focusKw}"
 - When bolding the keyword with <strong>, always write the full keyword text inside
 
 ═══ SEO FIELDS ═══
-- title: 50–60 characters, includes focus keyword, includes ONE power word — rotate variety: (Guide, Tips, How to, Step-by-Step, Fix, Essential, Practical, Proven, Modern, Quick, Effective, Simple, Key, Smart, Core, Actionable, Beginner, Best, Expert)
-- NEVER start the title with "Complete Guide" — this phrase is overused. Choose a different opening that is specific and varied.
+- title: 50–60 characters, includes focus keyword, includes ONE power word rotate variety: (Guide, Tips, How to, Step-by-Step, Fix, Essential, Practical, Proven, Modern, Quick, Effective, Simple, Key, Smart, Core, Actionable, Beginner, Best, Expert)
+- NEVER start the title with "Complete Guide" this phrase is overused. Choose a different opening that is specific and varied.
 - seo_title: 50–60 characters, optimized variation of title
-- seo_description: EXACTLY 140–160 characters — includes focus keyword — ends with a call to action (e.g. "Learn more.", "Start today.", "Find out how.")
+- seo_description: EXACTLY 140–160 characters includes focus keyword ends with a call to action (e.g. "Learn more.", "Start today.", "Find out how.")
 - excerpt: 120–160 characters, compelling, includes focus keyword
 - img_alt_featured: describe the image AND include the focus keyword phrase
 - img_alt_body: describe the image AND include the focus keyword phrase
@@ -873,87 +873,87 @@ FOCUS KEYWORD: "${focusKw}"
 - NEVER mention any real person's name, personal identity, or individual attribution
 - NEVER promote, advertise, or endorse any specific brand, product, company, or commercial service by name
 - NEVER include personally identifiable information of any kind
-- Write general, educational content only — no case studies tied to specific named individuals or companies
+- Write general, educational content only no case studies tied to specific named individuals or companies
 - Exception: you may reference well-known platform categories (e.g. "WordPress", "Google Search Console") only as tools, not endorsements
 
 ═══ CLEAN CONTENT RULES ═══
 - No AI-generated labels, badges, or indicators (do not write "AI Generated", "Written by AI", etc.)
 - No decorative emojis or icon characters in the content body
-- No inline CSS style attributes — content is styled by the site's stylesheet
+- No inline CSS style attributes content is styled by the site's stylesheet
 - No unnecessary filler phrases like "In conclusion, it is worth noting that..."
 - Every sentence must add real informational value
 
 ═══ H2 HEADING RULES (CRITICAL) ═══
 - H2 headings must be SHORT, SPECIFIC, and DESCRIPTIVE (4–8 words max)
-- NEVER start an H2 with the full focus keyword phrase — headings must be original titles, not keyword repetition
-- FORBIDDEN H2 pattern: "<h2>focus-keyword: Some Suffix</h2>" — do NOT prefix headings with the keyword
+- NEVER start an H2 with the full focus keyword phrase headings must be original titles, not keyword repetition
+- FORBIDDEN H2 pattern: "<h2>focus-keyword: Some Suffix</h2>" do NOT prefix headings with the keyword
 - FORBIDDEN: Generic boilerplate headings like "Getting Started", "Before You Begin", "Advanced Tips", "Key Takeaways", "Everything You Need to Know" unless they contain specific topical content
 - FORBIDDEN: Two consecutive H2 headings with nearly identical meaning or structure
-- Each H2 heading must describe what that specific section teaches — make it unique and topically meaningful
+- Each H2 heading must describe what that specific section teaches make it unique and topically meaningful
 
-═══ HUMAN AUTHENTICITY — ZERO AI FINGERPRINTS ═══
+═══ HUMAN AUTHENTICITY ZERO AI FINGERPRINTS ═══
 
-BANNED WORDS — never use any of these (they are the strongest AI tells):
+BANNED WORDS never use any of these (they are the strongest AI tells):
   delve, leverage, utilize, robust, seamless, streamline, navigate, realm, landscape,
   ecosystem, paradigm, synergy, empower, harness, cutting-edge, game-changer,
   comprehensive, paramount, shed light on, foster, curated, nuanced, holistic,
   underscores, it is crucial, it is vital, it is important to note, it's worth mentioning,
   as we explore, let's dive in, in today's digital world, in the realm of, going forward
 
-BANNED PARAGRAPH OPENERS — never start a paragraph with:
+BANNED PARAGRAPH OPENERS never start a paragraph with:
   "In today's...", "In the world of...", "When it comes to...",
   "It's important to understand...", "One of the most important/common/critical...",
   "First and foremost...", "Last but not least...", "Without a doubt...",
   "In this article/section/guide..."
 
-ANTI-AI WRITING TECHNIQUES — apply ALL of these:
+ANTI-AI WRITING TECHNIQUES apply ALL of these:
 
-1. MID-THOUGHT STARTS: At least 2 paragraphs per post must open with a concrete scenario or example FIRST — state the main point AFTER. Example: "Picture this: your contact form looks completely normal. No alerts. No warnings. But behind the scenes, a bot has already submitted 300 spam entries in two hours." — then explain the takeaway. Do NOT open every paragraph with a topic sentence.
+1. MID-THOUGHT STARTS: At least 2 paragraphs per post must open with a concrete scenario or example FIRST state the main point AFTER. Example: "Picture this: your contact form looks completely normal. No alerts. No warnings. But behind the scenes, a bot has already submitted 300 spam entries in two hours." then explain the takeaway. Do NOT open every paragraph with a topic sentence.
 
-2. NATURAL LIST IMPERFECTION: In any bulleted or numbered list, deliberately make at least 2 items slightly different in length or grammatical form from the others — perfectly parallel lists are a strong AI signal.
+2. NATURAL LIST IMPERFECTION: In any bulleted or numbered list, deliberately make at least 2 items slightly different in length or grammatical form from the others perfectly parallel lists are a strong AI signal.
 
 3. CONTRACTION RULE: Use "don't", "it's", "you'll", "there's", "isn't", "won't", "that's", "can't" throughout. NEVER write "do not", "it is", "you will", "there is" more than twice per 500 words.
 
-4. CONVERSATIONAL INTERJECTION: Add exactly one natural aside per post — such as: "Here's the thing:", "The catch is this:", "This part actually matters:", "Fair warning:", "Here's what's easy to miss:" — placed where the writing needs a natural beat.
+4. CONVERSATIONAL INTERJECTION: Add exactly one natural aside per post such as: "Here's the thing:", "The catch is this:", "This part actually matters:", "Fair warning:", "Here's what's easy to miss:" placed where the writing needs a natural beat.
 
-5. IMPERFECT TRANSITIONS — replace all formal connectors:
+5. IMPERFECT TRANSITIONS replace all formal connectors:
    "Furthermore," → "And that's exactly why..." or "Which connects to..."
    "Moreover," → "There's also this:" or "Worth adding:"
    "In addition," → "On top of that," or "There's more:"
-   "However," → "But here's the thing —" or "That said,"
+   "However," → "But here's the thing -" or "That said,"
    "In conclusion," → "Bottom line:" or "The short version:"
 
-6. ONE MILD CAVEAT per post: Include one honest limitation — "This won't fix everything — but it covers the cases that matter most." or "Results vary depending on your setup, but the approach stays the same."
+6. ONE MILD CAVEAT per post: Include one honest limitation "This won't fix everything but it covers the cases that matter most." or "Results vary depending on your setup, but the approach stays the same."
 
-7. NO SECTION SUMMARIES: Never end a section with "In summary...", "As we've seen...", "To recap..." — end on the final practical point and move on.
+7. NO SECTION SUMMARIES: Never end a section with "In summary...", "As we've seen...", "To recap..." end on the final practical point and move on.
 
 8. SENTENCE PUNCH PAIRS: After two medium-length sentences, write two SHORT sentences back-to-back (6–10 words each) for emphasis. This is how real writers land a point.
 
-9. ONE LONGER NATURAL SENTENCE per H2 is allowed — if the idea genuinely needs room (32–40 words), keep it. Don't force splits when the thought flows naturally as one.
+9. ONE LONGER NATURAL SENTENCE per H2 is allowed if the idea genuinely needs room (32–40 words), keep it. Don't force splits when the thought flows naturally as one.
 
 ═══ SENTENCE & WRITING STYLE RULES (STRICTLY ENFORCED) ═══
 - AUDIENCE: WordPress intermediate users (1–3 years). They use dashboards, install plugins, but are NOT developers or server admins.
-- READING LEVEL: Korean high school freshman (고등학교 1학년) equivalent — simple, clear, zero jargon without immediate explanation.
+- READING LEVEL: Korean high school freshman (고등학교 1학년) equivalent simple, clear, zero jargon without immediate explanation.
 - PRIMARY sentence length: 15–20 words. This is the default. Keep it short and punchy.
-- MAXIMUM sentence length: 40 words hard cap — split any sentence that exceeds this.
-- AVOID academic or overly formal phrasing — be conversational, direct, and practical.
+- MAXIMUM sentence length: 40 words hard cap split any sentence that exceeds this.
+- AVOID academic or overly formal phrasing be conversational, direct, and practical.
 - Explain every technical term in plain words the FIRST time you use it, inside the same sentence. Example: "malware (harmful software that attackers secretly install on your site)"
 - Vary rhythm within each paragraph: mix of medium → short → medium, or long → short → short. Never write three sentences of the same length back-to-back.
 - Use these sentence patterns to create confident, readable prose:
-  • Corrective opener:   "It's not about X — it's about Y."
-  • Moment capture:      "There's a moment when [situation] — and that's when [insight] matters."
+  • Corrective opener:   "It's not about X it's about Y."
+  • Moment capture:      "There's a moment when [situation] and that's when [insight] matters."
   • Concede and pivot:   "True, X has its place. But consider this:"
   • Grounded question:   Pose a short question, then answer it immediately in the next sentence.
   • Reader observation:  "Most people assume X. In practice, Y is closer to the truth."
   • Punch pair:          [medium sentence]. [8-word max]. [8-word max].
-- NEVER open every paragraph with a topic sentence — mix in scenario-first and question-first openings.
-- Cut all filler: "furthermore", "moreover", "it is worth noting", "needless to say", "it goes without saying" — replace with direct statements.
+- NEVER open every paragraph with a topic sentence mix in scenario-first and question-first openings.
+- Cut all filler: "furthermore", "moreover", "it is worth noting", "needless to say", "it goes without saying" replace with direct statements.
 - Prefer active voice. Write "the plugin updates the cache" not "the cache is updated by the plugin".
 - VOCABULARY: Replace technical jargon wherever possible. Examples: "exploit" → "take advantage of a weak point", "vulnerability" → "security gap", "authentication" → "login check", "malicious" → "harmful", "mitigate" → "reduce", "implement" → "set up", "configure" → "adjust the settings".
 
 ═══ LINK & TABLE RULES ═══
-- All links (external and internal) must use the same color as surrounding body text — NEVER yellow, NEVER colored
-- All links must have NO underline — they should be invisible from surrounding text unless hovered
+- All links (external and internal) must use the same color as surrounding body text NEVER yellow, NEVER colored
+- All links must have NO underline they should be invisible from surrounding text unless hovered
 - Summary/FAQ table at the bottom: maximum 4 data rows, all text in English only
 - Table header and column labels must be in English (e.g. Topic/Summary, Question/Answer)
 ${styleSection}${rulesSection}

@@ -148,22 +148,22 @@
     <div class="stat-grid">
       <div class="stat-card">
         <div class="stat-label">전체 고객</div>
-        <div class="stat-val" id="ov-customers">—</div>
+        <div class="stat-val" id="ov-customers">-</div>
         <div class="stat-badge up" id="ov-customers-badge">↑ Loading</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">활성 구독</div>
-        <div class="stat-val" id="ov-subs">—</div>
+        <div class="stat-val" id="ov-subs">-</div>
         <div class="stat-badge up" id="ov-subs-badge">↑ Loading</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">이번달 매출</div>
-        <div class="stat-val" id="ov-revenue">—</div>
+        <div class="stat-val" id="ov-revenue">-</div>
         <div class="stat-sub">USD</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Stripe 이벤트 (24h)</div>
-        <div class="stat-val" id="ov-stripe-events">—</div>
+        <div class="stat-val" id="ov-stripe-events">-</div>
         <div class="stat-badge up" id="ov-stripe-events-badge">↑ Loading</div>
       </div>
     </div>
@@ -248,7 +248,7 @@
           <div class="size-info">
             <strong>권장 사이즈: 160 × 40 px</strong><br />
             형식: PNG · <strong>WEBP 권장</strong> (이메일 호환) · 최대 200KB<br />
-            ⚠️ SVG 사용 불가 — 이메일 클라이언트 미지원
+            ⚠️ SVG 사용 불가 이메일 클라이언트 미지원
           </div>
           <div class="upload-zone" id="customer-drop" onclick="document.getElementById('customer-file').click()" ondragover="onDrag(event,'customer-drop')" ondragleave="offDrag('customer-drop')" ondrop="onDrop(event,'customer')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -363,19 +363,19 @@
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" id="cache-kv-stats">
         <div style="background:var(--bg-main);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-align:center;">
-          <div style="font-size:22px;font-weight:800;color:#fff;" id="kv-page">—</div>
+          <div style="font-size:22px;font-weight:800;color:#fff;" id="kv-page">-</div>
           <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">Page Keys</div>
         </div>
         <div style="background:var(--bg-main);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-align:center;">
-          <div style="font-size:22px;font-weight:800;color:#fff;" id="kv-obj">—</div>
+          <div style="font-size:22px;font-weight:800;color:#fff;" id="kv-obj">-</div>
           <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">Object Keys</div>
         </div>
         <div style="background:var(--bg-main);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-align:center;">
-          <div style="font-size:22px;font-weight:800;color:#fff;" id="kv-css">—</div>
+          <div style="font-size:22px;font-weight:800;color:#fff;" id="kv-css">-</div>
           <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">CSS Keys</div>
         </div>
         <div style="background:var(--bg-main);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-align:center;">
-          <div style="font-size:22px;font-weight:800;color:#fff;" id="kv-total">—</div>
+          <div style="font-size:22px;font-weight:800;color:#fff;" id="kv-total">-</div>
           <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">Total Keys</div>
         </div>
       </div>
@@ -642,7 +642,7 @@
         <table>
           <thead><tr><th>이벤트 ID</th><th>타입</th><th>처리</th><th>수신시각</th><th>오류</th><th>페이로드</th></tr></thead>
           <tbody id="stripe-events-tbody">
-            <tr><td colspan="6" style="color:var(--text-muted);text-align:center;padding:30px;">Stripe 이벤트 없음 — pricing.html 결제 후 표시됩니다</td></tr>
+            <tr><td colspan="6" style="color:var(--text-muted);text-align:center;padding:30px;">Stripe 이벤트 없음 pricing.html 결제 후 표시됩니다</td></tr>
           </tbody>
         </table>
       </div>
@@ -662,15 +662,15 @@
     <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px;">
       <div class="stat-card">
         <div class="stat-label">전체 구독자</div>
-        <div class="stat-val" id="mkt-subs">—</div>
+        <div class="stat-val" id="mkt-subs">-</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">발송된 캠페인</div>
-        <div class="stat-val" id="mkt-camps">—</div>
+        <div class="stat-val" id="mkt-camps">-</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">평균 오픈율</div>
-        <div class="stat-val" id="mkt-open">—%</div>
+        <div class="stat-val" id="mkt-open">-%</div>
       </div>
     </div>
 
@@ -834,7 +834,7 @@
         <div style="font-size:13px;color:var(--text-muted);margin-top:6px;">활성 소스</div>
       </div>
       <div class="card" style="text-align:center;padding:24px 16px;">
-        <div id="auto-stat-api" style="font-size:28px;font-weight:700;color:#22c55e;">—</div>
+        <div id="auto-stat-api" style="font-size:28px;font-weight:700;color:#22c55e;">-</div>
         <div style="font-size:13px;color:var(--text-muted);margin-top:6px;">OpenAI 상태</div>
       </div>
     </div>
@@ -1024,8 +1024,8 @@
       <div class="card" style="margin-top:16px;">
         <div class="card-title" style="margin-bottom:12px;">자동 스케줄</div>
         <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
-          오전 8시 KST <code style="background:var(--bg-main);padding:2px 6px;border-radius:4px;font-size:12px;">cron: 0 23 * * *</code> — 2개<br>
-          오후 8시 KST <code style="background:var(--bg-main);padding:2px 6px;border-radius:4px;font-size:12px;">cron: 0 11 * * *</code> — 2개
+          오전 8시 KST <code style="background:var(--bg-main);padding:2px 6px;border-radius:4px;font-size:12px;">cron: 0 23 * * *</code> 2개<br>
+          오후 8시 KST <code style="background:var(--bg-main);padding:2px 6px;border-radius:4px;font-size:12px;">cron: 0 11 * * *</code> 2개
         </div>
       </div>
     </div>
@@ -1036,7 +1036,7 @@
       <!-- D-1. 자동 적용 SEO 기준 -->
       <div class="card" style="margin-bottom:20px;">
         <div class="card-title" style="margin-bottom:12px;">자동 적용 SEO 기준 (RankMath 90+ 목표)</div>
-        <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">하드코딩 — 수정 불필요</p>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">하드코딩 수정 불필요</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;font-size:13px;line-height:1.7;">
           <div>✓ 포커스 키워드 → 제목(Title) 포함</div>
           <div>✓ 포커스 키워드 → Meta Description 포함</div>
@@ -1237,7 +1237,7 @@
     </div>
   </section>
 
-<!-- ▶ PRODUCTS — NEW 2026-02-28 ─────────────────────────── -->
+<!-- ▶ PRODUCTS NEW 2026-02-28 ─────────────────────────── -->
 <section class="section" id="section-products">
 
   <!-- ══ ① LOTTIE AI 자동생성 (상단) ══════════════════════════ -->
@@ -1374,7 +1374,7 @@
     <div class="section-header">
       <div>
         <h2>구독상품 관리</h2>
-        <div style="font-size:13px;color:var(--text-muted);margin-top:3px;">저장 즉시 Stripe API 자동 등록 — Product &amp; Price ID 자동 발급</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:3px;">저장 즉시 Stripe API 자동 등록 Product &amp; Price ID 자동 발급</div>
       </div>
       <button id="plan-add-btn" class="btn btn-primary" style="display:flex;align-items:center;gap:6px;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1389,19 +1389,19 @@
     <div class="stat-grid" style="margin-bottom:20px;">
       <div class="stat-card">
         <div class="stat-label">전체 플랜</div>
-        <div class="stat-val" id="ps-total">—</div>
+        <div class="stat-val" id="ps-total">-</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">활성</div>
-        <div class="stat-val" id="ps-active" style="color:var(--green);">—</div>
+        <div class="stat-val" id="ps-active" style="color:var(--green);">-</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">비활성</div>
-        <div class="stat-val" id="ps-inactive" style="color:var(--text-muted);">—</div>
+        <div class="stat-val" id="ps-inactive" style="color:var(--text-muted);">-</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Stripe 미등록</div>
-        <div class="stat-val" id="ps-unsynced" style="color:var(--focus);">—</div>
+        <div class="stat-val" id="ps-unsynced" style="color:var(--focus);">-</div>
       </div>
     </div>
 
@@ -1784,7 +1784,7 @@
 <div class="modal-overlay" id="file-upload-modal" onclick="if(event.target===this)closeFileModal()">
   <div class="modal-box" style="max-width:500px;">
     <div class="modal-title">
-      파일 업로드 — <span id="file-upload-product-name" style="color:var(--focus);"></span>
+      파일 업로드 <span id="file-upload-product-name" style="color:var(--focus);"></span>
       <button class="modal-close" onclick="closeFileModal()">×</button>
     </div>
     <input type="hidden" id="file-upload-product-id" />
@@ -1841,7 +1841,7 @@
     var PAGE_SIZE = 20; /* 5열 × 4행 */
 
     function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    function fmtDt(s){ if(!s)return'—'; try{return new Date(s).toLocaleString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return s;} }
+    function fmtDt(s){ if(!s)return'-'; try{return new Date(s).toLocaleString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return s;} }
 
     function showLottieAlert(id, msg, ok) {
       var el = document.getElementById(id);
@@ -1961,7 +1961,7 @@
           var activeLabel = isActive ? '활성' : '비활성';
           return '<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 10px;display:flex;flex-direction:column;gap:6px;min-width:0;">' +
             '<div style="font-size:11px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+esc(p.name)+'">'+esc(p.name)+'</div>' +
-            '<div style="font-size:10px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(p.category||'—')+'</div>' +
+            '<div style="font-size:10px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(p.category||'-')+'</div>' +
             '<div style="font-size:12px;font-weight:700;color:var(--yellow);">'+price+'</div>' +
             '<div style="font-size:10px;">'+activeDot+'<span style="color:var(--text-muted);">'+activeLabel+'</span></div>' +
             '<div style="display:flex;gap:4px;margin-top:2px;">' +
@@ -2061,7 +2061,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
         <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/>
       </svg>
-      AI SEO 최적화 — 제목·설명·카테고리 자동완성
+      AI SEO 최적화 제목·설명·카테고리 자동완성
     </button>
 
     <div class="prod-modal-grid">

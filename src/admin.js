@@ -1,5 +1,5 @@
 /**
- * admin.js — n0003 관리자 API
+ * admin.js n0003 관리자 API
  * n0005/src/admin.js 기반 (blogRouter + settings + admins + logo만)
  */
 
@@ -21,7 +21,7 @@ export async function adminRoute(request, url, env, admin) {
   const p = url.pathname;
   const m = request.method;
 
-  /* Overview — 블로그 통계만 */
+  /* Overview 블로그 통계만 */
   if (p === '/api/admin/overview' && m === 'GET') {
     const [tb, tp, td, ta, rp] = await Promise.all([
       env.DB.prepare('SELECT COUNT(*) c FROM blog_posts').first().catch(() => ({c:0})),
@@ -217,7 +217,7 @@ export async function blogRouter(p, m, request, env) {
     if (!b.title?.trim()) return bad('title required');
     const slug = b.slug || slugifyServer(b.title);
     const ex = await DB.prepare('SELECT id FROM blog_posts WHERE slug=?').bind(slug).first();
-    if (ex) return bad('Slug already exists — try a different slug', 409);
+    if (ex) return bad('Slug already exists try a different slug', 409);
     const now = new Date().toISOString();
     const res = await DB.prepare(
       `INSERT INTO blog_posts
@@ -689,7 +689,7 @@ JSON:
 {
   "seo_title": "...",
   "seo_description": "...",
-  "content": "full HTML — existing content + new sections appended"
+  "content": "full HTML existing content + new sections appended"
 }`;
 
     try {
@@ -706,7 +706,7 @@ JSON:
       let aiResult;
       try { aiResult = JSON.parse(raw.replace(/```json|```/g, '').trim()); } catch { aiResult = {}; }
 
-      // AI 결과 병합 — content는 AI가 반환한 것이 더 길 경우만 사용
+      // AI 결과 병합 content는 AI가 반환한 것이 더 길 경우만 사용
       const aiContent = aiResult.content || '';
       const aiWc = aiContent.split(/\s+/).filter(Boolean).length;
       const finalContent = aiWc > wc ? aiContent : content;

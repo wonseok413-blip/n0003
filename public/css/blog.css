@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   blog.css — Blog page specific styles
+   blog.css Blog page specific styles
    Common styles in style.css
    ═══════════════════════════════════════════ */
 
@@ -136,7 +136,7 @@
 .newsletter-input:focus { border-color: var(--focus); }
 .newsletter-input::placeholder { color: var(--text-dim); }
 
-/* RESPONSIVE — blog specific */
+/* RESPONSIVE blog specific */
 @media (max-width: 1024px) {
   .hero-grid { grid-template-columns: 1fr; gap: 48px; }
   .posts-grid { grid-template-columns: repeat(2, 1fr); }

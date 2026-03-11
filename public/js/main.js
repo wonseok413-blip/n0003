@@ -227,7 +227,7 @@ function createMalwareAnimation() {
     // Lock icon placeholder
     g.appendChild(el('rect', { x: 141, y: 52, width: 12, height: 12, rx: 2, fill: '#475568' }));
 
-    // Content area — sidebar
+    // Content area sidebar
     g.appendChild(el('rect', { x: 62, y: 84, width: 70, height: 228, rx: 4, fill: '#252b30' }));
 
     // Sidebar nav items
@@ -266,7 +266,7 @@ function createMalwareAnimation() {
   warn1.textContent = '\u26A0\uFE0F';
   stage1.appendChild(warn1);
 
-  // Malware particles — varying sizes & orbits
+  // Malware particles varying sizes & orbits
   for (let i = 0; i < 10; i++) {
     const angle = (i / 10) * Math.PI * 2;
     const radius = 140 + (i % 3) * 20;
@@ -487,7 +487,7 @@ function createMalwareAnimation() {
       50% { opacity: 0.4; }
     }
 
-    /* Malware particles — 3 speed variants */
+    /* Malware particles 3 speed variants */
     .malware-particle-0 {
       animation: particle-orbit-0 2.5s ease-in-out infinite;
     }
@@ -574,7 +574,7 @@ function createMalwareAnimation() {
       to { stroke-dashoffset: 0; }
     }
 
-    /* Sparkle animations — 3 delay variants */
+    /* Sparkle animations 3 delay variants */
     .sparkle-anim-0 { animation: sparkle-pop 2s ease-in-out 0.2s infinite; }
     .sparkle-anim-1 { animation: sparkle-pop 2s ease-in-out 0.7s infinite; }
     .sparkle-anim-2 { animation: sparkle-pop 2s ease-in-out 1.2s infinite; }

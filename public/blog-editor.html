@@ -172,9 +172,9 @@
             <span style="font-size:13px;font-weight:700;color:#a855f7;">AI SEO 분석 결과</span>
           </div>
           <div class="ai-score-row" id="ai-scores" style="display:none;margin-bottom:10px;">
-            <div class="ai-score-item"><div class="ai-score-val" id="ai-s-readability">—</div><div class="ai-score-lbl">가독성</div></div>
-            <div class="ai-score-item"><div class="ai-score-val" id="ai-s-seo">—</div><div class="ai-score-lbl">SEO</div></div>
-            <div class="ai-score-item"><div class="ai-score-val" id="ai-s-tone">—</div><div class="ai-score-lbl">문체</div></div>
+            <div class="ai-score-item"><div class="ai-score-val" id="ai-s-readability">-</div><div class="ai-score-lbl">가독성</div></div>
+            <div class="ai-score-item"><div class="ai-score-val" id="ai-s-seo">-</div><div class="ai-score-lbl">SEO</div></div>
+            <div class="ai-score-item"><div class="ai-score-val" id="ai-s-tone">-</div><div class="ai-score-lbl">문체</div></div>
           </div>
           <div class="ai-result empty" id="ai-result">상단 <strong>AI SEO</strong> 버튼을 클릭하면 GPT-4o-mini가 글을 분석하여 SEO 개선 제안을 합니다.</div>
           <div class="ai-tags" id="ai-suggested-tags" style="display:none;"></div>
@@ -405,13 +405,13 @@
         </div>
 
         <div class="pf-row">
-          <div class="pf-label">슬러그 <span id="slug-preview">/blog/—</span></div>
+          <div class="pf-label">슬러그 <span id="slug-preview">/blog/-</span></div>
           <input class="pf-input" id="meta-slug" placeholder="auto-generated" oninput="onSlugInput()"/>
         </div>
         <div class="pf-row">
           <div class="pf-label">카테고리</div>
           <select class="pf-select" id="meta-category">
-            <option value="">— 선택 —</option>
+            <option value="">- 선택 -</option>
             <option value="malware-removal">악성코드 제거</option>
             <option value="website-security">웹사이트 보안</option>
             <option value="vulnerability">취약점 분석</option>
@@ -454,11 +454,11 @@
       ⚠ SEO 점수가 60 미만입니다. 발행 전 SEO를 개선하는 것을 권장합니다.
     </div>
     <div style="background:var(--bg3);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.8;">
-      <div><strong style="color:var(--white);">제목:</strong> <span id="pub-title">—</span></div>
-      <div><strong style="color:var(--white);">슬러그:</strong> <span id="pub-slug">—</span></div>
-      <div><strong style="color:var(--white);">카테고리:</strong> <span id="pub-cat">—</span></div>
-      <div><strong style="color:var(--white);">SEO 점수:</strong> <span id="pub-seo">—</span></div>
-      <div><strong style="color:var(--white);">AI 리뷰:</strong> <span id="pub-ai">—</span></div>
+      <div><strong style="color:var(--white);">제목:</strong> <span id="pub-title">-</span></div>
+      <div><strong style="color:var(--white);">슬러그:</strong> <span id="pub-slug">-</span></div>
+      <div><strong style="color:var(--white);">카테고리:</strong> <span id="pub-cat">-</span></div>
+      <div><strong style="color:var(--white);">SEO 점수:</strong> <span id="pub-seo">-</span></div>
+      <div><strong style="color:var(--white);">AI 리뷰:</strong> <span id="pub-ai">-</span></div>
     </div>
     <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">자동 다국어 번역</div>
     <div style="font-size:12px;color:var(--muted);background:rgba(230,184,2,0.08);border:1px solid rgba(230,184,2,0.2);border-radius:6px;padding:10px;line-height:1.6;">

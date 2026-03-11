@@ -295,7 +295,7 @@ export default {
         return json({ post, translations: translations.results ?? [] });
       }
 
-      /* 블로그 자동생성 API (세션 확인) — n0005 프로덕션과 동일 패턴 */
+      /* 블로그 자동생성 API (세션 확인) n0005 프로덕션과 동일 패턴 */
       if (p.startsWith('/api/admin/blog-gen/')) {
         const session = await getSession(env.DB, request, 'admin');
         if (!session) return json({ error: 'Unauthorized' }, 401);

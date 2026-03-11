@@ -221,7 +221,7 @@
     }
     @keyframes accOpen { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
 
-    /* 고객 정보 — 가로 카드 테이블 */
+    /* 고객 정보 가로 카드 테이블 */
     .cust-info-table {
       display: grid;
       grid-template-columns: repeat(4, 1fr);

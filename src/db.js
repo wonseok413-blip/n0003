@@ -1,5 +1,5 @@
 /**
- * db.js — n0003 관리자 대시보드용 DB 초기화
+ * db.js n0003 관리자 대시보드용 DB 초기화
  * n0005/src/db.js 기반 (관리자+블로그 테이블만)
  */
 
@@ -59,7 +59,7 @@ export async function autoInit(DB) {
       updated_at      TEXT DEFAULT (datetime('now'))
     )`).run();
 
-    /* ── 5. blog_sources (n0005 프로덕션과 동일 — 소스 관리) ── */
+    /* ── 5. blog_sources (n0005 프로덕션과 동일 소스 관리) ── */
     await DB.prepare(`CREATE TABLE IF NOT EXISTS blog_sources (
       id         INTEGER PRIMARY KEY AUTOINCREMENT,
       type       TEXT    NOT NULL,
@@ -79,7 +79,7 @@ export async function autoInit(DB) {
       updated_at TEXT    DEFAULT (datetime('now'))
     )`).run();
 
-    /* ── 6. blog_gen_log (n0005 프로덕션과 동일 — 생성 이력) ── */
+    /* ── 6. blog_gen_log (n0005 프로덕션과 동일 생성 이력) ── */
     await DB.prepare(`CREATE TABLE IF NOT EXISTS blog_gen_log (
       id          INTEGER PRIMARY KEY AUTOINCREMENT,
       post_id     INTEGER,

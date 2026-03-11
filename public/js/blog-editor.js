@@ -191,7 +191,7 @@ async function saveDraft() {
 function openPublishModal() {
   collectMetaFields();
   document.getElementById('pub-title').textContent = S.title || '(제목 없음)';
-  document.getElementById('pub-slug').textContent = '/blog/' + (S.slug || toSlug(S.title) || '—');
+  document.getElementById('pub-slug').textContent = '/blog/' + (S.slug || toSlug(S.title) || '-');
   document.getElementById('pub-cat').textContent = S.category || '(미분류)';
   document.getElementById('pub-seo').textContent = S.seoScore + '/100';
   document.getElementById('pub-ai').textContent = S.aiReview ? '완료' : '미실행';
@@ -291,9 +291,9 @@ async function startAutoTranslation(postId) {
   }
 
   if (failed === 0) {
-    toast(`✅ 다국어 번역 완료 — ${done}개 언어 전체 성공`);
+    toast(`✅ 다국어 번역 완료 ${done}개 언어 전체 성공`);
   } else {
-    toast(`⚠️ 번역 완료 — 성공: ${done}개, 실패: ${failed}개`, 'warn');
+    toast(`⚠️ 번역 완료 성공: ${done}개, 실패: ${failed}개`, 'warn');
   }
 }
 
@@ -328,7 +328,7 @@ function onContentChange() {
 }
 function onSlugInput() {
   const v = document.getElementById('meta-slug').value;
-  document.getElementById('slug-preview').textContent = '/blog/' + (v || '—');
+  document.getElementById('slug-preview').textContent = '/blog/' + (v || '-');
   S.dirty = true;
 }
 function onSeoTitleChange() {
@@ -1012,7 +1012,7 @@ async function runAIReview() {
     runSEO();
 
     switchTab('seo');
-    toast('✅ AI SEO 최적화 완료 — 메타 필드가 자동 적용되었습니다');
+    toast('✅ AI SEO 최적화 완료 메타 필드가 자동 적용되었습니다');
   } catch (e) {
     toast('❌ AI SEO 최적화 실패: ' + e.message, 'error');
   } finally {
@@ -1028,9 +1028,9 @@ function renderAIResult(r) {
   // AI SEO 섹션 표시
   document.getElementById('ai-seo-section').style.display = 'block';
   document.getElementById('ai-scores').style.display = 'flex';
-  document.getElementById('ai-s-readability').textContent = data.scores?.readability ?? '—';
-  document.getElementById('ai-s-seo').textContent = data.scores?.seo ?? '—';
-  document.getElementById('ai-s-tone').textContent = data.scores?.tone ?? '—';
+  document.getElementById('ai-s-readability').textContent = data.scores?.readability ?? '-';
+  document.getElementById('ai-s-seo').textContent = data.scores?.seo ?? '-';
+  document.getElementById('ai-s-tone').textContent = data.scores?.tone ?? '-';
 
   const resultEl = document.getElementById('ai-result');
   resultEl.classList.remove('empty');
