@@ -580,6 +580,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 .nav-link {
   color: #D9D9D9;
   font-weight: 500;
+  font-size: 14.5px;
   position: relative;
   padding: 0.5rem 0;
 }
@@ -631,11 +632,6 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 }
 
 /* ── Mini Header (scroll) ── */
-@keyframes miniHeaderIn {
-  0% { transform: translateX(-50%) translateY(-80px); opacity: 0; }
-  50% { transform: translateX(-50%) translateY(290px); opacity: 1; }
-  100% { transform: translateX(-50%) translateY(0); opacity: 1; }
-}
 .header-mini {
   position: fixed;
   top: 10px;
@@ -655,7 +651,6 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
   transform: translateX(-50%) translateY(0);
   opacity: 1;
   pointer-events: auto;
-  animation: miniHeaderIn 1s cubic-bezier(0.05, 0, 0.0, 1) forwards;
 }
 .header-mini-nav {
   display: flex;
@@ -666,7 +661,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 .header-mini-nav a {
   color: #d9d9d9;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 14.5px;
   padding: 0.4rem 0;
   position: relative;
   transition: color 0.2s;
