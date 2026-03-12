@@ -551,7 +551,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 .nav-menu {
   display: flex;
   list-style: none;
-  gap: 1rem;
+  gap: 2rem;
   align-items: center;
   position: absolute;
   left: 50%;
