@@ -319,7 +319,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 
 .hero h1 {
   margin-bottom: 1rem;
-  line-height: 1.625;
+  line-height: 1.2;
 }
 
 .hero-highlight {
@@ -331,7 +331,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
   font-size: 1.15rem;
   margin-bottom: 1rem;
   max-width: 780px;
-  line-height: 1.625;
+  line-height: 1.4;
   text-align: center;
 }
 
