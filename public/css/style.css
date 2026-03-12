@@ -640,10 +640,11 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(12px);
   border-radius: 20px;
-  padding: 0.25rem calc(2rem + 30px);
+  padding: 0.25rem calc(2rem + 60px);
   opacity: 0;
-  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s ease;
+  transition: transform 1s cubic-bezier(0.05, 0, 0.0, 1), opacity 0.8s ease;
   pointer-events: none;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
 }
 .header-mini.visible {
   transform: translateX(-50%) translateY(0);
