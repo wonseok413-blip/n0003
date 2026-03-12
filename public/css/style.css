@@ -630,6 +630,52 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
   background: #f5c803;
 }
 
+/* ── Mini Header (scroll) ── */
+.header-mini {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-80px);
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 0.5rem 2rem;
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+  pointer-events: none;
+}
+.header-mini.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.header-mini-nav {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  align-items: center;
+}
+.header-mini-nav a {
+  color: #d9d9d9;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.4rem 0;
+  position: relative;
+  transition: color 0.2s;
+}
+.header-mini-nav a:hover { color: var(--accent-primary); }
+.header-mini-nav a.active { color: var(--accent-primary); }
+.header-mini-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background-color: var(--accent-primary);
+  transition: width 0.3s ease;
+}
+.header-mini-nav a:hover::after { width: 100%; }
+
 .mobile-toggle {
   display: none;
   flex-direction: column;

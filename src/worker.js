@@ -59,6 +59,15 @@ const HEADER_HTML = `<div class="sub-header">
     </button>
   </nav>
 </header>
+<div class="header-mini">
+  <ul class="header-mini-nav">
+    <li><a href="/services">Service</a></li>
+    <li><a href="/product">Product</a></li>
+    <li><a href="/solution">Solution</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</div>
 <script>
 (function(){
   var sid = sessionStorage.getItem('nr_session') || localStorage.getItem('nr_session');
@@ -88,20 +97,22 @@ const HEADER_HTML = `<div class="sub-header">
   function initHeader() {
     var header = document.querySelector('.header');
     var subHeader = document.querySelector('.sub-header');
+    var miniHeader = document.querySelector('.header-mini');
     var mobileToggle = document.querySelector('.mobile-toggle');
     var navMenu = document.querySelector('.nav-menu');
     if (!header) return;
-    var lastScroll = 0;
     window.addEventListener('scroll', function(){
       var y = window.pageYOffset;
-      if (y > 100) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
-      if (subHeader) {
-        if (y > 50) { subHeader.classList.add('hidden'); header.style.top = '0'; }
-        else { subHeader.classList.remove('hidden'); header.style.top = ''; }
+      if (y > 50) {
+        if (subHeader) subHeader.classList.add('hidden');
+        header.style.transform = 'translateY(-100%)';
+        if (miniHeader) miniHeader.classList.add('visible');
+      } else {
+        if (subHeader) subHeader.classList.remove('hidden');
+        header.style.transform = 'translateY(0)';
+        header.style.top = '';
+        if (miniHeader) miniHeader.classList.remove('visible');
       }
-      if (y > lastScroll && y > 100) { header.style.transform = 'translateY(-100%)'; }
-      else { header.style.transform = 'translateY(0)'; }
-      lastScroll = y;
     });
     if (mobileToggle && navMenu) {
       mobileToggle.addEventListener('click', function(){
@@ -114,6 +125,10 @@ const HEADER_HTML = `<div class="sub-header">
     }
     var p = window.location.pathname;
     document.querySelectorAll('.nav-link').forEach(function(a){
+      var href = a.getAttribute('href');
+      if (href && (p === href || (p === '/' && href === '/index.html'))) a.classList.add('active');
+    });
+    document.querySelectorAll('.header-mini-nav a').forEach(function(a){
       var href = a.getAttribute('href');
       if (href && (p === href || (p === '/' && href === '/index.html'))) a.classList.add('active');
     });
