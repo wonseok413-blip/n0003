@@ -30,7 +30,7 @@ async function handleVideo(request, originUrl) {
 }
 
 const HEADER_HTML = `<div class="sub-header">
-  <p>Launch your WaaS platform get 20% off your first month <a href="/product"><strong>See Plans!</strong></a></p>
+  <p>Join now and receive 20% off your first payment <a href="https://noteracker.com/en/pricing/#MonthlyCarePlan"><strong>Click!</strong></a></p>
 </div>
 <header class="header">
   <nav class="nav-container">
@@ -49,7 +49,7 @@ const HEADER_HTML = `<div class="sub-header">
     <div class="nav-cta">
       <a href="/dashboard-admin.html" class="cta-admin" id="cta-admin" style="display:none;" aria-label="Dashboard"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
       <button class="cta-login" onclick="window.location.href='/login'">Log In</button>
-      <button class="cta-button" onclick="window.location.href='/product'">Get Started</button>
+      <button class="cta-button" onclick="window.location.href='https://noteracker.com/en/pricing/#MonthlyCarePlan'">Get Started</button>
     </div>
 
     <button class="mobile-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
@@ -62,30 +62,27 @@ const HEADER_HTML = `<div class="sub-header">
 <script>
 (function(){
   var sid = sessionStorage.getItem('nr_session') || localStorage.getItem('nr_session');
-  if (!sid) return;
-  fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + sid } })
-    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
-    .then(function(d){
-      if (!d.user_type) return;
-      var btn = document.querySelector('.cta-login');
-      if (btn) {
-        btn.textContent = 'Log Out';
-        btn.onclick = function(){
-          fetch('/api/auth/logout',{method:'POST',headers:{'Authorization':'Bearer '+sid}});
-          sessionStorage.removeItem('nr_session');
-          localStorage.removeItem('nr_session');
-          window.location.href='/';
-        };
-      }
-      if (d.user_type === 'admin') {
-        var adm = document.getElementById('cta-admin');
-        if (adm) adm.style.display = 'flex';
-      }
-    }).catch(function(){});
-})();
-</script>
-<script>
-(function(){
+  if (sid) {
+    fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + sid } })
+      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(d){
+        if (!d.user_type) return;
+        var btn = document.querySelector('.cta-login');
+        if (btn) {
+          btn.textContent = 'Log Out';
+          btn.onclick = function(){
+            fetch('/api/auth/logout',{method:'POST',headers:{'Authorization':'Bearer '+sid}});
+            sessionStorage.removeItem('nr_session');
+            localStorage.removeItem('nr_session');
+            window.location.href='/';
+          };
+        }
+        if (d.user_type === 'admin') {
+          var adm = document.getElementById('cta-admin');
+          if (adm) adm.style.display = 'flex';
+        }
+      }).catch(function(){});
+  }
   if (window.__headerInit) return;
   window.__headerInit = true;
   function initHeader() {
@@ -134,7 +131,7 @@ const FOOTER_HTML = `<footer class="footer" id="footer">
           <a href="/index.html" class="footer-logo">
             <img src="/images/noteracker-logo-02-opt.webp" alt="Noteracker Ltd." width="143" height="40" style="filter: brightness(1.2);">
           </a>
-          <p>We build and manage modern web platforms Shopping, LMS, CMS, CRM, and AI Chatbot all in one service powered by Cloudflare & Vultr.</p>
+          <p>We cherish the value of genuine communication as we continue shaping our digital world. And if you ever wish to know more about Noteracker&#8230;</p>
           <div class="footer-email-label">Channel of communication</div>
           <div class="footer-email">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -211,7 +208,7 @@ const FOOTER_HTML = `<footer class="footer" id="footer">
         </div>
       </div>
       <div class="footer-trademark">
-        The WordPress&reg; and WooCommerce&reg; trademarks belong to the WordPress Foundation and WooCommerce, Inc. Cloudflare&reg; is a registered trademark of Cloudflare, Inc. Vultr&reg; is a registered trademark of The Constant Company, LLC. Reference to these trademarks is strictly for identification purposes. Noteracker is an independent WaaS (Website as a Service) provider specializing in managed web platforms. These professional infrastructure and software tools are utilized solely to deliver premium hosting, performance, and integrated services; they are not for individual resale. Noteracker is not endorsed by, affiliated with, or owned by the owners of these respective trademarks.
+        The WordPress&reg; and WooCommerce&reg; trademarks belong to the WordPress Foundation and WooCommerce, Inc. Reference to these trademarks, along with Breakdance Builder, WP Rocket, Wordfence, Perfmatters, Rank Math, and Object Cache Pro, is strictly for identification purposes. Noteracker is an independent agency specializing in website optimization and management. These professional software tools are utilized solely to provide premium performance and security as part of our management services; they are not for individual resale. Noteracker is not endorsed by, affiliated with, or owned by the owners of these respective trademarks.
       </div>
     </div>
   </footer>`;
