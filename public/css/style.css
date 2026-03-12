@@ -598,7 +598,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 .cta-login {
   background: transparent;
   color: #d7d7d7;
-  padding: 0.55rem 1rem;
+  padding: 0.85rem 1rem;
   border-radius: 22px;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -615,7 +615,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 .cta-button {
   background: var(--accent-primary);
   color: var(--bg-primary);
-  padding: 0.55rem 1rem;
+  padding: 0.85rem 1rem;
   border-radius: 22px;
   font-weight: 600;
   transition: all 0.3s ease;
