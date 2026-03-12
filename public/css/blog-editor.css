@@ -48,7 +48,7 @@
     .tb-left{display:flex;align-items:center;gap:1rem}
     .tb-back{
       display:flex;align-items:center;gap:1rem;
-      padding:0.4375rem 0.875rem;border-radius:22px;
+      padding:0.4375rem 0.875rem;border-radius:26px;
       background:transparent;border:1px solid var(--border);
       color:var(--muted);font-size:14px;font-weight:600;
       transition:border-color .2s,color .2s;cursor:pointer;
@@ -60,7 +60,7 @@
     .tb-right{display:flex;align-items:center;gap:1rem}
     .tb-status{font-size:14px;color:var(--muted);padding:0 0.625rem}
 
-    .btn{display:inline-flex;align-items:center;gap:1rem;padding:0.5rem 1.125rem;border-radius:22px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s,background .2s,color .2s,border-color .2s;white-space:nowrap}
+    .btn{display:inline-flex;align-items:center;gap:1rem;padding:0.5rem 1.125rem;border-radius:26px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s,background .2s,color .2s,border-color .2s;white-space:nowrap}
     .btn svg{width:14px;height:14px;flex-shrink:0}
     .btn-primary{background:var(--focus);color:#1c2228}
     .btn-primary:hover{opacity:.88}

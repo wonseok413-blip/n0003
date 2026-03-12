@@ -149,7 +149,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
   justify-content: center;
   gap: 1rem;
   padding: 1rem;
-  border-radius: 22px;
+  border-radius: 26px;
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;

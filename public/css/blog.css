@@ -53,7 +53,7 @@
 #filter-bar { background: var(--bg-main); padding: 2.25rem 0 0; }
 .filter-list { display: flex; gap: 1rem; flex-wrap: wrap; }
 .filter-btn {
-  padding: 0.5rem 1.25rem; border-radius: 22px; border: 1px solid var(--border);
+  padding: 0.5rem 1.25rem; border-radius: 26px; border: 1px solid var(--border);
   background: transparent; color: var(--text-muted);
   font-size: 14px; font-weight: 600; cursor: pointer;
   transition: all .2s; font-family: inherit;
