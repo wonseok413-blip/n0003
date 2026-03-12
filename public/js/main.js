@@ -16,7 +16,7 @@ async function loadComponents() {
   const footerEl = document.getElementById('footer-one');
 
   const fetches = [];
-  var cbv = 'v=7';
+  var cbv = 'v=8';
   if (headerEl) fetches.push(fetch('/components/header.html?' + cbv).then(r => r.text()));
   else fetches.push(null);
   if (footerEl) fetches.push(fetch('/components/footer.html?' + cbv).then(r => r.text()));
