@@ -598,12 +598,14 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 .cta-login {
   background: transparent;
   color: #d7d7d7;
-  padding: 0.45rem 1rem;
+  padding: 0.55rem 1rem;
   border-radius: 22px;
   font-weight: 600;
   transition: all 0.3s ease;
   border: 1.5px solid #d7d7d7;
   cursor: pointer;
+  min-width: 120px;
+  text-align: center;
 }
 .cta-login:hover {
   background: rgba(215, 215, 215, 0.1);
@@ -613,12 +615,14 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 .cta-button {
   background: var(--accent-primary);
   color: var(--bg-primary);
-  padding: 0.45rem 1rem;
+  padding: 0.55rem 1rem;
   border-radius: 22px;
   font-weight: 600;
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
+  min-width: 120px;
+  text-align: center;
 }
 .cta-button:hover {
   transform: translateY(-2px);
