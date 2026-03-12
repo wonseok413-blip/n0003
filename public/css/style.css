@@ -631,6 +631,11 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 }
 
 /* ── Mini Header (scroll) ── */
+@keyframes miniHeaderIn {
+  0% { transform: translateX(-50%) translateY(-80px); opacity: 0; }
+  50% { transform: translateX(-50%) translateY(290px); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
 .header-mini {
   position: fixed;
   top: 10px;
@@ -640,7 +645,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(12px);
   border-radius: 20px;
-  padding: 0.25rem calc(2rem + 60px);
+  padding: 0.25rem calc(2rem + 100px);
   opacity: 0;
   transition: transform 1s cubic-bezier(0.05, 0, 0.0, 1), opacity 0.8s ease;
   pointer-events: none;
@@ -650,6 +655,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
   transform: translateX(-50%) translateY(0);
   opacity: 1;
   pointer-events: auto;
+  animation: miniHeaderIn 1s cubic-bezier(0.05, 0, 0.0, 1) forwards;
 }
 .header-mini-nav {
   display: flex;
