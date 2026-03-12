@@ -217,9 +217,9 @@ const FOOTER_HTML = `<footer class="footer" id="footer">
 
       <div class="footer-bottom">
         <div class="footer-copy">
-          <strong>&copy; 2026 Noteracker Ltd.</strong><br />
-          Incorporated in England &amp; Wales No.17030247<br />
-          Registered Office : 71-75 Shelton Street, Covent Garden, London UK / WC2H 9JQ
+          <strong>&copy; 2026 Noteracker Korea</strong><br />
+          418-38-01542<br />
+          3F, Room 302-J37, 36 Daeji-ro, Suji-gu, Yongin-si, Gyeonggi-do, 16873, South Korea
         </div>
       </div>
       <div class="footer-trademark">
