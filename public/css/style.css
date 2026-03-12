@@ -510,7 +510,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
   text-align: center;
   display: flex; align-items: center; justify-content: center;
   z-index: 1001;
-  transition: transform 0.3s ease;
+  transition: transform 1s cubic-bezier(0.05, 0, 0.0, 1);
 }
 .sub-header p { margin: 0; color: #000; font-size: 0.85rem; }
 .sub-header a { color: #000; text-decoration: underline; margin-left: 1rem; }
@@ -523,7 +523,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
   backdrop-filter: none;
   border-bottom: none;
   z-index: 1000;
-  transition: all 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-bottom 0.3s ease, box-shadow 0.3s ease, transform 1s cubic-bezier(0.05, 0, 0.0, 1), opacity 0.8s ease;
 }
 .header.scrolled {
   background-color: rgba(27, 32, 38, 0.95);
@@ -644,7 +644,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
   opacity: 0;
   transition: transform 1s cubic-bezier(0.05, 0, 0.0, 1), opacity 0.8s ease;
   pointer-events: none;
-  box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 .header-mini.visible {
   transform: translateX(-50%) translateY(0);
