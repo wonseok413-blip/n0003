@@ -74,7 +74,7 @@
       var y = window.pageYOffset;
       if (y > 50) {
         if (subHeader) subHeader.classList.add('hidden');
-        header.style.transform = 'translateY(-100%)';
+        header.style.transform = 'translateY(calc(-100% - 35px))';
         if (miniHeader) miniHeader.classList.add('visible');
       } else {
         if (subHeader) subHeader.classList.remove('hidden');
