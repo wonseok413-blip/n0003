@@ -1,12 +1,12 @@
 /* ═══════════════════════════════════════════════
-   Product (Plans & Pricing) Page — n0003 WaaS
+   Product (Plans & Pricing) Page n0003 WaaS
    ═══════════════════════════════════════════════ */
 
 /* ── Product grid (3 cols) ── */
 .prod-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 1rem;
   align-items: stretch;
 }
 
@@ -15,7 +15,7 @@
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 2.5rem 2rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -59,7 +59,7 @@
   color: var(--bg-primary);
   font-size: 0.72rem;
   font-weight: 700;
-  padding: 0.3rem 1.2rem;
+  padding: 1rem;
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   white-space: nowrap;
   text-transform: uppercase;
@@ -73,7 +73,7 @@
   border: 1px solid rgba(230,184,2,0.1);
   border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   transition: all var(--transition);
 }
 .prod-card:hover .prod-card__icon {
@@ -82,17 +82,18 @@
 }
 
 .prod-card h3 { font-size: 1.25rem; color: var(--text-primary); margin: 0; }
-.prod-card p { color: var(--text-secondary); font-size: 0.93rem; line-height: 1.7; margin: 0; }
+.prod-card p { color: var(--text-secondary); font-size: 0.93rem; line-height: 1.625; margin: 0; }
 
 /* ── Feature list ── */
 .prod-feature-list {
-  list-style: none; padding: 0; margin: 0.5rem 0;
-  display: flex; flex-direction: column; gap: 0.6rem;
+  list-style: none; padding: 0; margin: 1rem 0;
+  display: flex; flex-direction: column; gap: 1rem;
   flex: 1;
 }
 .prod-feature-list li {
-  display: flex; align-items: center; gap: 0.6rem;
+  display: flex; align-items: center; gap: 1rem;
   color: var(--text-secondary); font-size: 0.9rem;
+  line-height: 1.625;
 }
 .prod-feature-list li::before {
   content: '✓'; color: var(--accent-primary); font-weight: 700; flex-shrink: 0;
@@ -100,15 +101,15 @@
 
 /* ── Price block ── */
 .prod-price-block {
-  margin: 0.5rem 0 1rem;
-  display: flex; flex-direction: column; gap: 0.2rem;
+  margin: 1rem 0;
+  display: flex; flex-direction: column; gap: 1rem;
 }
 .prod-price-was {
   color: var(--text-muted); font-size: 0.85rem;
   text-decoration: line-through;
 }
 .prod-price-now {
-  font-size: 2.8rem; font-weight: 800; line-height: 1;
+  font-size: 2.8rem; font-weight: 800; line-height: 1.625;
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-warm));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
@@ -130,7 +131,7 @@
   border: 1px solid var(--border-color);
   border-left: 4px solid var(--accent-primary);
   border-radius: var(--radius-lg);
-  padding: 2rem;
+  padding: 1rem;
   transition: all var(--transition);
 }
 .prod-faq:hover {
@@ -138,8 +139,8 @@
   border-left-color: var(--accent-primary);
   box-shadow: var(--shadow-sm);
 }
-.prod-faq h3 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 0.75rem; }
-.prod-faq p { color: var(--text-secondary); font-size: 0.93rem; line-height: 1.75; margin: 0; }
+.prod-faq h3 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 1rem; }
+.prod-faq p { color: var(--text-secondary); font-size: 0.93rem; line-height: 1.625; margin: 0; }
 
 /* ── Responsive ── */
 @media (max-width: 1280px) {
@@ -153,10 +154,10 @@
 }
 @media (max-width: 768px) {
   .prod-grid { grid-template-columns: 1fr; }
-  .prod-card { padding: 2rem 1.5rem; }
+  .prod-card { padding: 1rem; }
   .prod-price-now { font-size: 2.2rem; }
 }
 @media (max-width: 480px) {
-  .prod-card { padding: 1.5rem 1.25rem; }
+  .prod-card { padding: 1rem; }
   .prod-price-now { font-size: 2rem; }
 }

@@ -21,13 +21,13 @@
   <section class="hero">
     <div class="hero-container">
       <div class="hero-content">
-        <span class="hero-badge">All-in-One WaaS Platform — Powered by Cloudflare & Vultr</span>
+        <span class="hero-badge">All-in-One WaaS Platform Powered by Cloudflare & Vultr</span>
         <h1 style="color:#fff; -webkit-text-fill-color:#fff;">
           Your Website,<br>
           <span class="hero-highlight">Fully Managed.</span>
         </h1>
         <p>
-          Shopping, LMS, CMS, CRM, and AI Chatbot — all in one managed platform.
+          Shopping, LMS, CMS, CRM, and AI Chatbot all in one managed platform.
         </p>
         <div class="hero-buttons" style="margin-top: 1.5rem;">
           <button class="btn-primary" onclick="location.href='/services'">
@@ -44,12 +44,28 @@
   <!-- Hero Showcase -->
   <section class="hero-showcase">
     <div class="hero-showcase__frame">
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="24" r="24" fill="rgba(230,184,2,0.12)"/>
-        <path d="M19 15L35 24L19 33V15Z" fill="#e6b802"/>
-      </svg>
+      <div id="hero-lottie" style="width:100%;height:100%;"></div>
     </div>
   </section>
+  <script>
+  (function(){
+    var el = document.getElementById('hero-lottie');
+    if (!el) return;
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js';
+    s.onload = function(){
+      if (!window.lottie) return;
+      window.lottie.loadAnimation({
+        container: el,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '/animations/monitor-demo.json'
+      });
+    };
+    document.head.appendChild(s);
+  })();
+  </script>
 
   <!-- Trust Bar -->
   <section class="trust-bar">
@@ -75,7 +91,7 @@
         <span class="section-badge">What We Do</span>
         <h2 class="section-title">Complete WaaS Solutions</h2>
         <p class="section-description">
-          Six integrated services working in concert — from e-commerce to AI chatbot — to deliver
+          Six integrated services working in concert from e-commerce to AI chatbot to deliver
           a modern, cost-efficient web platform that powers your business 24/7.
         </p>
       </div>
@@ -95,13 +111,13 @@
         <div class="card">
           <div class="card-icon"><img src="/images/icons/opt/7218886.webp" alt="CMS" loading="lazy"></div>
           <h3>CMS & Web Management</h3>
-          <p>WordPress and modern web applications fully managed. Content publishing, SEO optimization, design updates, and performance tuning — all handled by our expert team.</p>
+          <p>WordPress and modern web applications fully managed. Content publishing, SEO optimization, design updates, and performance tuning all handled by our expert team.</p>
           <a href="/services#cms" class="card-link">Learn More →</a>
         </div>
         <div class="card">
           <div class="card-icon"><img src="/images/icons/opt/2906274.webp" alt="CRM" loading="lazy"></div>
           <h3>CRM & Automation</h3>
-          <p>Integrated customer relationship management with automated workflows, lead tracking, email campaigns, and analytics — driving growth with data-driven insights.</p>
+          <p>Integrated customer relationship management with automated workflows, lead tracking, email campaigns, and analytics driving growth with data-driven insights.</p>
           <a href="/services#crm" class="card-link">Learn More →</a>
         </div>
       </div>
@@ -117,15 +133,15 @@
           <h2 style="margin-top:1rem; background:none; -webkit-text-fill-color:#fff;">One Platform.<br>Everything You Need.</h2>
           <p>
             Stop juggling multiple vendors, hosting providers, and disconnected tools.
-            Our WaaS platform integrates everything — website, store, LMS, CRM, and AI chatbot —
+            Our WaaS platform integrates everything website, store, LMS, CRM, and AI chatbot 
             into a single managed service that dramatically cuts your operational costs.
           </p>
           <ul class="idx-check-list">
-            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6.5 11.5L2.5 7.5" stroke="#e6b802" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> AI Chatbot integrated — automate customer support 24/7</li>
-            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6.5 11.5L2.5 7.5" stroke="#e6b802" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Cloudflare CDN & security — global edge delivery</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6.5 11.5L2.5 7.5" stroke="#e6b802" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> AI Chatbot integrated automate customer support 24/7</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6.5 11.5L2.5 7.5" stroke="#e6b802" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Cloudflare CDN & security global edge delivery</li>
             <li><svg class="check-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6.5 11.5L2.5 7.5" stroke="#e6b802" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Vultr high-performance cloud servers worldwide</li>
             <li><svg class="check-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6.5 11.5L2.5 7.5" stroke="#e6b802" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Up to 60% reduction in total web operation costs</li>
-            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6.5 11.5L2.5 7.5" stroke="#e6b802" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Fully managed — design, hosting, updates, and support</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6.5 11.5L2.5 7.5" stroke="#e6b802" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Fully managed design, hosting, updates, and support</li>
           </ul>
           <div class="hero-buttons" style="margin-top:2rem;">
             <button class="btn-primary" onclick="location.href='/solution'"><span class="btn-desk">See How It Works</span><span class="btn-mob">How It Works</span></button>
@@ -150,7 +166,7 @@
         <h2 class="section-title">Powered by Cloudflare & Vultr</h2>
         <p class="section-description">
           Enterprise-grade cloud infrastructure combining Cloudflare's global edge network
-          with Vultr's high-performance compute — delivering speed, security, and reliability at scale.
+          with Vultr's high-performance compute delivering speed, security, and reliability at scale.
         </p>
       </div>
       <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
@@ -167,7 +183,7 @@
         <div class="card">
           <div class="card-icon"><img src="/images/icons/opt/3770283.webp" alt="AI" loading="lazy"></div>
           <h3>AI Chatbot Engine</h3>
-          <p>Our proprietary AI chatbot integrates directly into your website — handling customer inquiries, lead capture, and support automation 24/7 without additional staffing costs.</p>
+          <p>Our proprietary AI chatbot integrates directly into your website handling customer inquiries, lead capture, and support automation 24/7 without additional staffing costs.</p>
         </div>
         <div class="card">
           <div class="card-icon"><img src="/images/icons/opt/1069877.webp" alt="WordPress" loading="lazy"></div>
@@ -186,13 +202,13 @@
         <h2 class="section-title">The Problems WaaS Solves</h2>
         <p class="section-description">
           Running a modern web presence shouldn't require a full IT department.
-          These are the challenges businesses face every day — and exactly what our WaaS platform eliminates.
+          These are the challenges businesses face every day and exactly what our WaaS platform eliminates.
         </p>
       </div>
       <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
         <div class="card" style="border-left:3px solid var(--accent-primary);">
           <h3>High Operational Costs</h3>
-          <p>Separate hosting, security, design, development, and maintenance vendors drain your budget. WaaS consolidates everything into one predictable monthly fee — saving up to 60%.</p>
+          <p>Separate hosting, security, design, development, and maintenance vendors drain your budget. WaaS consolidates everything into one predictable monthly fee saving up to 60%.</p>
         </div>
         <div class="card" style="border-left:3px solid var(--accent-secondary);">
           <h3>Technical Complexity</h3>
@@ -200,11 +216,11 @@
         </div>
         <div class="card" style="border-left:3px solid var(--accent-primary);">
           <h3>Scattered Tools & Vendors</h3>
-          <p>Shopping on one platform, CRM on another, LMS somewhere else — disconnected systems create data silos and inefficiency. WaaS unifies everything under one roof.</p>
+          <p>Shopping on one platform, CRM on another, LMS somewhere else disconnected systems create data silos and inefficiency. WaaS unifies everything under one roof.</p>
         </div>
         <div class="card" style="border-left:3px solid var(--accent-secondary);">
           <h3>No AI Integration</h3>
-          <p>Most websites still lack intelligent automation. Our built-in AI chatbot handles customer inquiries, lead qualification, and support — reducing staffing costs instantly.</p>
+          <p>Most websites still lack intelligent automation. Our built-in AI chatbot handles customer inquiries, lead qualification, and support reducing staffing costs instantly.</p>
         </div>
       </div>
       <div style="text-align:center;margin-top:3rem;">
@@ -223,7 +239,7 @@
         <h2 class="section-title">WaaS & Web Technology Insights</h2>
         <p class="section-description">
           Expert knowledge on web management, cloud infrastructure, and digital business growth
-          — written by specialists who build and manage websites every day.
+          written by specialists who build and manage websites every day.
         </p>
       </div>
       <div class="idx-blog-grid" id="index-blog-grid">
@@ -232,7 +248,7 @@
           <div class="index-blog-card__content">
             <span class="blog-tag">WaaS</span>
             <h3>What is WaaS? The Complete Guide to Website as a Service in 2026</h3>
-            <p>Everything you need to know about WaaS — how it works, what it includes, and why businesses are switching from traditional hosting to fully managed platforms.</p>
+            <p>Everything you need to know about WaaS how it works, what it includes, and why businesses are switching from traditional hosting to fully managed platforms.</p>
             <a href="/blog.html" class="card-link">Read More →</a>
           </div>
         </article>
@@ -241,7 +257,7 @@
           <div class="index-blog-card__content">
             <span class="blog-tag">E-Commerce</span>
             <h3>Building a Profitable Online Store: WooCommerce vs Custom Solutions</h3>
-            <p>Compare the pros and cons of WooCommerce and custom e-commerce platforms — and learn which approach fits your business model and growth goals.</p>
+            <p>Compare the pros and cons of WooCommerce and custom e-commerce platforms and learn which approach fits your business model and growth goals.</p>
             <a href="/blog.html" class="card-link">Read More →</a>
           </div>
         </article>
@@ -250,7 +266,7 @@
           <div class="index-blog-card__content">
             <span class="blog-tag">AI</span>
             <h3>AI Chatbots for Business: How to Cut Support Costs by 60% in 2026</h3>
-            <p>How AI-powered chatbots handle customer inquiries, qualify leads, and automate support — reducing operational costs while improving customer satisfaction.</p>
+            <p>How AI-powered chatbots handle customer inquiries, qualify leads, and automate support reducing operational costs while improving customer satisfaction.</p>
             <a href="/blog.html" class="card-link">Read More →</a>
           </div>
         </article>
@@ -293,7 +309,7 @@
         <h2 class="section-title">Ready to Simplify Your<br>Web Operations?</h2>
         <p class="section-description">
           Stop overpaying for scattered services. Our WaaS platform delivers everything your
-          business needs — website, store, CRM, LMS, and AI chatbot — in one managed package.
+          business needs website, store, CRM, LMS, and AI chatbot in one managed package.
         </p>
         <div class="hero-buttons" style="justify-content: center; margin-top: 2rem;">
           <button class="btn-primary" onclick="location.href='/contact'">

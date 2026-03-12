@@ -37,7 +37,7 @@
 - FAQ 섹션 제거
 - Process 단계 카드 → `.two-col-grid` 적용
 
-### 6. contact.html (전면 재구성 — noteracker.com/contact 기준)
+### 6. contact.html (전면 재구성 noteracker.com/contact 기준)
 구조:
 - Hero
 - Contact 섹션 (`.contact-layout` 2열)

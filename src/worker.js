@@ -30,7 +30,7 @@ async function handleVideo(request, originUrl) {
 }
 
 const HEADER_HTML = `<div class="sub-header">
-  <p>Launch your WaaS platform — get 20% off your first month <a href="/product"><strong>See Plans!</strong></a></p>
+  <p>Launch your WaaS platform get 20% off your first month <a href="/product"><strong>See Plans!</strong></a></p>
 </div>
 <header class="header">
   <nav class="nav-container">
@@ -134,7 +134,7 @@ const FOOTER_HTML = `<footer class="footer" id="footer">
           <a href="/index.html" class="footer-logo">
             <img src="/images/noteracker-logo-02-opt.webp" alt="Noteracker Ltd." width="143" height="40" style="filter: brightness(1.2);">
           </a>
-          <p>We build and manage modern web platforms — Shopping, LMS, CMS, CRM, and AI Chatbot — all in one service powered by Cloudflare & Vultr.</p>
+          <p>We build and manage modern web platforms Shopping, LMS, CMS, CRM, and AI Chatbot all in one service powered by Cloudflare & Vultr.</p>
           <div class="footer-email-label">Channel of communication</div>
           <div class="footer-email">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>

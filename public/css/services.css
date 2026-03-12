@@ -1,12 +1,12 @@
 /* ═══════════════════════════════════════════════
-   Services Page — n0003 WaaS
+   Services Page n0003 WaaS
    ═══════════════════════════════════════════════ */
 
 /* ── Flagship featured card grid ── */
 .svc-featured-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
-  gap: 3rem;
+  gap: 1rem;
   align-items: center;
 }
 
@@ -15,10 +15,11 @@
   list-style: none; padding: 0; margin: 0;
 }
 .svc-feature-list li {
-  padding: 0.75rem 0;
+  padding: 1rem 0;
   color: var(--text-secondary);
   border-bottom: 1px solid var(--border-color);
-  display: flex; align-items: center; gap: 0.5rem;
+  display: flex; align-items: center; gap: 1rem;
+  line-height: 1.625;
 }
 .svc-feature-list li:last-child { border-bottom: none; }
 .svc-feature-list li::before {
@@ -28,7 +29,7 @@
 /* ── Flagship info box ── */
 .svc-flagship-box {
   background: var(--bg-elevated);
-  padding: 3rem;
+  padding: 1rem;
   border-radius: var(--radius-lg);
   text-align: center;
   border: 1px solid var(--border-color);
@@ -37,7 +38,7 @@
   font-size: 2.5rem; font-weight: 800;
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-warm));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  line-height: 1; margin-bottom: 0.3rem;
+  line-height: 1.625; margin-bottom: 1rem;
 }
 
 /* ── Process step number (gold gradient) ── */
@@ -54,20 +55,51 @@
 .svc-feature-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  gap: 1rem;
+}
+
+/* ── Hero two-column: text left, lottie right ── */
+.hero {
+  padding-top: 6.8125rem;
+  box-sizing: border-box;
+}
+.hero .hero-container {
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  gap: 1rem;
+  padding: 0 3.125rem;
+}
+.hero .hero-content {
+  flex: 1;
+  align-items: flex-start;
+}
+.hero .hero-content p {
+  text-align: left;
+  margin-bottom: 1rem;
+  line-height: 1.625;
+}
+.hero .hero-content .hero-buttons {
+  justify-content: flex-start;
+  margin-top: 1rem !important;
+}
+.hero .hero-content .hero-buttons .btn-primary,
+.hero .hero-content .hero-buttons .btn-secondary {
+  flex: 0 0 220px;
+  width: 220px;
 }
 
 /* ── Lottie widget (services hero companion) ── */
-.svc-lottie { width: 100%; max-width: 480px; margin: 0 auto; }
-.svc-lottie .lottie-wrap { padding: 24px; }
+.svc-lottie { width: 100%; max-width: 480px; flex-shrink: 0; }
+.svc-lottie .lottie-wrap { padding: 1.5rem; }
 .svc-lstep-title {
   font-size: 0.7rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--accent-primary); margin-bottom: 12px;
+  color: var(--accent-primary); margin-bottom: 1rem;
 }
 .svc-lstep-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 0;
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem 0;
   border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 .svc-lstep-row:last-child { border-bottom: none; }
@@ -79,9 +111,9 @@
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .svc-lstep-icon img { width: 20px; height: 20px; }
-.svc-lstep-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+.svc-lstep-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.625; }
 .svc-lstep-text strong { color: var(--text-primary); }
-.svc-lstep-bar { height: 3px; background: var(--bg-secondary); border-radius: 2px; margin-top: 16px; overflow: hidden; }
+.svc-lstep-bar { height: 3px; background: var(--bg-secondary); border-radius: 2px; margin-top: 1rem; overflow: hidden; }
 .svc-lstep-bar-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
@@ -105,13 +137,22 @@
 
 /* ── Responsive ── */
 @media (max-width: 1280px) {
-  .svc-featured-grid { gap: 2rem; }
+  .svc-featured-grid { gap: 1rem; }
 }
 @media (max-width: 1024px) {
-  .svc-featured-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .hero .hero-container {
+    flex-direction: column;
+    text-align: center;
+    padding: 0 1.875rem;
+  }
+  .hero .hero-content {
+    align-items: center;
+  }
+  .svc-lottie { margin: 0 auto; }
+  .svc-featured-grid { grid-template-columns: 1fr; gap: 1rem; }
   .svc-feature-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-  .svc-flagship-box { padding: 2rem; }
+  .svc-flagship-box { padding: 1rem; }
   .svc-flagship-stat { font-size: 2rem; }
 }
