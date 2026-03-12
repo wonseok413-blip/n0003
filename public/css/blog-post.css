@@ -50,7 +50,7 @@
 }
 .post-hero-inner {
   position: relative; z-index: 2;
-  padding: 5rem 0 3.5rem;
+  padding: 7.5rem 0 5.25rem;
   max-width: 760px;
   margin-left: 340px;
 }
@@ -78,7 +78,7 @@
 /* ── POST WRAP (3-column layout) ───────────── */
 .post-wrap {
   background: var(--bg-main);
-  padding: 3.5rem 0 5rem;
+  padding: 5.25rem 0 7.5rem;
 }
 .post-layout {
   display: grid;
@@ -416,7 +416,7 @@
   .sidebar-left { order: 2; }
   .post-body { order: 1; }
   .sidebar-right { order: 3; position: static; }
-  .post-hero-inner { padding: 3.75rem 0 2.5rem; margin-left: 0; }
+  .post-hero-inner { padding: 5.625rem 0 3.75rem; margin-left: 0; }
 }
 @media (max-width: 600px) {
   #post-hero { min-height: 360px; }

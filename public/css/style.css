@@ -90,7 +90,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 .section {
   position: relative;
   overflow: hidden;
-  padding: 3rem 0;
+  padding: 4.5rem 0;
 }
 
 /* Section divider gradient */
@@ -702,7 +702,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 #footer, .footer {
   background: #252b30;
   border-top: 1px solid #323841;
-  padding: 4.5rem 0 0;
+  padding: 6.75rem 0 0;
 }
 .footer .container { padding: 0 3rem; }
 
@@ -850,7 +850,7 @@ a { text-decoration: none; color: inherit; transition: color var(--transition-fa
 
   .process-step { flex-direction: column !important; gap: 1rem !important; }
 
-  #footer, .footer { padding: 2rem 0 0; }
+  #footer, .footer { padding: 3rem 0 0; }
   .footer-top { gap: 1rem; padding-bottom: 1rem; }
   .footer-cols { gap: 1rem; flex-wrap: wrap; }
   .footer-col { flex: 0 0 calc(50% - 0.875rem); min-width: 0; }
