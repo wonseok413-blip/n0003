@@ -858,24 +858,40 @@ async function generateSinglePost(env, category, sources, logId, useOpenAI) {
   const topic = topicSeeds[Math.floor(Math.random() * topicSeeds.length)];
   const focusKw = extractFocusKeyword(topic, category);
 
-  /* 소스 콘텐츠 준비 - 5개 소스를 부분 참고하여 새롭게 작성 */
+  /* [방법 4] 소스 노출 최소화 - 데이터 포인트만 추출, 원문 문장 전달 금지 */
   let sourceContent = '';
   const sourceIds = [];
   if (sources.length) {
     const shuffled = [...sources].sort(() => Math.random() - 0.5);
-    /* 5개 소스 선택 (넓은 참고 범위, 부분적으로만 활용) */
     const picked = shuffled.slice(0, Math.min(sources.length, 5));
     for (const s of picked) {
       sourceIds.push(s.id);
-      const isYT = s.type === 'youtube';
-      const label = isYT
-        ? `[YouTube: ${s.title || 'Video'}] (transcript excerpt)`
-        : `[Reference: ${s.title || s.type}]`;
-      /* 소스당 300단어만 발췌 (부분 참고, 전체 복사 방지) */
-      const allWords = (s.content || '').split(/\s+/);
-      const startIdx = Math.floor(Math.random() * Math.max(0, allWords.length - 300));
-      const words = allWords.slice(startIdx, startIdx + 300).join(' ');
-      sourceContent += `${label}\n${words}\n\n---\n\n`;
+      const label = s.type === 'youtube'
+        ? `[YouTube: ${s.title || 'Video'}]`
+        : `[Ref: ${s.title || s.type}]`;
+      /* 소스에서 데이터 포인트만 추출 (숫자, 퍼센트, 연도, 사실) */
+      const rawText = (s.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
+      const sentences = rawText.split(/[.!?]+/).filter(s => s.trim().length > 15);
+      const dataPoints = [];
+      for (const sent of sentences) {
+        /* 숫자/퍼센트/연도/통계가 포함된 문장에서 핵심만 추출 */
+        if (/\d+%|\d{4}|\$\d|million|billion|thousand|percent|increase|decrease|grew|dropped|rose|fell/i.test(sent)) {
+          /* 문장 전체가 아닌 핵심 사실만 간추림 (30단어 이내) */
+          const trimmed = sent.trim().split(/\s+/).slice(0, 30).join(' ');
+          dataPoints.push(trimmed);
+        }
+      }
+      /* 데이터 포인트가 없으면 주요 키워드/주제 목록만 전달 */
+      if (dataPoints.length === 0) {
+        const allWords = rawText.toLowerCase().split(/\s+/).filter(w => w.length > 4);
+        const freq = {};
+        allWords.forEach(w => { freq[w] = (freq[w] || 0) + 1; });
+        const topKeywords = Object.entries(freq).sort((a,b) => b[1] - a[1]).slice(0, 10).map(e => e[0]);
+        sourceContent += `${label}\nKEY TOPICS: ${topKeywords.join(', ')}\n\n---\n\n`;
+      } else {
+        /* 최대 5개 데이터 포인트만 전달 */
+        sourceContent += `${label}\nDATA POINTS (facts only, do NOT copy wording):\n${dataPoints.slice(0, 5).map((d, i) => `  ${i+1}. ${d}`).join('\n')}\n\n---\n\n`;
+      }
     }
   }
 
@@ -1331,6 +1347,50 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
   aiSimilarity = newSim;
   qualityScore = computeContentQuality(post.content);
 
+  /* [방법 3] 2단계 재작성 패스 - 소스 대비 N-gram 유사도 체크 후 재작성 */
+  if (sourceContent) {
+    const ngramSim = computeNgramSimilarity(post.content, sourceContent);
+    console.log(`[blog-gen] N-gram similarity: trigram=${ngramSim.trigram}%, quadgram=${ngramSim.quadgram}%`);
+    if (ngramSim.trigram > 10 || ngramSim.quadgram > 5) {
+      console.log(`[blog-gen] N-gram too high, running AI rewrite pass...`);
+      try {
+        const rewritePrompt = `You are a rewriting specialist. Rewrite the blog post below using COMPLETELY DIFFERENT words and sentence structures. Keep the same meaning, facts, and HTML structure (<h2>, <p>, <ul>, <li>, <strong>, <em>) but change EVERY sentence to use new vocabulary and phrasing.
+
+RULES:
+- Keep all <h2> headings but reword them
+- Keep the focus keyword "${focusKw}" (use it 5-6 times)
+- Change every verb, adjective, and adverb to a synonym
+- Restructure every sentence (active to passive, split long sentences, merge short ones)
+- Keep the same number of paragraphs and sections
+- Output ONLY the rewritten HTML content (no JSON wrapper, no explanation)
+
+ORIGINAL HTML:
+${post.content}`;
+        const rewriteResult = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
+          messages: [
+            { role: 'system', content: 'You are a content rewriter. Output ONLY rewritten HTML. No markdown fences, no JSON, no explanation.' },
+            { role: 'user', content: rewritePrompt },
+          ],
+          max_tokens: 8192,
+          temperature: 0.9,
+        });
+        const rewritten = (rewriteResult.response || '').trim();
+        if (rewritten.length > 500 && rewritten.includes('<h2') && rewritten.includes('<p')) {
+          // HTML에서 markdown fence 제거
+          const cleanRewritten = rewritten.replace(/^```html?\s*/i, '').replace(/```\s*$/i, '').trim();
+          post.content = postProcessContent(cleanRewritten);
+          post.content = post.content.replace(/<h3[^>]*>[\s\S]*?<\/h3>/gi, '');
+          const newNgram = computeNgramSimilarity(post.content, sourceContent);
+          console.log(`[blog-gen] After rewrite: trigram=${newNgram.trigram}%, quadgram=${newNgram.quadgram}%`);
+          aiSimilarity = computeAISimilarity(post.content);
+          qualityScore = computeContentQuality(post.content);
+        }
+      } catch (e) {
+        console.warn('[blog-gen] Rewrite pass failed:', e.message);
+      }
+    }
+  }
+
   /* Title 길이 자동 보정 (R14: 50-60자) */
   {
     let t = (post.title || '').trim();
@@ -1459,12 +1519,12 @@ function buildGenerationPrompt(topic, category, focusKw, sourceContent, customRu
 - Write as if explaining to a 15-year-old who is smart and curious but has no technical background
 - No academic phrasing be direct, friendly, and practical
 
-PARTIAL REFERENCE EXCERPTS (use ONLY for factual inspiration - write everything in your own words):
-${sourceContent.slice(0, 4000)}
+DATA POINTS ONLY (these are extracted facts/numbers from reference sources - do NOT copy any wording):
+${sourceContent.slice(0, 3000)}
 
-REMINDER: The above are small excerpts from 5 different sources. Use them ONLY as background knowledge. Your article must be 100% original writing with zero phrases copied from these references.
+CRITICAL: The above contains ONLY data points and keywords from sources. You must write 100% original sentences using your own words. Do NOT reconstruct or paraphrase any source text. Use the data points as factual background only.
 
-WORD SIMPLIFICATION RULE: When you find a technical or complex word in the reference sources, ALWAYS replace it with a simpler everyday word. Examples: "leverage" -> "use", "implement" -> "set up", "infrastructure" -> "setup", "optimize" -> "improve", "utilize" -> "use", "facilitate" -> "help", "methodology" -> "method", "comprehensive" -> "full", "subsequently" -> "then", "mitigate" -> "reduce". This naturally makes the output different from sources while improving readability.`
+WORD SIMPLIFICATION RULE: Replace complex words with simple ones. "leverage" -> "use", "implement" -> "set up", "infrastructure" -> "setup", "optimize" -> "improve", "utilize" -> "use", "facilitate" -> "help", "methodology" -> "method", "comprehensive" -> "full", "subsequently" -> "then", "mitigate" -> "reduce".`
     : `Write based on your knowledge about: ${topic}.
 🎯 TARGET AUDIENCE: WordPress intermediate users (1–3 years experience, knows plugin installation and dashboard use, but not server-level or coding concepts).
 📖 WRITING LEVEL: Simple and accessible Korean high school freshman equivalent. Short sentences (15–20 words max), plain vocabulary, explain every technical term in plain words when first used.`;
@@ -2546,6 +2606,38 @@ function computeAISimilarity(content) {
   else if (shortRatio > 0.08) penalties -= 2;
 
   return Math.min(Math.max(penalties, 0), 100);
+}
+
+/* ── [방법 2+3] N-gram 프로그램 기반 유사성 측정 ── */
+function computeNgramSimilarity(blogHtml, sourceText) {
+  const stopwords = new Set(['the','and','for','that','this','with','from','have','has','are','was','were','been','being','will','would','could','should','can','may','not','but','all','any','each','than','its','our','their','your','into','also','more','most','some','other','very','just','only','such','when','then','them','these','those','what','which','where','how','who','why','about','after','before','over','under','between','through','during','without','within']);
+  const clean = (t) => t.replace(/<[^>]*>/g, ' ').replace(/\[.*?\]/g, '').replace(/---/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+  const blogWords = clean(blogHtml).split(/\s+/).filter(w => w.length > 2);
+  const srcWords = clean(sourceText).split(/\s+/).filter(w => w.length > 2);
+  if (blogWords.length < 20 || srcWords.length < 20) return { trigram: 0, quadgram: 0 };
+
+  const srcTrigrams = new Set();
+  const srcQuadgrams = new Set();
+  for (let i = 0; i < srcWords.length - 2; i++) {
+    srcTrigrams.add(srcWords[i] + ' ' + srcWords[i+1] + ' ' + srcWords[i+2]);
+    if (i < srcWords.length - 3) srcQuadgrams.add(srcWords[i] + ' ' + srcWords[i+1] + ' ' + srcWords[i+2] + ' ' + srcWords[i+3]);
+  }
+  let triMatch = 0, quadMatch = 0;
+  for (let i = 0; i < blogWords.length - 2; i++) {
+    const tri = blogWords[i] + ' ' + blogWords[i+1] + ' ' + blogWords[i+2];
+    // stopword-only trigram 필터
+    const triWords = [blogWords[i], blogWords[i+1], blogWords[i+2]];
+    const meaningful = triWords.filter(w => !stopwords.has(w)).length;
+    if (meaningful >= 2 && srcTrigrams.has(tri)) triMatch++;
+    if (i < blogWords.length - 3) {
+      const quad = blogWords[i] + ' ' + blogWords[i+1] + ' ' + blogWords[i+2] + ' ' + blogWords[i+3];
+      if (srcQuadgrams.has(quad)) quadMatch++;
+    }
+  }
+  return {
+    trigram: Math.round((triMatch / Math.max(blogWords.length - 2, 1)) * 100),
+    quadgram: Math.round((quadMatch / Math.max(blogWords.length - 3, 1)) * 100),
+  };
 }
 
 /* ── URL Slug 생성 ── */

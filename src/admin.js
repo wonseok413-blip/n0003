@@ -559,42 +559,108 @@ JSON format:
         if (rev && Array.isArray(rev.sources)) sources = rev.sources;
       } catch {}
     }
-    // AI 유사도 분석 (참고 소스 포함)
+    // [방법 2] 프로그램 기반 N-gram 유사성 측정 (실제 텍스트 복사율)
+    const blogText = (post.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+    const blogWords = blogText.split(/\s+/).filter(w => w.length > 2);
+    let ngramResult = { trigram: 0, quadgram: 0, copied_phrases: [] };
+    if (sourceContentForAI && blogWords.length > 20) {
+      const srcText = sourceContentForAI.replace(/\[.*?\]/g, '').replace(/---/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+      const srcWords = srcText.split(/\s+/).filter(w => w.length > 2);
+      // 소스에서 3-gram, 4-gram 세트 생성
+      const srcTrigrams = new Set();
+      const srcQuadgrams = new Set();
+      for (let i = 0; i < srcWords.length - 2; i++) {
+        srcTrigrams.add(srcWords[i] + ' ' + srcWords[i+1] + ' ' + srcWords[i+2]);
+        if (i < srcWords.length - 3) srcQuadgrams.add(srcWords[i] + ' ' + srcWords[i+1] + ' ' + srcWords[i+2] + ' ' + srcWords[i+3]);
+      }
+      // 블로그에서 매칭 3-gram, 4-gram 카운트
+      let triMatch = 0, quadMatch = 0;
+      const copiedPhrases = [];
+      for (let i = 0; i < blogWords.length - 2; i++) {
+        const tri = blogWords[i] + ' ' + blogWords[i+1] + ' ' + blogWords[i+2];
+        if (srcTrigrams.has(tri)) {
+          triMatch++;
+          if (copiedPhrases.length < 10) copiedPhrases.push(tri);
+        }
+        if (i < blogWords.length - 3) {
+          const quad = blogWords[i] + ' ' + blogWords[i+1] + ' ' + blogWords[i+2] + ' ' + blogWords[i+3];
+          if (srcQuadgrams.has(quad)) quadMatch++;
+        }
+      }
+      const totalTri = Math.max(blogWords.length - 2, 1);
+      const totalQuad = Math.max(blogWords.length - 3, 1);
+      // 일반 단어 (the, and, for, etc.) 포함 trigram은 제외 - stopword trigram 필터
+      const stopwords = new Set(['the','and','for','that','this','with','from','have','has','are','was','were','been','being','will','would','could','should','can','may','not','but','all','any','each','than','its','our','their','your','into','also','more','most','some','other','very','just','only','such','when','then','them','these','those','what','which','where','how','who','why','about','after','before','over','under','between','through','during','without','within','along','among','against','does','did','done','make','made','like','get','got','use','used','one','two','new','way','out']);
+      // stopword-only trigram 비율 계산
+      const meaningfulTriMatch = copiedPhrases.filter(p => {
+        const ws = p.split(' ');
+        return ws.filter(w => !stopwords.has(w)).length >= 2;
+      }).length;
+      ngramResult = {
+        trigram: Math.round((triMatch / totalTri) * 100),
+        quadgram: Math.round((quadMatch / totalQuad) * 100),
+        meaningful_trigram: Math.round((meaningfulTriMatch / Math.max(copiedPhrases.length, 1)) * 100),
+        copied_phrases: copiedPhrases.slice(0, 5)
+      };
+    }
+
+    // [방법 1] AI 유사도 분석 - 실제 텍스트 복사만 측정하도록 정밀화
     let similarity = {};
     const openaiKey = (env.OPENAI_API_KEY || '').trim() || ((await getSetting(DB, 'openai_api_key')) || '').trim();
     if (openaiKey) {
       try {
-        const textSnippet = (post.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').slice(0, 2500);
-        const simPrompt = `당신은 콘텐츠 유사도 및 저작권 전문가입니다. 아래 블로그 글을 참고 소스와 비교하여 유사도, 저작권 위험도, 독창성을 분석하세요. 반드시 유효한 JSON만 응답하세요. 모든 텍스트 필드는 반드시 한국어로 작성하세요.
+        const textSnippet = blogText.slice(0, 2500);
+        const simPrompt = `You are a plagiarism detection specialist. Your ONLY job is to find ACTUAL TEXT COPYING between the blog post and the reference sources.
 
-제목: "${post.title}"
-콘텐츠: "${textSnippet}"
+CRITICAL SCORING RULES:
+- "Topic similarity" (writing about the same subject) is NOT plagiarism. Two articles about the same topic using different words = LOW similarity (0-10%).
+- ONLY count: copied phrases (3+ identical consecutive words), paraphrased sentences (same structure, synonym swaps), directly lifted data/examples.
+- Generic terms (WordPress, SEO, hosting, plugin, server, etc.) do NOT count.
+- If the blog uses completely different words and sentence structures about the same topic, ALL scores MUST be 0-10%.
 
-이 글 작성에 사용된 참고 소스:
-${sourceContentForAI || '(참고 소스 없음)'}
+BLOG TITLE: "${post.title}"
+BLOG TEXT: "${textSnippet}"
 
-아래 JSON 형식으로 정확히 응답하세요 (모든 설명/요약은 한국어로):
+REFERENCE SOURCES:
+${sourceContentForAI || '(no sources)'}
+
+PROGRAMMATIC N-GRAM CHECK RESULTS (for reference):
+- 3-word phrase overlap: ${ngramResult.trigram}%
+- 4-word phrase overlap: ${ngramResult.quadgram}%
+- Copied phrases found: ${ngramResult.copied_phrases.join(', ') || 'none'}
+
+YOUR AI SCORES MUST BE CONSISTENT WITH THE N-GRAM DATA ABOVE. If N-gram shows <5% overlap, your word_similarity CANNOT be 40%+.
+
+SCORING GUIDE:
+- 0-10%: Original wording, no copied phrases (EXPECTED for good content)
+- 11-25%: A few similar phrases
+- 26-50%: Multiple paraphrased sentences
+- 51-100%: Significant copying
+
+JSON ONLY (Korean text fields):
 {
   "overall_risk": "low"|"mid"|"high",
-  "summary": "참고 소스 대비 콘텐츠 유사도와 독창성에 대한 2-3문장 한국어 평가",
-  "word_similarity": {"risk":"low"|"mid"|"high","detail": <0-100 숫자>},
-  "context_similarity": {"risk":"low"|"mid"|"high","detail": <0-100 숫자>},
-  "proper_nouns": {"risk":"low"|"mid"|"high","detail": "발견된 고유명사 목록 (한국어로) 또는 없음"},
-  "topic_similarity": {"risk":"low"|"mid"|"high","detail": <0-100 숫자>},
-  "title_similarity": {"risk":"low"|"mid"|"high","detail": "-" 또는 한국어 유사도 설명},
-  "copyright_risk": {"risk":"low"|"mid"|"high","detail": "낮음"|"보통"|"높음"},
+  "summary": "2-3 sentence Korean evaluation - focus ONLY on actual text copying, NOT topic overlap",
+  "word_similarity": {"risk":"low"|"mid"|"high","detail": <0-100>},
+  "context_similarity": {"risk":"low"|"mid"|"high","detail": <0-100>},
+  "proper_nouns": {"risk":"low"|"mid"|"high","detail": "Korean or none"},
+  "topic_similarity": {"risk":"low"|"mid"|"high","detail": <0-100, same topic different words = 0-10>},
+  "title_similarity": {"risk":"low"|"mid"|"high","detail": "Korean"},
+  "copyright_risk": {"risk":"low"|"mid"|"high","detail": "low"|"normal"|"high"},
   "by_source": []
 }`;
         const simRes = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + openaiKey },
-          body: JSON.stringify({ model: 'gpt-4o-mini', messages: [{ role: 'user', content: simPrompt }], temperature: 0.2, max_tokens: 800 })
+          body: JSON.stringify({ model: 'gpt-4o-mini', messages: [{ role: 'user', content: simPrompt }], temperature: 0.1, max_tokens: 800 })
         });
         const simJson = await simRes.json();
         const raw = simJson.choices?.[0]?.message?.content || '{}';
         try { similarity = JSON.parse(raw.replace(/```json|```/g, '').trim()); } catch {}
       } catch {}
     }
+    // N-gram 실측 데이터를 응답에 포함
+    similarity.ngram_programmatic = ngramResult;
     return ok({ post: { id: post.id, title: post.title, slug: post.slug }, focusKw, seoBreakdown: breakdown, sources, similarity });
   }
 
