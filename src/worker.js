@@ -1,7 +1,7 @@
 import { autoInit, maybeCleanupSessions } from './db.js';
 import { login, logout, me, getSession } from './auth.js';
 import { adminRoute } from './admin.js';
-import { blogGenRoute, runBlogGeneration } from './blog-gen.js';
+import { blogGenRoute, runBlogGeneration, autoCollectSources } from './blog-gen.js';
 
 const CORS = {
   'Access-Control-Allow-Origin' : '*',
@@ -372,6 +372,14 @@ export default {
     } catch (e) {
       console.error('[cron] Session cleanup error:', e.message);
     }
+    /* DB 소스 자동 고도화 (카테고리 순환, 매일 1개 추가) */
+    try {
+      const collected = await autoCollectSources(env);
+      console.log(`[cron] Auto source enrichment done: ${collected} new source added`);
+    } catch (e) {
+      console.error('[cron] Auto source enrichment failed:', e.message);
+    }
+    /* 블로그 자동 생성 */
     try {
       const count = await runBlogGeneration(env, 1);
       console.log(`[cron] Blog generation done: ${count} post(s) created`);

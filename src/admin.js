@@ -609,7 +609,6 @@ ${sourceContentForAI || '(참고 소스 없음)'}
     const focusKw = post.focus_keyword || post.title || '';
     const kw = focusKw.toLowerCase();
     const oldScore = computeSeoScore(post, focusKw, post.slug || '');
-    if (oldScore >= 90) return ok({ already_good: true, score: oldScore });
     const breakdown = computeSeoScoreDetailed(post, focusKw, post.slug || '');
     const failedChecks = breakdown.checks.filter(c => !c.pass);
     const failedLabels = failedChecks.map(c => c.label);
@@ -649,12 +648,12 @@ ${sourceContentForAI || '(참고 소스 없음)'}
 
     // 내부 링크 없으면 추가
     if (failedLabels.some(l => l.includes('internal')) && !/<a[^>]+href=["']\/[^"']+["']/i.test(content)) {
-      content += `\n<p>더 많은 보안 가이드는 <a href="/blog">보안 블로그</a>에서 확인하세요.</p>`;
+      content += `\n<p>Read more on our <a href="/blog">blog</a> for related tips and guides.</p>`;
     }
 
     // 외부 링크 없으면 추가
     if (failedLabels.some(l => l.includes('outbound') || l.includes('외부')) && !/<a[^>]+href=["']https?:\/\//i.test(content)) {
-      content += `\n<p>보안 모범 사례에 대한 자세한 내용은 <a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">OWASP Top 10</a>을 참조하세요.</p>`;
+      content += `\n<p>For more details, check out the official <a href="https://developer.mozilla.org/en-US/" target="_blank" rel="noopener">MDN Web Docs</a>.</p>`;
     }
 
     // ── STEP 3: AI로 meta/title 생성 + 콘텐츠 확장 (참고 소스 활용)

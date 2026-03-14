@@ -1,5 +1,6 @@
 /**
- * blog-gen.js n0003 블로그 자동생성 엔진
+ * blog-gen.js n0003 WaaS/비즈니스 블로그 자동생성 엔진
+ * (보안 관련 콘텐츠 절대 금지 - 보안은 n0004 전용)
  *
  * ═══════════════════════════════════════════════
  *  공식 생성 규칙 (OFFICIAL GENERATION RULES)
@@ -8,7 +9,7 @@
  *
  *  R1.  단어 수: 1,500~2,200 (목표 1,600~2,000)
  *  R2.  H2 개수: 정확히 7개 (허용 5~9)
- *  R3.  H3 개수: 정확히 4개 (허용 2~6), H2 1~4번 뒤에 각 1개
+ *  R3.  H3 금지 (0개). H2 + 본문만으로 구성
  *  R4.  포커스 키워드: 제목에 반드시 포함
  *  R5.  포커스 키워드: 첫 문단 100단어 이내에 포함
  *  R6.  포커스 키워드: H2 1개 이상에 포함
@@ -37,7 +38,7 @@
  *  생성 흐름:
  *  1) Workers AI (Llama 3.3 70B) → 글 생성
  *  2) 후처리: AI 패턴 제거, 축약형 강제, 키워드 밀도 보정
- *  3) H2/H3 보강: 목표 개수 미달 시 자동 삽입
+ *  3) H2 보강: 목표 개수 미달 시 자동 삽입, H3 자동 제거
  *  4) 단락 길이 보정: 짧으면 보충, 길면 분할
  *  5) R7 키워드 횟수 강제 조정 (4-8회, 목표 6회)
  *  6) 1단계 프로그램 검사: R1~R16 자동 체크
@@ -66,13 +67,16 @@ const CORS = {
 const ok = (d, s = 200) => new Response(JSON.stringify(d), { status: s, headers: { 'Content-Type': 'application/json', ...CORS } });
 const bad = (msg, s = 400) => ok({ error: msg }, s);
 
-/* ── 보안 6개 카테고리 ── */
+/* ── n0003 WaaS/비즈니스 블로그 8개 카테고리 (보안 카테고리 없음) ── */
 const CATEGORIES = [
+  'business',
+  'startup',
+  'seo',
   'wordpress',
+  'web-design',
+  'cloud',
   'web-hosting',
   'ecommerce',
-  'seo',
-  'web-security',
 ];
 
 /* ── 카테고리별 외부 권위 링크 ── */
@@ -93,9 +97,21 @@ const CAT_EXTERNAL_REFS = {
     ['https://developers.google.com/search/docs', 'Google Search Central Documentation'],
     ['https://moz.com/learn/seo', 'Moz SEO Learning Center'],
   ],
-  'web-security': [
-    ['https://owasp.org/www-project-top-ten/', 'OWASP Top Ten Security Risks'],
-    ['https://www.cloudflare.com/learning/security/', 'Cloudflare Security Learning Center'],
+  'business': [
+    ['https://hbr.org/', 'Harvard Business Review'],
+    ['https://www.mckinsey.com/featured-insights', 'McKinsey Insights'],
+  ],
+  'startup': [
+    ['https://www.ycombinator.com/library', 'Y Combinator Startup Library'],
+    ['https://a16z.com/content/', 'Andreessen Horowitz Blog'],
+  ],
+  'web-design': [
+    ['https://www.smashingmagazine.com/', 'Smashing Magazine'],
+    ['https://www.nngroup.com/articles/', 'Nielsen Norman Group'],
+  ],
+  'cloud': [
+    ['https://www.cloudflare.com/learning/', 'Cloudflare Learning Center'],
+    ['https://aws.amazon.com/blogs/', 'AWS Blog'],
   ],
 };
 
@@ -171,22 +187,53 @@ function extractFocusKeyword(topic, category) {
       ['internal linking', 'internal linking strategy'],
       ['featured snippet', 'featured snippet guide'],
     ],
-    'web-security': [
-      ['firewall', 'web application firewall'],
-      ['ssl', 'ssl security setup'],
-      ['malware', 'malware removal guide'],
-      ['ddos', 'ddos protection guide'],
-      ['brute force', 'brute force protection'],
-      ['sql injection', 'sql injection prevention'],
-      ['xss', 'xss prevention guide'],
-      ['two-factor', 'two-factor authentication'],
-      ['backup', 'security backup strategy'],
-      ['vulnerability', 'vulnerability scanning guide'],
-      ['security headers', 'security headers setup'],
-      ['wordpress security', 'wordpress security guide'],
-      ['data breach', 'data breach prevention'],
-      ['monitoring', 'security monitoring tools'],
-      ['incident response', 'incident response plan'],
+    'business': [
+      ['marketing', 'digital marketing strategy'],
+      ['productivity', 'team productivity tips'],
+      ['management', 'project management guide'],
+      ['leadership', 'leadership skills guide'],
+      ['remote', 'remote work best practices'],
+      ['brand', 'brand building strategy'],
+      ['email', 'email marketing guide'],
+      ['growth', 'business growth strategy'],
+      ['analytics', 'business analytics guide'],
+      ['automation', 'workflow automation tips'],
+    ],
+    'startup': [
+      ['funding', 'startup funding guide'],
+      ['pitch', 'pitch deck tips'],
+      ['saas', 'saas metrics guide'],
+      ['mvp', 'mvp development guide'],
+      ['product market', 'product market fit'],
+      ['growth hack', 'growth hacking strategy'],
+      ['fundraising', 'fundraising guide'],
+      ['scaling', 'startup scaling tips'],
+      ['lean', 'lean startup method'],
+      ['bootstrapping', 'bootstrapping strategy'],
+    ],
+    'web-design': [
+      ['responsive', 'responsive design guide'],
+      ['accessibility', 'web accessibility guide'],
+      ['ui', 'ui design principles'],
+      ['ux', 'ux design best practices'],
+      ['typography', 'web typography guide'],
+      ['color', 'color theory web design'],
+      ['wireframe', 'wireframing guide'],
+      ['animation', 'web animation guide'],
+      ['performance', 'web performance guide'],
+      ['mobile', 'mobile first design'],
+    ],
+    'cloud': [
+      ['serverless', 'serverless architecture guide'],
+      ['docker', 'docker container guide'],
+      ['kubernetes', 'kubernetes setup guide'],
+      ['aws', 'aws cloud services guide'],
+      ['microservice', 'microservices architecture'],
+      ['edge', 'edge computing guide'],
+      ['ci cd', 'ci cd pipeline setup'],
+      ['monitoring', 'cloud monitoring tools'],
+      ['cost', 'cloud cost optimization'],
+      ['migration', 'cloud migration guide'],
     ],
   };
   const topicLower = topic.toLowerCase();
@@ -233,7 +280,7 @@ const CAT_TOPICS = {
     'setting up uptime monitoring to catch downtime before customers do',
     'Nginx vs Apache choosing the right web server for your site',
     'Docker containers for web application deployment guide',
-    'setting up Cloudflare for performance and security',
+    'setting up Cloudflare for performance and speed optimization',
     'business email hosting setup and configuration guide',
   ],
   'ecommerce': [
@@ -270,22 +317,73 @@ const CAT_TOPICS = {
     'internal linking strategy that boosts page authority',
     'how to optimize content for Google featured snippets',
   ],
-  'web-security': [
-    'web application firewall setup guide for business websites',
-    'SSL and HTTPS configuration best practices for website security',
-    'detecting and removing malware from your WordPress site',
-    'DDoS protection strategies for small business websites',
-    'preventing brute force attacks on your WordPress login',
-    'SQL injection prevention techniques every developer should know',
-    'cross-site scripting XSS prevention for WordPress sites',
-    'setting up two-factor authentication for website administrators',
-    'automated backup strategies to recover from security incidents',
-    'website vulnerability scanning tools and how to use them',
-    'essential security headers every website should implement',
-    'WordPress security hardening checklist for site owners',
-    'data breach prevention strategies for online businesses',
-    'real-time security monitoring tools for website protection',
-    'building an incident response plan for your business website',
+  'business': [
+    'digital marketing strategies that drive measurable results',
+    'building a strong brand identity for your online business',
+    'email marketing automation tips for small business owners',
+    'remote team management best practices for distributed companies',
+    'project management tools and workflows for growing teams',
+    'business analytics dashboards that track what matters',
+    'content marketing framework for consistent lead generation',
+    'customer retention strategies that reduce churn',
+    'business process automation to save time and money',
+    'social media marketing guide for B2B companies',
+    'sales funnel optimization tips for higher conversion',
+    'competitive analysis framework for market positioning',
+    'building partnerships and collaborations for business growth',
+    'financial planning basics for small business owners',
+    'productivity tools and habits for busy entrepreneurs',
+  ],
+  'startup': [
+    'how to validate your startup idea before building',
+    'creating a pitch deck that investors actually want to see',
+    'SaaS metrics every founder should track from day one',
+    'building an MVP without wasting time or money',
+    'finding product market fit for your startup',
+    'growth hacking strategies for early-stage startups',
+    'bootstrapping vs venture capital which path is right for you',
+    'startup hiring guide for building your first team',
+    'customer discovery interviews that reveal real problems',
+    'pricing strategies for SaaS and subscription businesses',
+    'lean startup methodology applied to real products',
+    'scaling your startup from 10 to 100 customers',
+    'startup legal essentials every founder should know',
+    'building a startup community and network from scratch',
+    'measuring and improving startup unit economics',
+  ],
+  'web-design': [
+    'responsive web design principles for modern websites',
+    'web accessibility WCAG compliance checklist for designers',
+    'UI design patterns that improve user engagement',
+    'UX research methods for data-driven design decisions',
+    'typography best practices for readable web content',
+    'color theory applied to website design and branding',
+    'wireframing and prototyping workflow for web projects',
+    'CSS animation techniques for engaging user interfaces',
+    'web performance optimization for better user experience',
+    'mobile-first design strategy for responsive websites',
+    'design system creation guide for consistent branding',
+    'landing page design tips that increase conversions',
+    'dark mode implementation guide for web applications',
+    'micro-interactions that make websites feel premium',
+    'image optimization techniques for faster page loads',
+  ],
+  'cloud': [
+    'serverless architecture guide for web applications',
+    'Docker container basics for web developers',
+    'Kubernetes deployment guide for beginners',
+    'AWS vs Azure vs GCP choosing the right cloud provider',
+    'microservices architecture patterns for scalable apps',
+    'edge computing benefits for website performance',
+    'CI/CD pipeline setup guide for automated deployments',
+    'cloud monitoring and alerting best practices',
+    'cloud cost optimization strategies that save money',
+    'migrating your application to the cloud step by step',
+    'infrastructure as code with Terraform for beginners',
+    'cloud database options compared for web applications',
+    'serverless functions for building APIs without servers',
+    'multi-cloud strategy benefits and challenges',
+    'cloud storage solutions for web application data',
   ],
 };
 
@@ -331,6 +429,151 @@ async function initBlogGenDB(DB) {
     duration_ms INTEGER,
     created_at  TEXT    DEFAULT (datetime('now'))
   )`);
+
+  /* writing_samples 테이블 + 시드 데이터 */
+  await run(`CREATE TABLE IF NOT EXISTS writing_samples (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author TEXT NOT NULL,
+    genre TEXT DEFAULT 'tech',
+    excerpt TEXT NOT NULL,
+    style_note TEXT DEFAULT '',
+    created_at TEXT DEFAULT (datetime('now'))
+  )`);
+  try {
+    const cnt = await DB.prepare('SELECT COUNT(*) as c FROM writing_samples').first();
+    if (!cnt || cnt.c < 50) await seedWritingSamples(DB);
+  } catch (_) {}
+}
+
+/* ── 유명 작가 문체 샘플 100개 시드 ── */
+async function seedWritingSamples(DB) {
+  const samples = [
+    // Paul Graham (essays, startup)
+    ['Paul Graham','tech','Keep your identity small. The more labels you have for yourself, the dumber they make you. People can never have a fruitful argument about something that is part of their identity.','Short punchy sentences, contrarian, conversational'],
+    ['Paul Graham','startup','A startup is a company designed to grow fast. The only essential thing is growth. Everything else we associate with startups follows from growth.','Direct thesis statements, building logic step by step'],
+    ['Paul Graham','tech','The way to get startup ideas is not to try to think of startup ideas. It is to look for problems, preferably problems you have yourself.','Counterintuitive openings, simple vocabulary'],
+    ['Paul Graham','startup','Do things that don\'t scale. Lots of would-be founders believe that startups either take off or don\'t. Actually startups take off because the founders make them take off.','Imperative advice, concrete examples'],
+    ['Paul Graham','tech','Writing doesn\'t just communicate ideas; it generates them. If you\'re bad at writing and don\'t like to do it, you\'ll miss out on most of the ideas writing would have generated.','Surprising claims backed by reasoning'],
+    // Seth Godin (marketing, business)
+    ['Seth Godin','business','People don\'t buy goods and services. They buy relations, stories, and magic. The best marketing doesn\'t feel like marketing at all.','Ultra-short paragraphs, provocative'],
+    ['Seth Godin','marketing','Remarkable ideas spread. Products that are worth talking about get talked about. The challenge isn\'t to make something everyone likes. It\'s to make something that some people love.','Bold declarations, repetition for emphasis'],
+    ['Seth Godin','business','Instead of wondering when your next vacation is, maybe you should set up a life you don\'t need to escape from.','One-liner wisdom, reframing problems'],
+    ['Seth Godin','marketing','The only thing worse than starting something and failing is not starting something. Every new project is a chance to learn.','Motivational directness'],
+    ['Seth Godin','business','The internet has made it possible for small teams to serve global audiences. You don\'t need permission anymore. Just ship it.','Action-oriented, empowering'],
+    // Malcolm Gladwell (storytelling)
+    ['Malcolm Gladwell','business','The key to good decision making is not knowledge. It is understanding. We are drowning in information while starving for wisdom.','Narrative hooks, anecdotal openings'],
+    ['Malcolm Gladwell','tech','We learn by example and by direct experience because there are real limits to the adequacy of verbal instruction.','Academic ideas made accessible'],
+    ['Malcolm Gladwell','business','Success is not a random act. It arises out of a predictable and powerful set of circumstances and opportunities.','Thesis-driven, building a case'],
+    ['Malcolm Gladwell','tech','The tipping point is that magic moment when an idea, trend, or social behavior crosses a threshold and spreads like wildfire.','Metaphor-rich, vivid imagery'],
+    ['Malcolm Gladwell','business','Practice isn\'t the thing you do once you\'re good. It\'s the thing you do that makes you good.','Simple reframes of common beliefs'],
+    // James Clear (habits, productivity)
+    ['James Clear','business','You do not rise to the level of your goals. You fall to the level of your systems. Focus on systems, not goals.','Aphoristic style, actionable advice'],
+    ['James Clear','business','Every action you take is a vote for the type of person you wish to become. Small habits compound over time into remarkable results.','Identity-based framing'],
+    ['James Clear','productivity','The most effective way to change your habits is to focus not on what you want to achieve, but on who you wish to become.','Second person address, clear structure'],
+    ['James Clear','business','Time magnifies the margin between success and failure. Good habits make time your ally. Bad habits make time your enemy.','Parallel structure, contrast'],
+    ['James Clear','productivity','You should be far more concerned with your current trajectory than with your current results. Are you heading in the right direction?','Questions to the reader, future-focused'],
+    // Tim Ferriss (productivity, lifestyle)
+    ['Tim Ferriss','business','What we fear doing most is usually what we most need to do. A person\'s success in life can usually be measured by the number of uncomfortable conversations they\'re willing to have.','Provocative claims, personal experience'],
+    ['Tim Ferriss','productivity','Focus on being productive instead of busy. Doing less meaningless work so that you can focus on things of greater personal importance.','Clear distinction, redefining terms'],
+    ['Tim Ferriss','business','The question you should be asking isn\'t what do I want? or what are my goals? but what would excite me? Excitement is a better guide.','Rhetorical questions, contrarian'],
+    ['Tim Ferriss','tech','If you are insecure, guess what? The rest of the world is too. Do not overestimate the competition and underestimate yourself.','Reassuring tone, direct address'],
+    ['Tim Ferriss','productivity','Perfection is not when there is no more to add, but no more to take away. Simplify your workflows ruthlessly.','Minimalist philosophy'],
+    // Derek Sivers (business, creative)
+    ['Derek Sivers','startup','If more information was the answer, then we would all be billionaires with perfect abs. It\'s not about knowing more. It\'s about doing more.','Humor, blunt honesty'],
+    ['Derek Sivers','business','When you make a business, you get to make a little universe where you control all the laws. This is your world. Create its rules.','Metaphor, empowerment'],
+    ['Derek Sivers','startup','The standard pace is for chumps. The system is designed so anyone can keep up. If you\'re more driven than most people, you can do way more than anyone expects.','Rebellious tone, motivation'],
+    ['Derek Sivers','business','Don\'t be a donkey. You can do everything you want to do. You just need foresight and patience. Think long term.','Animal metaphor, patience wisdom'],
+    ['Derek Sivers','tech','Ideas are just a multiplier of execution. The most brilliant idea with no execution is worth nothing. A so-so idea with brilliant execution is worth millions.','Mathematical analogy, clear logic'],
+    // Ben Thompson (Stratechery - tech analysis)
+    ['Ben Thompson','tech','The internet has fundamentally changed the cost structure of distribution. What used to cost millions now costs nearly nothing. This changes everything.','Analytical, building from first principles'],
+    ['Ben Thompson','business','Aggregation theory explains how platforms gain power by owning the customer relationship while commoditizing suppliers.','Framework-based analysis'],
+    ['Ben Thompson','tech','The most important factor in any technology company is its business model. Technology is a means to an end, not the end itself.','Business model focused'],
+    ['Ben Thompson','startup','The best technology companies build platforms, not products. A platform creates value by facilitating interactions between different groups.','Definition-based argument'],
+    ['Ben Thompson','tech','Every new platform starts by solving a real user problem better than existing alternatives. Distribution follows product quality.','Cause and effect reasoning'],
+    // Nassim Taleb (risk, anti-fragile)
+    ['Nassim Taleb','business','The three most harmful addictions are heroin, carbohydrates, and a monthly salary. Freedom comes from having options, not obligations.','Shocking comparisons, philosophical'],
+    ['Nassim Taleb','business','Wind extinguishes a candle and energizes fire. You want to be the fire and wish for the wind. That is antifragility.','Extended metaphor, new concepts'],
+    ['Nassim Taleb','tech','The problem with experts is that they don\'t know what they don\'t know. Real knowledge comes from doing, not studying.','Epistemological challenge'],
+    ['Nassim Taleb','business','The robust absorbs shocks and stays the same; the antifragile gets better. Build systems that get stronger under stress.','Technical concept made simple'],
+    ['Nassim Taleb','startup','Don\'t ask someone for their opinion. Ask them what they have in their portfolio. Talk is cheap. Skin in the game matters.','Pragmatic, action-focused'],
+    // Chris Anderson (Long Tail, Wired)
+    ['Chris Anderson','tech','The future of business is selling less of more. The long tail means niche products collectively outsell the hits.','Data-driven insight, new framework'],
+    ['Chris Anderson','business','Free is not just a price. It is a business model. The economics of digital abundance create new possibilities every day.','Redefining common terms'],
+    ['Chris Anderson','tech','The democratization of the tools of production means anyone can create. The democratization of distribution means anyone can reach an audience.','Parallel structure, tech optimism'],
+    ['Chris Anderson','startup','Atoms are expensive. Bits are cheap. The shift from physical to digital is the most important economic transformation of our era.','Contrast pairs, big picture'],
+    ['Chris Anderson','business','Abundance creates different economics than scarcity. When storage and distribution cost near zero, you can offer everything.','Economic reasoning, simple language'],
+    // Jason Fried (Basecamp, business simplicity)
+    ['Jason Fried','startup','Workaholism is a disease. Real heroes go home on time. Getting more done in less time is the real skill. Work smarter, not longer.','Anti-conventional, blunt'],
+    ['Jason Fried','business','Plans are guesses. Planning is useful. Plans are useless. The moment you write a plan, it starts becoming obsolete.','Paradoxical statements'],
+    ['Jason Fried','startup','Why grow? Just because you can doesn\'t mean you should. Stay small, stay happy, stay profitable.','Questioning assumptions'],
+    ['Jason Fried','business','Meetings are toxic. Most could have been an email. Protect your people\'s time like you protect your money.','Provocative analogies'],
+    ['Jason Fried','tech','Good enough is fine. Perfect is the enemy of shipping. Get your product into people\'s hands and iterate from there.','Practical minimalism'],
+    // Ryan Holiday (Stoicism, marketing)
+    ['Ryan Holiday','business','The obstacle is the way. What stands in the way becomes the way. Every challenge contains the seeds of opportunity within it.','Stoic philosophy applied to business'],
+    ['Ryan Holiday','productivity','Ego is the enemy. The moment you believe your own hype, you stop growing. Stay a student, always.','Self-awareness themes'],
+    ['Ryan Holiday','business','Stillness is the key to better performance. In a world of constant noise, the ability to be quiet and think is a superpower.','Counter-cultural, reflective'],
+    ['Ryan Holiday','marketing','Perennial sellers don\'t happen by accident. They are the result of deliberate choices about substance over flash.','Long-term thinking'],
+    ['Ryan Holiday','business','You don\'t control what happens to you. You control how you respond. That\'s where all your power lives.','Empowerment through acceptance'],
+    // Naval Ravikant (angel investing, philosophy)
+    ['Naval Ravikant','startup','Seek wealth, not money or status. Wealth is having assets that earn while you sleep. Money is how we transfer time and wealth.','Definitional clarity, philosophical'],
+    ['Naval Ravikant','business','Learn to sell. Learn to build. If you can do both, you will be unstoppable. These are the two most valuable skills.','Numbered advice, memorable'],
+    ['Naval Ravikant','tech','Code and media are permissionless leverage. You can create software that works for you while you sleep.','Leverage concept, modern context'],
+    ['Naval Ravikant','startup','Specific knowledge is found by pursuing your genuine curiosity and passion rather than whatever is hot right now.','Personal authenticity advice'],
+    ['Naval Ravikant','business','Reading is the ultimate meta-skill. It\'s the foundation for everything else. Read what you love until you love to read.','Learning philosophy, simple rules'],
+    // Andrew Chen (growth, metrics)
+    ['Andrew Chen','startup','The cold start problem is the biggest challenge for any network effect business. You need both sides of the market before either side has value.','Problem framing, technical'],
+    ['Andrew Chen','marketing','Growth hacking is simply marketing informed by product data. It\'s not a trick. It\'s a method of working that puts measurement first.','Demystifying jargon'],
+    ['Andrew Chen','startup','Viral loops sound simple but are incredibly hard to build. Each step in the loop has a conversion rate, and they multiply together.','Mathematical thinking made accessible'],
+    ['Andrew Chen','tech','The best products market themselves. Word of mouth is not a strategy. It\'s a result of building something people actually want to talk about.','Cause and effect, product focus'],
+    ['Andrew Chen','startup','Retention is the single most important metric for any product. If people don\'t come back, nothing else matters.','Single metric focus, blunt truth'],
+    // Marie Forleo (business, online education)
+    ['Marie Forleo','business','Everything is figureoutable. You don\'t need to have all the answers before you start. Just start and figure it out along the way.','Encouraging, coined phrases'],
+    ['Marie Forleo','marketing','Clarity comes from engagement, not thought. You can\'t think your way into a new life. You have to act your way into it.','Action bias, motivational'],
+    ['Marie Forleo','business','Success doesn\'t come from what you do occasionally. It comes from what you do consistently. Show up every single day.','Consistency theme, simple language'],
+    ['Marie Forleo','startup','The world needs that special gift that only you have. Stop comparing yourself to others and start creating your own path.','Individuality, encouragement'],
+    ['Marie Forleo','business','If you\'re not making someone else\'s life better, you\'re wasting your time. Business at its best serves other people.','Purpose-driven business'],
+    // Buffer, Intercom, Basecamp style tech blogs
+    ['Joel Gascoigne','startup','Transparency builds trust. We share our revenue, our salaries, and our mistakes publicly. It makes us better and it makes our customers trust us more.','Radical transparency, values-led'],
+    ['Des Traynor','tech','Most features fail because they solve imaginary problems. Before you build anything, talk to your users. Find out what actually hurts.','User-first philosophy'],
+    ['David Heinemeier Hansson','tech','The best frameworks and tools are extracted from real projects, not designed in advance. Build first, abstract later.','Experience-based wisdom'],
+    ['David Heinemeier Hansson','startup','Venture capital is a choice, not a requirement. Most of the greatest businesses in history were built without it.','Bootstrapping advocacy'],
+    ['David Heinemeier Hansson','business','Remote work isn\'t the future. It\'s the present. Companies that force everyone into offices are fighting the last war.','Forward-looking, confident claims'],
+    // Rand Fishkin (SEO, marketing)
+    ['Rand Fishkin','seo','Good SEO work only gets better over time. It\'s only search engine tricks that need to keep changing when the ranking algorithms change.','Long-term thinking about SEO'],
+    ['Rand Fishkin','marketing','Don\'t build links. Build relationships. Links follow relationships, not the other way around.','Reframing strategy'],
+    ['Rand Fishkin','seo','Best way to sell something: don\'t sell anything. Earn the awareness, respect, and trust of those who might buy.','Trust-based marketing'],
+    ['Rand Fishkin','startup','The hardest part of marketing is earning attention honestly. Shortcuts don\'t last. Building an audience takes time, but it\'s worth it.','Patience wisdom'],
+    ['Rand Fishkin','seo','Content marketing works best when you genuinely help people solve their problems without asking for anything in return.','Generosity principle'],
+    // Patrick McKenzie (business, SaaS)
+    ['Patrick McKenzie','startup','Charge more. Seriously. Whatever you\'re charging right now, you should probably double it. Most people dramatically undercharge.','Blunt pricing advice'],
+    ['Patrick McKenzie','business','Don\'t sell a product. Sell a transformation. People don\'t want a drill. They want a hole in the wall.','Outcome-focused framing'],
+    ['Patrick McKenzie','tech','Every business is a software business now. If you don\'t understand that, you\'ll be disrupted by someone who does.','Industry-level observation'],
+    ['Patrick McKenzie','startup','The best time to start charging is before you feel ready. Your early customers are buying potential, not perfection.','Timing advice, imperfection OK'],
+    ['Patrick McKenzie','business','Email is the most underrated marketing channel. It\'s personal, direct, and you own the relationship. Social media can disappear overnight.','Channel strategy, ownership'],
+    // Sahil Lavingia (Gumroad, creators)
+    ['Sahil Lavingia','startup','Start small. Stay small if that makes you happy. Not every business needs to become a billion dollar company. Some of the best ones stay lean.','Anti-unicorn narrative'],
+    ['Sahil Lavingia','business','The creator economy isn\'t about fame. It\'s about a thousand true fans who value what you make enough to pay for it.','Niche economics'],
+    ['Sahil Lavingia','startup','Failure is data. Every failed project teaches you something that success never could. Collect failures like badges of honor.','Reframing failure'],
+    ['Sahil Lavingia','tech','Build tools for creators, not consumers. Creators have real problems, real budgets, and real loyalty.','Market targeting advice'],
+    ['Sahil Lavingia','business','The best businesses are built around things you would do anyway. Passion isn\'t everything, but it makes the hard days bearable.','Authenticity in business'],
+    // Hiten Shah (product, SaaS)
+    ['Hiten Shah','startup','Talk to your customers. Then talk to them again. The best product insights come from conversations, not dashboards.','Customer obsession'],
+    ['Hiten Shah','tech','Your product roadmap should be driven by customer problems, not competitor features. Copying is a losing strategy.','Independent thinking'],
+    ['Hiten Shah','startup','The biggest mistake startups make is building something nobody asked for. Validation before creation saves years of wasted effort.','Validation first'],
+    ['Hiten Shah','business','Simple products win. Complexity is the enemy of adoption. If your grandma can\'t figure out your product, simplify it.','Simplicity principle'],
+    ['Hiten Shah','tech','Data tells you what happened. Talking to customers tells you why. You need both to make good decisions.','Balanced methodology'],
+    // Additional diverse voices
+    ['Anne Lamott','business','Almost all good writing begins with terrible first efforts. You need to start somewhere. Give yourself permission to write badly.','Permission to be imperfect'],
+    ['Austin Kleon','business','Don\'t wait until you know who you are to get started. Steal like an artist. Creativity is about combining existing ideas in new ways.','Creative process, accessible'],
+    ['Brene Brown','business','Vulnerability is not weakness. It\'s our greatest measure of courage. Leaders who admit what they don\'t know earn more trust.','Emotional intelligence in leadership'],
+    ['Simon Sinek','business','People don\'t buy what you do. They buy why you do it. Start with why. The golden circle puts purpose at the center.','Purpose-driven framework'],
+    ['Cal Newport','productivity','Deep work is the ability to focus without distraction on a cognitively demanding task. It\'s rare, it\'s valuable, and it\'s trainable.','Concept introduction, research-backed'],
+  ];
+  const stmt = DB.prepare('INSERT INTO writing_samples (author, genre, excerpt, style_note) VALUES (?, ?, ?, ?)');
+  for (const [author, genre, excerpt, note] of samples) {
+    try { await stmt.bind(author, genre, excerpt, note).run(); } catch(_) {}
+  }
+  console.log('[blog-gen] Seeded ' + samples.length + ' writing samples');
 }
 
 /* ══════════════════════════════════════════════
@@ -469,7 +712,7 @@ export async function blogGenRoute(request, url, env) {
     const { currentRules } = await request.json().catch(() => ({}));
     const key = await getSetting(env.DB, 'openai_api_key').catch(() => '');
     if (!key) return bad('OpenAI API key not configured in API Settings');
-    const metaPrompt = `You are an expert SEO content strategist. Review and improve the blog generation rules below for achieving RankMath 90+ SEO scores on a cybersecurity blog.
+    const metaPrompt = `You are an expert SEO content strategist. Review and improve the blog generation rules below for achieving RankMath 90+ SEO scores on a WaaS (Website as a Service) and business blog.
 
 Current custom rules:
 ${currentRules || '(none set)'}
@@ -478,7 +721,7 @@ The system already enforces these core requirements automatically do NOT repeat 
 - Focus keyword in title, meta description, URL, first paragraph, at least one H2
 - Keyword density 1.0–1.5% (max 2%)
 - Content 1,500–2,000 words
-- H2 + H3 heading structure (250+ words per H2, 60+ words per H3)
+- H2-only heading structure (80-120 words per H2 section, NO H3)
 - External links to authoritative sources (auto-injected)
 - Internal links to related posts (auto-injected)
 - Image alt text includes focus keyword
@@ -491,7 +734,7 @@ Suggest 6–10 additional custom rules that will make the AI writer produce cont
 2. Engages readers and reduces bounce rate
 3. Avoids common AI writing patterns and filler phrases
 4. Follows current Google Helpful Content guidelines
-5. Stays relevant and practical for the site's cybersecurity audience
+5. Stays relevant and practical for the site's WaaS, business, and web technology audience
 
 Return ONLY a bulleted list in English. Start each rule with "- ". No headers, no explanation, just the rules.`;
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -611,23 +854,27 @@ async function generateSinglePost(env, category, sources, logId, useOpenAI) {
   const t0 = Date.now();
 
   /* 주제 + 포커스 키워드 */
-  const topicSeeds = CAT_TOPICS[category] || CAT_TOPICS['malware-removal'];
+  const topicSeeds = CAT_TOPICS[category] || CAT_TOPICS['business'];
   const topic = topicSeeds[Math.floor(Math.random() * topicSeeds.length)];
   const focusKw = extractFocusKeyword(topic, category);
 
-  /* 소스 콘텐츠 준비 최소 3개 이상 소스 활용, 유튜브 스크립트 원문 명시 */
+  /* 소스 콘텐츠 준비 - 5개 소스를 부분 참고하여 새롭게 작성 */
   let sourceContent = '';
   const sourceIds = [];
   if (sources.length) {
     const shuffled = [...sources].sort(() => Math.random() - 0.5);
-    const picked = shuffled.slice(0, Math.max(3, Math.min(sources.length, 5)));
+    /* 5개 소스 선택 (넓은 참고 범위, 부분적으로만 활용) */
+    const picked = shuffled.slice(0, Math.min(sources.length, 5));
     for (const s of picked) {
       sourceIds.push(s.id);
       const isYT = s.type === 'youtube';
       const label = isYT
-        ? `[YouTube Transcript: ${s.title || 'Video'}] 아래는 유튜브 영상의 원본 스크립트입니다. 이 스크립트를 다른 자료와 비교·대조하여 재구성하세요.`
-        : `[Source: ${s.title || s.type}]`;
-      const words = (s.content || '').split(/\s+/).slice(0, 600).join(' ');
+        ? `[YouTube: ${s.title || 'Video'}] (transcript excerpt)`
+        : `[Reference: ${s.title || s.type}]`;
+      /* 소스당 300단어만 발췌 (부분 참고, 전체 복사 방지) */
+      const allWords = (s.content || '').split(/\s+/);
+      const startIdx = Math.floor(Math.random() * Math.max(0, allWords.length - 300));
+      const words = allWords.slice(startIdx, startIdx + 300).join(' ');
       sourceContent += `${label}\n${words}\n\n---\n\n`;
     }
   }
@@ -636,8 +883,19 @@ async function generateSinglePost(env, category, sources, logId, useOpenAI) {
   const customRules = await getSetting(env.DB, 'blog_gen_rules').catch(() => '');
   const writingStyle = await getSetting(env.DB, 'blog_writing_style').catch(() => '');
 
+  /* 유명 작가 문체 샘플 랜덤 로드 (3-5개) */
+  let writingSamples = [];
+  try {
+    const sampleRows = await env.DB.prepare(
+      'SELECT author, excerpt, style_note FROM writing_samples ORDER BY RANDOM() LIMIT 4'
+    ).all();
+    writingSamples = sampleRows.results || [];
+  } catch (e) {
+    console.warn('[blog-gen] writing_samples load failed:', e.message);
+  }
+
   /* Workers AI로 글 생성 */
-  const prompt = buildGenerationPrompt(topic, category, focusKw, sourceContent, customRules, writingStyle);
+  const prompt = buildGenerationPrompt(topic, category, focusKw, sourceContent, customRules, writingStyle, writingSamples);
   let aiRaw = await generateWithWorkersAI(env, prompt);
   let post = parseAIResponse(aiRaw);
 
@@ -706,7 +964,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
 
   /* 본문 단어 수 부족 시 확장 */
   const _wc0 = post.content.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
-  if (_wc0 < 1400) {
+  if (_wc0 < 1600) {
     console.log(`[blog-gen] content only ${_wc0} words expanding...`);
     post.content = await expandContent(env, post.content, focusKw, _wc0);
   }
@@ -714,74 +972,59 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
   /* 후처리 (AI 패턴 정리 + HTML 정리) */
   post.content = postProcessContent(post.content);
 
-  /* ⛔ H2/H3 태그 필수 검증 — 목표 H2=7, H3=4 (허용 H2:5-9, H3:2-6) */
+  /* ⛔ H3 태그 전부 제거 (규정: H2 + 본문만으로 구성) */
+  post.content = post.content.replace(/<h3[^>]*>[\s\S]*?<\/h3>/gi, '');
+
+  /* ⛔ H2 태그 필수 검증 - 목표 정확히 7개 */
   const _h2Tags = (post.content.match(/<h2[\s>]/gi) || []);
-  const _h3Tags = (post.content.match(/<h3[\s>]/gi) || []);
-  console.log(`[blog-gen] Heading check: H2=${_h2Tags.length}, H3=${_h3Tags.length} (target: H2=7, H3=4)`);
-  if (_h2Tags.length < 5 || _h3Tags.length < 2) {
-    console.log('[blog-gen] Heading structure insufficient, injecting to reach target...');
-    /* H2 보강 — 목표 7개까지 */
-    const h2Target = 7;
-    if (_h2Tags.length < 5) {
-      const needed = Math.min(h2Target - _h2Tags.length, 5);
-      const sectionTitles = [
-        `Key ${focusKw} Strategies You Need`,
-        `How ${focusKw} Impacts Your Business`,
-        `Common ${focusKw} Mistakes to Avoid`,
-        `${focusKw} Best Practices for Success`,
-        `Why ${focusKw} Matters More Than Ever`,
-        `Advanced ${focusKw} Techniques`,
-        `Smart Ways to Handle ${focusKw}`,
-      ];
-      let parts = post.content.split(/(<\/p>)/gi);
-      const pTags = parts.filter(p => p.toLowerCase() === '</p>').length;
-      const step = Math.max(2, Math.floor(pTags / (needed + 1)));
-      let injected = 0;
-      let pCount = 0;
-      let result = '';
-      for (let i = 0; i < parts.length; i++) {
-        result += parts[i];
-        if (parts[i].toLowerCase() === '</p>') {
-          pCount++;
-          if (injected < needed && pCount > 1 && pCount % step === 0) {
-            const title = sectionTitles[injected % sectionTitles.length];
-            result += `\n<h2>${title}</h2>\n`;
-            injected++;
-          }
+  console.log(`[blog-gen] Heading check: H2=${_h2Tags.length} (target: 7, no H3)`);
+
+  /* H2 초과 시 뒤쪽부터 제거 (최대 7개 유지) */
+  if (_h2Tags.length > 7) {
+    let h2Count = 0;
+    post.content = post.content.replace(/<h2[^>]*>[\s\S]*?<\/h2>/gi, (match) => {
+      h2Count++;
+      return h2Count <= 7 ? match : '';
+    });
+    console.log(`[blog-gen] H2 trimmed from ${_h2Tags.length} to 7`);
+  }
+
+  /* H2 부족 시 보강 - 목표 7개까지 */
+  const currentH2 = (post.content.match(/<h2[\s>]/gi) || []).length;
+  if (currentH2 < 5) {
+    const needed = Math.min(7 - currentH2, 5);
+    const sectionTitles = [
+      `Key ${focusKw} Strategies You Need`,
+      `How ${focusKw} Impacts Your Business`,
+      `Common ${focusKw} Mistakes to Avoid`,
+      `${focusKw} Best Practices for Success`,
+      `Why ${focusKw} Matters More Than Ever`,
+      `Advanced ${focusKw} Techniques`,
+      `Smart Ways to Handle ${focusKw}`,
+    ];
+    let parts = post.content.split(/(<\/p>)/gi);
+    const pTags = parts.filter(p => p.toLowerCase() === '</p>').length;
+    const step = Math.max(2, Math.floor(pTags / (needed + 1)));
+    let injected = 0;
+    let pCount = 0;
+    let result = '';
+    for (let i = 0; i < parts.length; i++) {
+      result += parts[i];
+      if (parts[i].toLowerCase() === '</p>') {
+        pCount++;
+        if (injected < needed && pCount > 1 && pCount % step === 0) {
+          const title = sectionTitles[injected % sectionTitles.length];
+          result += `\n<h2>${title}</h2>\n`;
+          injected++;
         }
       }
-      if (injected > 0) post.content = result;
     }
-    /* H3 보강 — 목표 4개까지, 첫 4개 H2 뒤에 삽입 */
-    const currentH3 = (post.content.match(/<h3[\s>]/gi) || []).length;
-    if (currentH3 < 2) {
-      const h3Target = 4;
-      const needed = Math.min(h3Target - currentH3, 4);
-      const subTitles = [
-        `Quick ${focusKw} Checklist`,
-        `Step-by-Step ${focusKw} Process`,
-        `${focusKw} Implementation Tips`,
-        `Practical ${focusKw} Examples`,
-      ];
-      let subIdx = 0;
-      /* H2 뒤 첫 </p> 다음에 H3 삽입 */
-      let h2Count = 0;
-      post.content = post.content.replace(/<\/h2>([\s\S]*?)<\/p>/gi, (match) => {
-        h2Count++;
-        if (subIdx < needed && h2Count <= 4) {
-          const sub = subTitles[subIdx++ % subTitles.length];
-          return match + `\n<h3>${sub}</h3>\n<p>This step builds on the previous section and adds practical detail you can apply right away. Most site owners find this part straightforward once they understand the basics. The key is consistency in your approach. Take it one step at a time for best results.</p>`;
-        }
-        return match;
-      });
-    }
-    const _h2After = (post.content.match(/<h2[\s>]/gi) || []).length;
-    const _h3After = (post.content.match(/<h3[\s>]/gi) || []).length;
-    console.log(`[blog-gen] After heading injection: H2=${_h2After}, H3=${_h3After}`);
+    if (injected > 0) post.content = result;
+    console.log(`[blog-gen] H2 injected: ${injected} (now ${currentH2 + injected})`);
   }
 
   /* H2 헤딩에 focus keyword 보강 (SEO 점수용) */
-  const _headingCheck = (post.content.match(/<h[2-3][^>]*>([\s\S]*?)<\/h[2-3]>/gi) || [])
+  const _headingCheck = (post.content.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [])
     .map(h => h.replace(/<[^>]*>/g, '')).join(' ').toLowerCase();
   if (!_headingCheck.includes(focusKw.toLowerCase())) {
     /* 두번째 H2 헤딩에 focus keyword 삽입 */
@@ -828,7 +1071,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
   } catch (_) { console.warn('[blog-gen] n0005 image blocklist fetch failed (ignored)'); }
   if (unsplashKey) {
     try {
-      const candidates = await fetchUnsplashImages(focusKw, unsplashKey, 8);
+      const candidates = await fetchUnsplashImages(focusKw, unsplashKey, 8, category, post.title);
       const fresh = candidates.filter((u) => !_usedUrls.has(u.split('?')[0]));
       featuredImg = fresh[1] || fresh[0] || candidates[1] || candidates[0] || FALLBACK_IMG;
       bodyImg = fresh[0] || candidates[0] || FALLBACK_IMG;
@@ -896,7 +1139,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
         post.content = post.content.replace(/<h2[^>]*>\s*(Conclusion|Final Thoughts|Summary|Wrapping Up|Key Takeaways)[^<]*<\/h2>/gi, '');
 
         /* R10 수정: 빈 태그 제거 */
-        post.content = post.content.replace(/<(strong|em|h2|h3|p)>\s*<\/\1>/gi, '');
+        post.content = post.content.replace(/<(strong|em|h2|p)>\s*<\/\1>/gi, '');
 
         /* 후처리 재적용 */
         post.content = postProcessContent(post.content);
@@ -921,7 +1164,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
     for (let regenAttempt = 1; regenAttempt <= 2; regenAttempt++) {
       try {
         console.log(`[blog-gen] Regeneration attempt ${regenAttempt}/2...`);
-        const regenPrompt = buildGenerationPrompt(topic, category, focusKw, sourceContent, customRules, writingStyle);
+        const regenPrompt = buildGenerationPrompt(topic, category, focusKw, sourceContent, customRules, writingStyle, writingSamples);
         const regenRaw = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
           messages: [
             { role: 'system', content: `You are a senior SEO content writer. CRITICAL: The focus keyword "${focusKw}" must appear EXACTLY 5-6 times in the content body. NOT more. Count carefully before submitting. Previous attempt FAILED because keyword appeared too many times. Write naturally without keyword stuffing.` },
@@ -958,7 +1201,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
         regenJson.content = regenJson.content.replace(/<h2[^>]*>\s*(Conclusion|Final Thoughts|Summary|Wrapping Up|Key Takeaways)[^<]*<\/h2>/gi, '');
 
         /* 빈 태그 제거 */
-        regenJson.content = regenJson.content.replace(/<(strong|em|h2|h3|p)>\s*<\/\1>/gi, '');
+        regenJson.content = regenJson.content.replace(/<(strong|em|h2|p)>\s*<\/\1>/gi, '');
 
         /* 재검사 */
         const tempPost = { ...post, title: regenJson.title, content: regenJson.content, seo_description: regenJson.seo_description || post.seo_description };
@@ -1002,8 +1245,9 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
       }
       /* 여전히 140 미만이면 padding으로 맞춤 */
       if (md.length < 140) {
-        const pad = ' Protect your site with proven strategies and actionable steps for better security.';
-        md = (md + pad).slice(0, 155);
+        const pad = ' Get proven strategies and actionable steps to grow your online business today.';
+        md = (md + pad).slice(0, 158);
+        if (md.length > 160) md = md.slice(0, 157) + '...';
       }
     }
     post.seo_description = md;
@@ -1021,14 +1265,14 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
   if (realSeoScore < 90 && useOpenAI) {
     console.log(`[blog-gen] SEO score ${realSeoScore} < 90 attempting regeneration...`);
     try {
-      const retryPrompt = buildGenerationPrompt(topic, category, focusKw, sourceContent, customRules, writingStyle);
+      const retryPrompt = buildGenerationPrompt(topic, category, focusKw, sourceContent, customRules, writingStyle, writingSamples);
       const retryRes = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: { 'Authorization': 'Bearer ' + openaiKey, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'gpt-4o-mini',
           messages: [
-            { role: 'system', content: 'You are a professional SEO blog writer. Your previous attempt scored ' + realSeoScore + '/100. This time you MUST score 90+. Pay extra attention to: keyword density 1-2%, focus keyword in title/H2/first paragraph/meta description, at least 5 H2 and 2 H3 headings, 1500-2000 words, 140-160 char meta description.' },
+            { role: 'system', content: 'You are a professional SEO blog writer. Your previous attempt scored ' + realSeoScore + '/100. This time you MUST score 90+. Pay extra attention to: keyword density 1-2%, focus keyword in title/H2/first paragraph/meta description, exactly 7 H2 headings (NO H3), 1500-2000 words, 140-160 char meta description.' },
             { role: 'user', content: retryPrompt },
           ],
           temperature: 0.7,
@@ -1078,37 +1322,81 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
   let aiSimilarity = computeAISimilarity(post.content);
   console.log(`[blog-gen] Quality=${qualityScore}/100, AI-similarity=${aiSimilarity}/100`);
 
-  /* AI 유사성 25 이상이면 humanize rewrite 시도 */
-  if (aiSimilarity > 25) {
-    try {
-      console.log('[blog-gen] AI similarity too high, attempting humanization pass...');
-      const textOnly = post.content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 3000);
-      const humanizeResult = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
-        messages: [
-          { role: 'system', content: 'You are a human writing coach. Your ONLY job is to rewrite text to sound less robotic. Keep the same meaning and structure but change word choices, sentence patterns, and transitions. Return ONLY the rewritten HTML, no explanation.' },
-          { role: 'user', content: `Rewrite ONLY the <p> paragraph content below to sound more human and natural. Keep all HTML tags, headings, images, links, tables, and blockquotes EXACTLY as they are. Only change the text inside <p> tags. Rules: 1) Replace formal/corporate language with casual direct language 2) Vary sentence lengths dramatically 3) Use contractions everywhere 4) Start some sentences with "But", "And", "So" 5) Add 1-2 short rhetorical questions 6) Remove any phrase that sounds like corporate speak. Return the FULL HTML:\n\n${post.content}` },
-        ],
-        max_tokens: 8192,
-        temperature: 0.9,
-      });
-      const rewritten = (humanizeResult?.response || '').trim();
-      if (rewritten && rewritten.length > post.content.length * 0.5) {
-        /* 확인: rewritten이 여전히 HTML 구조를 유지하는지 */
-        if (/<h2/.test(rewritten) && /<p/.test(rewritten)) {
-          /* humanized 결과에도 postProcess 적용 */
-          const cleanRewritten = postProcessContent(rewritten);
-          const newSim = computeAISimilarity(cleanRewritten);
-          console.log(`[blog-gen] Humanized: AI-similarity ${aiSimilarity} → ${newSim}`);
-          if (newSim < aiSimilarity) {
-            post.content = cleanRewritten;
-            aiSimilarity = newSim;
-            qualityScore = computeContentQuality(post.content);
-          }
+  /* 프로그래밍적 humanization 항상 적용 (질문, 펀치라인, 구어체 삽입) */
+  console.log(`[blog-gen] Applying programmatic humanization (AI-sim=${aiSimilarity})...`);
+  post.content = programmaticHumanize(post.content);
+  post.content = postProcessContent(post.content);
+  const newSim = computeAISimilarity(post.content);
+  console.log(`[blog-gen] After humanization: AI-sim ${aiSimilarity} -> ${newSim}`);
+  aiSimilarity = newSim;
+  qualityScore = computeContentQuality(post.content);
+
+  /* Title 길이 자동 보정 (R14: 50-60자) */
+  {
+    let t = (post.title || '').trim();
+    /* 60자 초과 시 깔끔하게 자르기 (단어 단위) */
+    if (t.length > 62) {
+      const trimmed = t.slice(0, 60);
+      const lastSpace = trimmed.lastIndexOf(' ');
+      post.title = lastSpace > 40 ? trimmed.slice(0, lastSpace) : trimmed;
+      console.log(`[blog-gen] Title trimmed: "${t}"(${t.length}) -> "${post.title}"(${post.title.length})`);
+      t = post.title;
+    }
+    if (t.length < 50) {
+      const kwL = focusKw.toLowerCase();
+      /* 다양한 접미사 풀에서 랜덤 선택하여 반복 방지 */
+      const suffixPools = {
+        'wordpress|wp\\b': [' for Site Owners', ' You Need to Know', ' That Actually Works', ' Worth Trying Today'],
+        'plugin|theme': [' Worth Your Time', ' Tested and Proven', ' for Better Sites', ' That Deliver Results'],
+        'speed|performance|cache': [' for Faster Loading', ' That Cut Load Times', ' You Should Try Now', ' for Better UX'],
+        'seo|search': [' for Higher Rankings', ' That Drive Traffic', ' for 2026 and Beyond', ' Backed by Data'],
+        'hosting|server|domain': [' for Reliable Uptime', ' on a Budget', ' for Growing Sites', ' That Scale Well'],
+        'ecommerce|woocommerce|shop|cart|checkout': [' to Boost Sales', ' for Online Stores', ' That Convert Better', ' for Store Owners'],
+        'business|marketing|brand': [' for Growing Companies', ' That Drive Results', ' Worth Your Time', ' for Smart Owners'],
+        'startup|saas|funding': [' for Founders', ' That Scale Fast', ' Worth Knowing', ' for Early Stage'],
+        'design|ui|ux|responsive': [' for Better UX', ' That Convert', ' Worth Implementing', ' for Modern Sites'],
+        'cloud|docker|serverless|aws': [' for Developers', ' Made Simple', ' on a Budget', ' That Scale Well'],
+        'backup|restore': [' Step by Step', ' for Peace of Mind', ' Without the Stress', ' Done Right'],
+      };
+      let ext = '';
+      for (const [pattern, suffixes] of Object.entries(suffixPools)) {
+        if (new RegExp(pattern, 'i').test(kwL)) {
+          ext = suffixes[Math.floor(Math.random() * suffixes.length)];
+          break;
         }
       }
-    } catch (e) {
-      console.warn('[blog-gen] Humanization pass failed:', e.message);
+      if (!ext) {
+        const generic = [' Worth Knowing', ' for Your Website', ' That Actually Work', ' You Can Apply Today'];
+        ext = generic[Math.floor(Math.random() * generic.length)];
+      }
+      const candidate = t + ext;
+      if (candidate.length >= 50 && candidate.length <= 62) {
+        post.title = candidate;
+      } else if (candidate.length > 62) {
+        const tr = candidate.slice(0, 60);
+        const ls = tr.lastIndexOf(' ');
+        post.title = ls > 40 ? tr.slice(0, ls) : tr;
+      } else {
+        post.title = candidate;
+      }
+      if (!post.seo_title || post.seo_title === t) post.seo_title = post.title;
+      console.log(`[blog-gen] Title expanded: "${t}"(${t.length}) -> "${post.title}"(${post.title.length})`);
     }
+  }
+
+  /* ⛔ 최종 H2 캡 (재생성/자동수정 후에도 7개 초과 방지) */
+  {
+    const finalH2 = (post.content.match(/<h2[\s>]/gi) || []).length;
+    if (finalH2 > 7) {
+      let cnt = 0;
+      post.content = post.content.replace(/<h2[^>]*>[\s\S]*?<\/h2>/gi, (m) => {
+        cnt++;
+        return cnt <= 7 ? m : '';
+      });
+      console.log(`[blog-gen] Final H2 cap: ${finalH2} -> 7`);
+    }
+    /* H3 최종 제거 보장 */
+    post.content = post.content.replace(/<h3[^>]*>[\s\S]*?<\/h3>/gi, '');
   }
 
   /* DB 저장 */
@@ -1142,18 +1430,20 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
 /* ══════════════════════════════════════════════
    프롬프트 빌더
    ══════════════════════════════════════════════ */
-function buildGenerationPrompt(topic, category, focusKw, sourceContent, customRules, writingStyle) {
+function buildGenerationPrompt(topic, category, focusKw, sourceContent, customRules, writingStyle, writingSamples = []) {
   const srcSection = sourceContent
     ? `══ REFERENCE MATERIAL (참고 자료) ══
 
-🚨 CRITICAL ORIGINALITY RULES ZERO TOLERANCE FOR COPYING:
-1. COMPLETELY TRANSFORM every sentence from the source material change EVERY word, phrase, and sentence structure without exception
-2. Do NOT copy ANY phrase from the sources not even casual expressions like "it is important to", "you should", "one of the most common"
-3. Extract FACTS, numbers, and technical concepts ONLY then express them entirely in your own original voice using completely different words
-4. Imagine you read all sources 2 weeks ago and are now writing purely from memory you are NOT looking at them while writing
-5. If a sentence could appear verbatim in any source material, DELETE it and rewrite from scratch with completely different wording
-6. Synthesize and combine information from ALL sources to create unique perspectives not found in any single source
-7. TARGET: final content must share less than 15% word-level similarity with any single source
+🚨 ABSOLUTE ORIGINALITY - ZERO TOLERANCE FOR ANY COPYING:
+1. You MUST NOT copy ANY phrase, sentence, or structure from the sources below - not even 3 consecutive words
+2. Read the sources ONLY for factual data points (numbers, dates, names). Then CLOSE them mentally and write 100% from scratch
+3. Use COMPLETELY different vocabulary, sentence patterns, and paragraph structures than the sources
+4. If a source says "X improves Y by Z%", you must restate it as something like "Z% gains in Y come from X" - never mirror the original phrasing
+5. Every single sentence you write must be YOUR original creation - as if you are a journalist writing a brand new article after interviewing experts
+6. Do NOT use the same examples, analogies, or explanations found in any source
+7. COMBINE facts from multiple sources to create NEW insights not present in any single source
+8. TARGET: less than 10% word-level overlap with any single source, less than 30% topic-level similarity
+9. If you catch yourself paraphrasing a source sentence, STOP and write a completely new sentence about the same fact using different words and structure
 
 🎯 TARGET AUDIENCE:
 - WordPress intermediate users (1–3 years of hands-on experience)
@@ -1165,12 +1455,16 @@ function buildGenerationPrompt(topic, category, focusKw, sourceContent, customRu
 - Use simple, everyday vocabulary if a technical term is unavoidable, IMMEDIATELY explain it in plain words in the SAME sentence
 - Keep sentences SHORT: 15–20 words maximum per sentence
 - ONE idea per sentence. ONE main concept per paragraph.
-- Replace technical jargon with plain words: "malicious code" → "harmful code planted by hackers", "vulnerability" → "security weak point", "authentication" → "login verification step"
+- Replace technical jargon with plain words: "API" → "a way for apps to talk to each other", "latency" → "loading delay", "bandwidth" → "data transfer capacity"
 - Write as if explaining to a 15-year-old who is smart and curious but has no technical background
 - No academic phrasing be direct, friendly, and practical
 
-SOURCE MATERIAL (extract facts only COMPLETELY transform ALL expressions, DO NOT copy any phrase):
-${sourceContent.slice(0, 5000)}`
+PARTIAL REFERENCE EXCERPTS (use ONLY for factual inspiration - write everything in your own words):
+${sourceContent.slice(0, 4000)}
+
+REMINDER: The above are small excerpts from 5 different sources. Use them ONLY as background knowledge. Your article must be 100% original writing with zero phrases copied from these references.
+
+WORD SIMPLIFICATION RULE: When you find a technical or complex word in the reference sources, ALWAYS replace it with a simpler everyday word. Examples: "leverage" -> "use", "implement" -> "set up", "infrastructure" -> "setup", "optimize" -> "improve", "utilize" -> "use", "facilitate" -> "help", "methodology" -> "method", "comprehensive" -> "full", "subsequently" -> "then", "mitigate" -> "reduce". This naturally makes the output different from sources while improving readability.`
     : `Write based on your knowledge about: ${topic}.
 🎯 TARGET AUDIENCE: WordPress intermediate users (1–3 years experience, knows plugin installation and dashboard use, but not server-level or coding concepts).
 📖 WRITING LEVEL: Simple and accessible Korean high school freshman equivalent. Short sentences (15–20 words max), plain vocabulary, explain every technical term in plain words when first used.`;
@@ -1178,6 +1472,28 @@ ${sourceContent.slice(0, 5000)}`
     ? `\nBASE WRITING REFERENCE (core style guidelines apply to every sentence and paragraph):\n${customRules.trim()}\n` : '';
   const styleSection = writingStyle && writingStyle.trim()
     ? `\nWRITING STYLE & TONE (apply throughout the entire post):\n${writingStyle.trim()}\n` : '';
+
+  /* 유명 작가 문체 참조 섹션 */
+  let humanStyleSection = '';
+  if (writingSamples && writingSamples.length > 0) {
+    const sampleTexts = writingSamples.map((s, i) =>
+      `[Author ${i + 1}: ${s.author}] ${s.style_note ? '(' + s.style_note + ')' : ''}\n"${s.excerpt}"`
+    ).join('\n\n');
+    humanStyleSection = `
+HUMAN AUTHOR WRITING STYLE REFERENCE (CRITICAL - mimic these human authors' style):
+The following are real excerpts from famous human authors. Study their rhythm, tone, sentence variety, and natural flow. Your writing MUST match this level of human authenticity - NOT the content, but the STYLE and FEEL.
+
+${sampleTexts}
+
+STYLE INSTRUCTIONS from the samples above:
+- Match the casual-yet-authoritative tone of these authors
+- Use their rhythm patterns: short punchy sentences mixed with longer flowing ones
+- Copy their directness - say what you mean without padding
+- Notice how they use personal experience and concrete examples
+- Adopt their conversational hooks and transitions
+- Your final post should read as if one of these authors wrote it about ${topic}
+`;
+  }
 
   return `You are an expert English content writer. Write a complete, SEO-optimized blog post targeting a RankMath score of 90+.
 
@@ -1192,66 +1508,56 @@ CATEGORY: ${category}
 FOCUS KEYWORD: "${focusKw}"
 
 ═══ WORD COUNT (ABSOLUTE REQUIREMENT) ═══
-- Total visible text: exactly 1,500–2,000 words (not counting HTML tags)
-- 7 H2 sections × ~200 words each + intro + closing = 1,600 words target
-- Below 1,500 = REJECTED. Above 2,200 = REJECTED.
+- Total visible text: exactly 1,800-2,200 words (not counting HTML tags)
+- 7 H2 sections x 250 words each + intro(120) + closing(120) = 1,990 words target
+- Below 1,700 = REJECTED. Above 2,400 = REJECTED.
+- WRITE MORE, NOT LESS. Each paragraph MUST be 100-130 words (5-6 full sentences).
 
 ═══ HTML STRUCTURE (ZERO TOLERANCE — #1 PRIORITY RULE) ═══
 
-ALLOWED TAGS ONLY: <h2>, <h3>, <p>, <ul>, <li>, <ol>, <strong>, <em>, <blockquote>
-FORBIDDEN TAGS: <h1>, <script>, <style>, <svg>, <i>, <span>, <div>, <img>, <a>
+ALLOWED TAGS ONLY: <h2>, <p>, <ul>, <li>, <ol>, <strong>, <em>, <blockquote>
+FORBIDDEN TAGS: <h1>, <h3>, <h4>, <h5>, <h6>, <script>, <style>, <svg>, <i>, <span>, <div>, <img>, <a>
 
-EXACT STRUCTURE — follow this template PRECISELY:
+EXACT STRUCTURE — follow this template PRECISELY (H2 + paragraphs ONLY, NO H3):
 
-  <p>[intro paragraph: exactly 4–5 sentences, 60–100 words, includes focus keyword]</p>
+  <p>[intro paragraph: exactly 6 sentences, 100-130 words, includes focus keyword]</p>
 
-  <h2>[Section 1 Title — includes focus keyword]</h2>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
-  <h3>[Subsection 1.1]</h3>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
+  <h2>[Section 1 Title - includes focus keyword]</h2>
+  <p>[exactly 6 sentences, 100-130 words with specific details and examples]</p>
 
   <h2>[Section 2 Title]</h2>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
-  <h3>[Subsection 2.1]</h3>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
+  <p>[exactly 6 sentences, 100-130 words with actionable advice]</p>
 
   <h2>[Section 3 Title]</h2>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
-  <h3>[Subsection 3.1]</h3>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
+  <p>[exactly 6 sentences, 100-130 words with real-world context]</p>
 
   <h2>[Section 4 Title]</h2>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
-  <h3>[Subsection 4.1]</h3>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
+  <p>[exactly 6 sentences, 100-130 words with practical tips]</p>
 
   <h2>[Section 5 Title]</h2>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
+  <p>[exactly 6 sentences, 100-130 words with clear explanations]</p>
 
   <h2>[Section 6 Title]</h2>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
+  <p>[exactly 6 sentences, 100-130 words with supporting evidence]</p>
 
   <h2>[Section 7 Title]</h2>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
-  <p>[exactly 4–5 sentences, 60–100 words]</p>
+  <p>[exactly 6 sentences, 100-130 words with forward-looking advice]</p>
 
-PARAGRAPH LENGTH RULE — THE MOST IMPORTANT RULE:
-- Every single <p> tag MUST contain EXACTLY 4 or 5 sentences
-- Every single <p> tag MUST contain 60–100 words
-- 3 sentences = REJECTED. 6 sentences = REJECTED. 2 sentences = REJECTED.
-- Count your sentences before writing each paragraph. If it's not 4 or 5, rewrite it.
+  <p>[closing paragraph: 6 sentences, 100-130 words, summarize key points]</p>
+
+PARAGRAPH LENGTH RULE - THE MOST IMPORTANT RULE:
+- Every single <p> tag MUST contain EXACTLY 5 or 6 sentences
+- Every single <p> tag MUST contain 80-120 words
+- 4 sentences = REJECTED. 7 sentences = REJECTED. 3 sentences = REJECTED.
+- Count your sentences before writing each paragraph. If it's not 5 or 6, rewrite it.
 
 HEADING COUNT RULE:
 - Exactly 7 <h2> tags. Not 6. Not 8. Exactly 7.
-- Exactly 4 <h3> tags. One each under H2 sections 1, 2, 3, 4.
-- H2 sections 5, 6, 7 have NO <h3>, just two <p> paragraphs each.
+- ZERO <h3> tags. Do NOT use H3 headings at all. H3 is FORBIDDEN.
 
 HEADING-PARAGRAPH SEQUENCE RULE:
-- Every <h2> MUST be immediately followed by a <p> paragraph. NEVER <h2> then <h3>.
-- Every <h3> MUST be immediately followed by a <p> paragraph. NEVER <h3> then <h2>.
-- Between any two heading tags, there MUST be at least 60 words of paragraph text.
+- Every <h2> MUST be immediately followed by a <p> paragraph
+- Between any two <h2> tags, there MUST be exactly one <p> paragraph (5-6 sentences, 80-120 words)
 
 ═══ EMPTY TAG RULE (CRITICAL zero tolerance) ═══
 - NEVER produce empty HTML tags of any kind
@@ -1361,7 +1667,7 @@ ANTI-AI WRITING TECHNIQUES apply ALL of these (THIS IS THE MOST IMPORTANT SECTIO
 - PRIMARY sentence length: 15–20 words. This is the default. Keep it short and punchy.
 - MAXIMUM sentence length: 40 words hard cap split any sentence that exceeds this.
 - AVOID academic or overly formal phrasing be conversational, direct, and practical.
-- Explain every technical term in plain words the FIRST time you use it, inside the same sentence. Example: "malware (harmful software that attackers secretly install on your site)"
+- Explain every technical term in plain words the FIRST time you use it, inside the same sentence. Example: "CDN (a network of servers that delivers your site content faster)"
 - Vary rhythm within each paragraph: mix of medium → short → medium, or long → short → short. Never write three sentences of the same length back-to-back.
 - Use these sentence patterns to create confident, readable prose:
   • Corrective opener:   "It's not about X it's about Y."
@@ -1373,14 +1679,14 @@ ANTI-AI WRITING TECHNIQUES apply ALL of these (THIS IS THE MOST IMPORTANT SECTIO
 - NEVER open every paragraph with a topic sentence mix in scenario-first and question-first openings.
 - Cut all filler: "furthermore", "moreover", "it is worth noting", "needless to say", "it goes without saying" replace with direct statements.
 - Prefer active voice. Write "the plugin updates the cache" not "the cache is updated by the plugin".
-- VOCABULARY: Replace technical jargon wherever possible. Examples: "exploit" → "take advantage of a weak point", "vulnerability" → "security gap", "authentication" → "login check", "malicious" → "harmful", "mitigate" → "reduce", "implement" → "set up", "configure" → "adjust the settings".
+- VOCABULARY: Replace technical jargon wherever possible. Examples: "deploy" → "put live", "repository" → "code storage", "API endpoint" → "connection point", "latency" → "delay", "implement" → "set up", "configure" → "adjust the settings".
 
 ═══ LINK & TABLE RULES ═══
 - All links (external and internal) must use the same color as surrounding body text NEVER yellow, NEVER colored
 - All links must have NO underline they should be invisible from surrounding text unless hovered
-- Summary/FAQ table at the bottom: maximum 4 data rows, all text in English only
+- Summary/FAQ table at the bottom: maximum 2 data rows, all text in English only
 - Table header and column labels must be in English (e.g. Topic/Summary, Question/Answer)
-${styleSection}${rulesSection}
+${styleSection}${rulesSection}${humanStyleSection}
 ${srcSection}
 
 Respond ONLY with a single valid JSON object. No markdown fences, no explanation before or after the JSON.
@@ -1393,7 +1699,7 @@ Respond ONLY with a single valid JSON object. No markdown fences, no explanation
 async function generateWithWorkersAI(env, prompt) {
   const result = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
     messages: [
-      { role: 'system', content: 'You are a veteran tech journalist with 15 years of hands-on cybersecurity experience. You write the way you talk - direct, opinionated, and practical. You hate corporate jargon and AI-sounding text. Always respond with valid JSON only. No markdown fences, no explanation, no text before or after the JSON object.' },
+      { role: 'system', content: 'You are a veteran tech journalist with 15 years of hands-on web technology and business experience. You write the way you talk - direct, opinionated, and practical. You hate corporate jargon and AI-sounding text. Always respond with valid JSON only. No markdown fences, no explanation, no text before or after the JSON object.' },
       { role: 'user', content: prompt },
     ],
     max_tokens: 8192,
@@ -1438,9 +1744,8 @@ function programmaticRuleCheck(post, focusKw) {
   if (h2s.length < 5) violations.push(`R2_H2_LOW: ${h2s.length} H2 (need 5-9, target 7)`);
   if (h2s.length > 9) violations.push(`R2_H2_HIGH: ${h2s.length} H2 (max 9)`);
 
-  /* R3: H3 정확히 4개 (허용 범위 2~6) */
-  if (h3s.length < 2) violations.push(`R3_H3_LOW: ${h3s.length} H3 (need 2-6, target 4)`);
-  if (h3s.length > 8) violations.push(`R3_H3_HIGH: ${h3s.length} H3 (max 8)`);
+  /* R3: H3 금지 (0개) */
+  if (h3s.length > 0) violations.push(`R3_H3_FORBIDDEN: ${h3s.length} H3 found (must be 0)`);
 
   /* R4: 포커스 키워드 — 제목 */
   const kwLower = focusKw.toLowerCase();
@@ -1469,22 +1774,22 @@ function programmaticRuleCheck(post, focusKw) {
   if (korRe.test(post.title) || korRe.test(text)) violations.push('R9_KOREAN: Korean text detected');
 
   /* R10: 빈 태그 금지 */
-  const emptyTags = content.match(/<(strong|em|h2|h3|p)>\s*<\/\1>/gi) || [];
+  const emptyTags = content.match(/<(strong|em|h2|p)>\s*<\/\1>/gi) || [];
   if (emptyTags.length) violations.push(`R10_EMPTY_TAGS: ${emptyTags.length} found`);
 
-  /* R11: H태그 뒤 단락 4-5줄 (60-100단어) — 40단어 미만 섹션 개수 */
-  const headingSplits = content.split(/<h[23][^>]*>/gi);
+  /* R11: H2 뒤 단락 5-6줄 (80-120단어) - 50단어 미만 섹션 개수 */
+  const headingSplits = content.split(/<h2[^>]*>/gi);
   let tooShort = 0;
   let tooLong = 0;
   for (let i = 1; i < headingSplits.length; i++) {
-    const afterHeading = headingSplits[i].split(/<h[23][^>]*>/i)[0] || '';
+    const afterHeading = headingSplits[i].split(/<h2[^>]*>/i)[0] || '';
     const firstP = (afterHeading.match(/<p[^>]*>([\s\S]*?)<\/p>/i) || [])[1] || '';
     const pWords = firstP.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
-    if (pWords > 0 && pWords < 40) tooShort++;
-    if (pWords > 130) tooLong++;
+    if (pWords > 0 && pWords < 50) tooShort++;
+    if (pWords > 140) tooLong++;
   }
-  if (tooShort > 1) violations.push(`R11_SHORT_PARA: ${tooShort} sections under 40 words after heading`);
-  if (tooLong > 1) violations.push(`R11_LONG_PARA: ${tooLong} sections over 130 words after heading`);
+  if (tooShort > 1) violations.push(`R11_SHORT_PARA: ${tooShort} sections under 50 words after heading`);
+  if (tooLong > 1) violations.push(`R11_LONG_PARA: ${tooLong} sections over 140 words after heading`);
 
   /* R12: AI 금지 단어 (0개 허용) - HUMAN AUTHENTICITY 섹션과 완전 동기화 */
   const banned = /\b(delve|leverage|utilize|robust|seamless|streamline|navigate|realm|landscape|ecosystem|paradigm|synergy|empower|harness|cutting-edge|game-changer|comprehensive|paramount|holistic|crucial|essential|ensure|bolstering|foster|nuanced|underscores|curated|mitigate|proactive|prioritize|optimal|pivotal|facilitate|enhance)\b/gi;
@@ -1497,7 +1802,7 @@ function programmaticRuleCheck(post, focusKw) {
 
   /* R14: 제목 길이 50-60자 */
   const titleLen = (post.title || '').length;
-  if (titleLen < 40) violations.push(`R14_TITLE_SHORT: ${titleLen} chars (need 50-60)`);
+  if (titleLen < 50) violations.push(`R14_TITLE_SHORT: ${titleLen} chars (need 50-60)`);
   if (titleLen > 70) violations.push(`R14_TITLE_LONG: ${titleLen} chars (need 50-60)`);
 
   /* R15: 비축약형 과다 사용 금지 (postProcessContent 이후에도 남아있으면 위반) */
@@ -1549,7 +1854,7 @@ FULL CONTENT (text only): ${text.slice(0, 4000)}
 ═══ 14 RULES — CHECK EVERY SINGLE ONE ═══
 R1. WORD COUNT: 1,500–2,200 words. Current: ${wordCount}.
 R2. H2 COUNT: exactly 7 (allow 5-9). Current: ${(content.match(/<h2[\s>]/gi) || []).length}.
-R3. H3 COUNT: exactly 4 (allow 2-6). Current: ${(content.match(/<h3[\s>]/gi) || []).length}.
+R3. H3 COUNT: must be 0 (FORBIDDEN). Current: ${(content.match(/<h3[\s>]/gi) || []).length}. Any H3 = FAIL.
 R4. KEYWORD IN TITLE: "${focusKw}" must appear in title.
 R5. KEYWORD IN FIRST PARAGRAPH: "${focusKw}" must appear in first 100 words.
 R6. KEYWORD IN H2: "${focusKw}" must appear in at least 1 H2 heading.
@@ -1557,7 +1862,7 @@ R7. KEYWORD DENSITY: "${focusKw}" must appear EXACTLY 4-8 times total in content
 R8. META DESCRIPTION: 140-160 characters with keyword and call to action.
 R9. ENGLISH ONLY: zero Korean, Japanese, Chinese text.
 R10. NO EMPTY TAGS: no <strong></strong>, <p></p>, etc.
-R11. PARAGRAPH LENGTH: every <p> after a heading must have EXACTLY 4-5 sentences (60-100 words). Check: are there paragraphs with only 1-2 sentences? Are there paragraphs with 7+ sentences?
+R11. PARAGRAPH LENGTH: every <p> after a H2 heading must have 5-6 sentences (80-120 words). Check: are there paragraphs with only 1-3 sentences? Are there paragraphs with 8+ sentences?
 R12. BANNED AI WORDS: zero tolerance for: delve, leverage, utilize, robust, seamless, streamline, navigate, realm, landscape, ecosystem, paradigm, synergy, empower, harness, cutting-edge, game-changer, comprehensive, paramount, holistic, crucial, essential, ensure, bolstering, foster, nuanced, underscores, curated, mitigate, proactive, prioritize, optimal, pivotal, facilitate, enhance, furthermore, moreover, additionally.
 R13. NO CONCLUSION: last H2 must NOT be "Conclusion", "Final Thoughts", "Summary", "Wrapping Up".
 R14. TITLE LENGTH: 50-60 characters.
@@ -1642,10 +1947,10 @@ function enforceKeywordDensity(content, keyword, maxPct) {
   let count = 0;
   let replIdx = 0;
   const kw = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  /* H2/H3 헤딩과 그 외 영역을 분리하여 처리 - 헤딩 내부는 교체 안 함 */
-  const parts = content.split(/(<h[2-3][^>]*>[\s\S]*?<\/h[2-3]>)/gi);
+  /* H2 헤딩과 그 외 영역을 분리하여 처리 - 헤딩 내부는 교체 안 함 */
+  const parts = content.split(/(<h2[^>]*>[\s\S]*?<\/h2>)/gi);
   return parts.map(part => {
-    if (/^<h[2-3]/i.test(part)) return part; /* 헤딩은 건드리지 않음 */
+    if (/^<h2/i.test(part)) return part; /* 헤딩은 건드리지 않음 */
     const regex = new RegExp(
       `(?:<(?:strong|em)>\\s*)?${kw}(?:\\s*<\\/(?:strong|em)>)?`, 'gi'
     );
@@ -1679,10 +1984,10 @@ function enforceKeywordCount(content, keyword, targetCount = 6) {
     const alts = ['this process', 'these methods', 'this approach', 'these techniques', 'this strategy', 'the practice', 'this system', 'such methods'];
     let kept = 0;
     let altIdx = 0;
-    const parts = content.split(/(<h[2-3][^>]*>[\s\S]*?<\/h[2-3]>)/gi);
+    const parts = content.split(/(<h2[^>]*>[\s\S]*?<\/h2>)/gi);
     const result = parts.map(part => {
-      if (/^<h[2-3]/i.test(part)) {
-        /* H2/H3 제목 안의 키워드는 1개까지만 허용 */
+      if (/^<h2/i.test(part)) {
+        /* H2 제목 안의 키워드는 1개까지만 허용 */
         const regex = new RegExp(kwEscaped, 'gi');
         let hKept = 0;
         return part.replace(regex, (m) => {
@@ -1740,34 +2045,23 @@ async function expandContent(env, content, focusKw, currentWc) {
   try {
     const shortSections = [];
     /* H2 아래 직접 본문이 짧은 섹션 찾기 */
-    const h2Re = /<h2[^>]*>([\s\S]*?)<\/h2>([\s\S]*?)(?=<h[2-3]|$)/gi;
+    const h2Re = /<h2[^>]*>([\s\S]*?)<\/h2>([\s\S]*?)(?=<h2|$)/gi;
     let m2;
     while ((m2 = h2Re.exec(content)) !== null) {
       const title = m2[1].replace(/<[^>]*>/g, '').trim();
-      const directBody = m2[2].replace(/<h3[\s\S]*$/, '').trim();
+      const directBody = m2[2].trim();
       const bodyWc = directBody.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
       if (bodyWc < 80 && title.length > 3) {
         shortSections.push({ tag: 'h2', title, matchEnd: m2.index + `<h2>${m2[1]}</h2>`.length });
       }
     }
-    /* H3 아래 본문이 짧은 섹션 찾기 */
-    const sectionRe = /<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)(?=<h[2-6]|$)/gi;
-    let m;
-    while ((m = sectionRe.exec(content)) !== null) {
-      const title = m[1].replace(/<[^>]*>/g, '').trim();
-      const body = m[2];
-      const bodyWc = body.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
-      if (bodyWc < 80 && title.length > 3) {
-        shortSections.push({ tag: 'h3', title, index: m.index, fullLen: m[0].length });
-      }
-    }
     /* 짧은 섹션이 없으면 일반 확장 */
     if (shortSections.length === 0) {
-      const h3Titles = (content.match(/<h3[^>]*>([\s\S]*?)<\/h3>/gi) || []).map((h) => h.replace(/<[^>]*>/g, '').trim()).slice(0, 4).join('; ');
+      const h2Titles = (content.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || []).map((h) => h.replace(/<[^>]*>/g, '').trim()).slice(0, 4).join('; ');
       const raw2 = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
         messages: [
           { role: 'system', content: 'Return only <p> HTML paragraphs. No headings, no JSON, no markdown.' },
-          { role: 'user', content: `Write 4 additional <p> paragraphs (each 110–130 words) expanding on "${focusKw}". Subtopics covered: ${h3Titles}. Add new practical details not yet covered. Mention "${focusKw}" once naturally. Return ONLY <p> tags.` },
+          { role: 'user', content: `Write 4 additional <p> paragraphs (each 110-130 words) expanding on "${focusKw}". Subtopics covered: ${h2Titles}. Add new practical details not yet covered. Mention "${focusKw}" once naturally. Return ONLY <p> tags.` },
         ],
         max_tokens: 1800,
         temperature: 0.65,
@@ -1840,13 +2134,15 @@ function insertImageBeforeThirdH(content, imgUrl, altText, minWordsBeforeImg = 4
 
 /* ── 요약/FAQ 테이블 ── */
 function buildSummaryTable(html, tableType) {
+  /* 최대 2개만 추출 (불필요하게 긴 Q&A 금지) */
   const sections = [];
   const re = /<h2[^>]*>([\s\S]*?)<\/h2>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
   let m;
-  while ((m = re.exec(html)) !== null && sections.length < 4) {
+  while ((m = re.exec(html)) !== null && sections.length < 2) {
     const heading = m[1].replace(/<[^>]*>/g, '').trim();
     const paraText = m[2].replace(/<[^>]*>/g, '').trim();
-    const sentence = (paraText.match(/^[^.!?]+[.!?]/) || [paraText.slice(0, 160)])[0].trim();
+    /* 간결한 1문장 요약만 (최대 120자) */
+    const sentence = (paraText.match(/^[^.!?]+[.!?]/) || [paraText.slice(0, 120)])[0].trim().slice(0, 120);
     if (heading && sentence) sections.push({ heading, sentence });
   }
   if (sections.length < 2) return '';
@@ -1857,7 +2153,7 @@ function buildSummaryTable(html, tableType) {
     return `\n<h2>Key Takeaways</h2>\n<div class="summary-table-wrap"><table class="summary-table"><thead><tr><th>Topic</th><th>Summary</th></tr></thead><tbody>${rows}</tbody></table></div>\n`;
   } else {
     const rows = sections.map((s) => {
-      const q = /[?？]$/.test(s.heading) ? s.heading : s.heading + '?';
+      const q = /[?]$/.test(s.heading) ? s.heading : s.heading + '?';
       return `<tr><td><strong>${q}</strong></td><td>${s.sentence}</td></tr>`;
     }).join('');
     return `\n<h2>Frequently Asked Questions</h2>\n<div class="summary-table-wrap"><table class="summary-table"><thead><tr><th>Question</th><th>Answer</th></tr></thead><tbody>${rows}</tbody></table></div>\n`;
@@ -1867,6 +2163,8 @@ function buildSummaryTable(html, tableType) {
 /* ── HTML 후처리 ── */
 function postProcessContent(content) {
   let c = content
+    /* 보안 CTA / 상품 프로모션 blockquote 완전 제거 (n0003은 보안 판매/홍보 사이트가 아님) */
+    .replace(/<blockquote[^>]*>[\s\S]*?(?:Care Plan|Security Plan|Protection|Malware|Monitoring Plan|Emergency Help|Hardened Today|noteracker\.com)[\s\S]*?<\/blockquote>/gi, '')
     .replace(/<h1[^>]*>[\s\S]*?<\/h1>/gi, '')
     .replace(/<h[2-6][^>]*>\s*<\/h[2-6]>/gi, '')
     .replace(/<strong>\s*<\/strong>/gi, '')
@@ -1987,18 +2285,19 @@ function postProcessContent(content) {
     [/\bhere is\b/gi, "here's"],
     [/\bit is\b/gi, "it's"],
     [/\bthat is\b/gi, "that's"],
+    [/\ba ([aeiou])/gi, 'an $1'],
   ];
   for (const [pattern, replacement] of aiPhrases) {
     c = c.replace(pattern, replacement);
   }
-  /* 문장 시작 소문자 보정: <p>, <li>, <h2>, <h3> 직후 첫 글자 대문자화 */
-  c = c.replace(/(<(?:p|li|h[23])[^>]*>)\s*([a-z])/g, (m, tag, ch) => tag + ch.toUpperCase());
+  /* 문장 시작 소문자 보정: <p>, <li>, <h2> 직후 첫 글자 대문자화 */
+  c = c.replace(/(<(?:p|li|h2)[^>]*>)\s*([a-z])/g, (m, tag, ch) => tag + ch.toUpperCase());
   return c.trim();
 }
 
 /* ── 외부 권위 링크 삽입 ── */
 function injectExternalLinks(content, category) {
-  const refs = CAT_EXTERNAL_REFS[category] || CAT_EXTERNAL_REFS['web-security'];
+  const refs = CAT_EXTERNAL_REFS[category] || CAT_EXTERNAL_REFS['business'];
   if (!refs || !refs.length) return content;
   const half = Math.floor(content.length / 2);
   const insertPoint = content.lastIndexOf('</p>', half);
@@ -2047,7 +2346,7 @@ function computeRealSeoScore(post, focusKw, slug) {
   if (kw && slug.includes(kwSlug)) score += 5;
   if (kw && words.slice(0, 100).join(' ').includes(kw)) score += 5;
 
-  const headingText = (raw.match(/<h[2-3][^>]*>([\s\S]*?)<\/h[2-3]>/gi) || []).map((h) => h.replace(/<[^>]*>/g, '')).join(' ').toLowerCase();
+  const headingText = (raw.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || []).map((h) => h.replace(/<[^>]*>/g, '')).join(' ').toLowerCase();
   if (kw && headingText.includes(kw)) score += 5;
 
   if (kw && wc) {
@@ -2066,7 +2365,7 @@ function computeRealSeoScore(post, focusKw, slug) {
   if (/href="\/blog-post\.html/.test(raw)) score += 5;
   if (/<img\b/.test(raw)) score += 5;
   if ((raw.match(/<h2[^>]*>/gi) || []).length >= 5) score += 5;
-  if ((raw.match(/<h3[^>]*>/gi) || []).length >= 2) score += 5;
+  if ((raw.match(/<h2[^>]*>/gi) || []).length >= 7) score += 5;
   if (!/<(strong|em|h[2-6])[^>]*>\s*<\/\1>/i.test(raw)) score += 5;
 
   const powerWords = ['guide', 'how', 'best', 'complete', 'ultimate', 'step', 'fix', 'improve', 'top', 'easy', 'tips', 'checklist', 'explained'];
@@ -2115,9 +2414,8 @@ function computeContentQuality(content) {
 
   /* 4. 헤딩 구조 */
   const h2s = (content.match(/<h2[^>]*>/gi) || []).length;
-  const h3s = (content.match(/<h3[^>]*>/gi) || []).length;
-  if (h2s >= 5 && h3s >= 2) score += 10;
-  else if (h2s >= 3) score += 5;
+  if (h2s >= 7) score += 10;
+  else if (h2s >= 5) score += 5;
 
   /* 5. 외부 링크 존재 */
   if (/<a\s[^>]*href="https?:\/\//.test(content)) score += 5;
@@ -2161,72 +2459,91 @@ function computeAISimilarity(content) {
   if (!wc) return 100;
   let penalties = 0;
 
-  /* AI 시그니처 표현 */
-  const aiSignatures = [
+  /* AI 시그니처 표현 - 고위험 (postProcessContent 통과 후 잔존하면 강한 AI 신호) */
+  const highRisk = [
+    /\bdelve(?:s|d)?\b/g, /\bleverage(?:s|d)?\b/g, /\brobust\b/g,
+    /\bseamless(?:ly)?\b/g, /\bstreamline(?:s|d)?\b/g, /\bparadigm\b/g,
+    /\bempower(?:s|ed|ing)?\b/g, /\bharness(?:es|ed|ing)?\b/g,
+    /\bcutting[- ]edge\b/g, /\bgame[- ]changer\b/g, /\bparamount\b/g,
+    /\bholistic(?:ally)?\b/g, /\bnuanced\b/g, /\bsynergy\b/g,
+  ];
+  for (const pat of highRisk) {
+    const m = text.match(pat) || [];
+    penalties += m.length * 4;
+  }
+
+  /* AI 시그니처 표현 - 중위험 */
+  const medRisk = [
     /\bit is (?:crucial|essential|vital|important|worth noting|imperative)\b/g,
     /\bit'?s (?:crucial|essential|vital|important|worth mentioning)\b/g,
     /\bin today'?s (?:digital |modern |fast-paced )?(?:world|landscape|era|age)\b/g,
     /\bplays a (?:crucial|vital|key|important|significant|pivotal) role\b/g,
-    /\bin conclusion\b/g,
-    /\bto summarize\b/g,
+    /\bin conclusion\b/g, /\bto summarize\b/g,
     /\bas (?:we'?ve|we have) (?:seen|discussed|explored|covered)\b/g,
     /\bin this (?:article|guide|blog post|section)\b/g,
-    /\bdelve(?:s|d)?\b/g,
-    /\bleverage(?:s|d)?\b/g,
-    /\brobust\b/g,
-    /\bseamless(?:ly)?\b/g,
-    /\bstreamline(?:s|d)?\b/g,
-    /\bnavigate\b/g,
-    /\blandscape\b/g,
-    /\becosystem\b/g,
-    /\bparadigm\b/g,
-    /\bempower(?:s|ed|ing)?\b/g,
-    /\bharness(?:es|ed|ing)?\b/g,
-    /\bcutting[- ]edge\b/g,
-    /\bgame[- ]changer\b/g,
-    /\bcomprehensive(?:ly)?\b/g,
-    /\bparamount\b/g,
-    /\bfoster(?:s|ed|ing)?\b/g,
-    /\bholistic(?:ally)?\b/g,
-    /\bnuanced\b/g,
-    /\bunderscores\b/g,
-    /\bfurthermore\b/g,
-    /\bmoreover\b/g,
-    /\badditionally\b/g,
-    /\bneedless to say\b/g,
-    /\bit goes without saying\b/g,
-    /\bwithout further ado\b/g,
-    /\bfirst and foremost\b/g,
-    /\blast but not least\b/g,
+    /\bfurthermore\b/g, /\bmoreover\b/g, /\badditionally\b/g,
+    /\bensure that\b/g, /\bcomprehensive(?:ly)?\b/g,
+    /\blandscape\b/g, /\becosystem\b/g, /\bnavigate\b/g,
+    /\bfoster(?:s|ed|ing)?\b/g, /\bunderscores?\b/g,
     /\bone of the most (?:common|important|critical|significant)\b/g,
     /\bcan significantly (?:reduce|improve|enhance|increase|help)\b/g,
     /\bby taking these (?:steps|measures|precautions|actions)\b/g,
-    /\bensure that\b/g,
+    /\bneedless to say\b/g, /\bit goes without saying\b/g,
+    /\bfirst and foremost\b/g, /\blast but not least\b/g,
+    /\bwithout further ado\b/g,
   ];
-  for (const pat of aiSignatures) {
-    const matches = text.match(pat) || [];
-    penalties += matches.length * 3;
+  for (const pat of medRisk) {
+    const m = text.match(pat) || [];
+    penalties += m.length * 2;
   }
 
-  /* 반복 구문 패턴 (같은 문장 시작 반복) */
+  /* 반복 구문 패턴 (같은 문장 시작 3단어 반복) */
   const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10).map(s => s.trim());
   const openers = sentences.map(s => s.split(/\s+/).slice(0, 3).join(' '));
   const openerCount = {};
   openers.forEach(o => { openerCount[o] = (openerCount[o] || 0) + 1; });
-  const repeatedOpeners = Object.values(openerCount).filter(c => c > 2).reduce((a, b) => a + b, 0);
-  penalties += repeatedOpeners * 2;
+  const repeatedOpeners = Object.values(openerCount).filter(c => c > 2).reduce((a, b) => a + (b - 2), 0);
+  penalties += repeatedOpeners;
 
-  /* 수동태 과다 */
+  /* 수동태 과다 - 비율 기반 */
   const passiveCount = (text.match(/\b(?:is|are|was|were|been|being) \w+ed\b/g) || []).length;
-  if (sentences.length && passiveCount / sentences.length > 0.3) penalties += 10;
+  const passiveRatio = sentences.length ? passiveCount / sentences.length : 0;
+  if (passiveRatio > 0.35) penalties += 5;
+  else if (passiveRatio > 0.25) penalties += 3;
 
-  /* 동일 문장 길이 반복 (3+ 연속 유사 길이) */
+  /* 동일 문장 길이 반복 - 비율 기반 (완화) */
   const sentLens = sentences.map(s => s.split(/\s+/).length);
-  for (let i = 0; i < sentLens.length - 2; i++) {
-    if (Math.abs(sentLens[i] - sentLens[i + 1]) <= 2 && Math.abs(sentLens[i + 1] - sentLens[i + 2]) <= 2) {
-      penalties += 1;
+  if (sentences.length > 8) {
+    let uniformTriplets = 0;
+    for (let i = 0; i < sentLens.length - 2; i++) {
+      if (Math.abs(sentLens[i] - sentLens[i + 1]) <= 2 && Math.abs(sentLens[i + 1] - sentLens[i + 2]) <= 2) {
+        uniformTriplets++;
+      }
     }
+    const uniformRatio = uniformTriplets / (sentLens.length - 2);
+    if (uniformRatio > 0.70) penalties += 8;
+    else if (uniformRatio > 0.55) penalties += 4;
   }
+
+  /* 축약형 사용 -> 인간 글쓰기 지표 (보너스 감점) */
+  const contractionHits = (text.match(/\b(?:don't|won't|can't|doesn't|isn't|aren't|wouldn't|shouldn't|haven't|hasn't|didn't|wasn't|weren't|you'll|there's|here's|it's|that's|we're|you're|they're|let's|what's|who's|how's|i've|we've|you've|they've)\b/g) || []).length;
+  if (sentences.length > 0) {
+    const cRate = contractionHits / sentences.length;
+    if (cRate > 0.35) penalties -= 8;
+    else if (cRate > 0.2) penalties -= 5;
+    else if (cRate > 0.1) penalties -= 2;
+  }
+
+  /* 질문형 문장 사용 -> 인간 글쓰기 지표 (보너스 감점) */
+  const questionCount = (text.match(/\?/g) || []).length;
+  if (questionCount >= 3) penalties -= 3;
+  else if (questionCount >= 1) penalties -= 1;
+
+  /* 짧은 펀치 문장 (10단어 이하) 사용 -> 인간 지표 */
+  const shortPunch = sentLens.filter(l => l >= 3 && l <= 10).length;
+  const shortRatio = sentences.length ? shortPunch / sentences.length : 0;
+  if (shortRatio > 0.15) penalties -= 4;
+  else if (shortRatio > 0.08) penalties -= 2;
 
   return Math.min(Math.max(penalties, 0), 100);
 }
@@ -2317,37 +2634,155 @@ async function fetchYouTubeContent(videoUrl, apiKey) {
 }
 
 /* ══════════════════════════════════════════════
-   Unsplash 이미지 검색
+   Unsplash 이미지 검색 - 본문 연관성 99% 목표
+   - 카테고리 + 키워드 기반 다중 쿼리
+   - 비영어 이미지 필터링
+   - 관련도 스코어링으로 최적 이미지 선택
    ══════════════════════════════════════════════ */
-async function fetchUnsplashImages(keyword, accessKey, count = 2) {
-  const stopWords = /\b(for|to|how|the|a|an|with|and|or|of|in|on|at|by|from|tips|guide|basics|complete|step|best|using|your|site|owners|what|is|why|when)\b/gi;
-  const cleanKw = keyword.replace(stopWords, ' ').replace(/\s+/g, ' ').trim().slice(0, 40);
-  const queries = [cleanKw, keyword.split(' ').slice(0, 3).join(' ')];
+async function fetchUnsplashImages(keyword, accessKey, count = 2, category = '', title = '') {
+  /*
+   * 이미지 연관성 99% 목표
+   * - 카테고리 + 키워드 기반 정밀 검색 (본문 주제와 직결)
+   * - 유사 이미지/유사 색상 사용 금지
+   * - 영어 이외 다국어 이미지 절대 금지
+   * - 무관한 이미지 (음식, 패션, 동물 등) 절대 금지
+   */
+
+  /* n0003 8개 카테고리별 정밀 검색어 */
+  const CAT_IMAGE_TERMS = {
+    'business': 'business office strategy meeting professional workspace',
+    'startup': 'startup team brainstorm whiteboard growth pitch',
+    'seo': 'analytics dashboard search traffic graph data',
+    'wordpress': 'wordpress website CMS blog design theme',
+    'web-design': 'web design UI UX wireframe layout prototype',
+    'cloud': 'cloud computing server infrastructure data center',
+    'web-hosting': 'server hosting data center rack network',
+    'ecommerce': 'ecommerce shopping online store checkout cart',
+  };
+
+  /* 비영어 문자 필터 */
+  const nonEnglishRe = /[\uAC00-\uD7A3\u3131-\u318E\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF\u0400-\u04FF\u0600-\u06FF\u0E00-\u0E7F]/;
+
+  /* 완전 무관 이미지 필터 (엄격) */
+  const irrelevantRe = /\b(food|cooking|recipe|fashion|clothing|pet|dog|cat|baby|wedding|party|beach|vacation|travel|selfie|portrait|flower|garden|sports|game|music|concert|art\s*gallery|sunset|sunrise|nature|landscape|mountain|ocean|animal|wine|beer|cocktail|dessert|cake|yoga|fitness|gym)\b/i;
+
+  /* 코드/터미널 이미지 필터 */
+  const codeRe = /\b(code|programming|terminal|console|syntax|dark\s+theme|IDE|vim|emacs|shell)\b/i;
+
+  /* 검색어 정제 */
+  const stopWords = /\b(for|to|how|the|a|an|with|and|or|of|in|on|at|by|from|tips|guide|basics|complete|step|best|using|your|site|owners|what|is|why|when|way|ways|top|proven|effective|essential)\b/gi;
+  const cleanKw = keyword.replace(stopWords, ' ').replace(/\s+/g, ' ').trim().slice(0, 35);
+  const catTerms = CAT_IMAGE_TERMS[category] || 'business technology professional';
+
+  /* 타이틀에서 핵심어 추출 */
+  const titleWords = (title || '').replace(stopWords, ' ').replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, ' ').trim().split(' ').filter(w => w.length > 3).slice(0, 3).join(' ');
+
+  /* 다양한 검색 쿼리 (정밀도 순) */
+  const queries = [
+    cleanKw,
+    titleWords + ' ' + catTerms.split(' ').slice(0, 2).join(' '),
+    catTerms.split(' ').slice(0, 3).join(' '),
+    cleanKw.split(' ').slice(0, 2).join(' ') + ' professional',
+  ].filter(q => q.trim().length > 3);
+
+  const allCandidates = [];
+
   for (const q of queries) {
-    const encoded = encodeURIComponent(q);
-    const res = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encoded}&per_page=${count + 4}&orientation=landscape&content_filter=high&client_id=${accessKey}`
-    );
-    if (!res.ok) continue;
-    const data = await res.json();
-    /* 코드/프로그래밍 이미지 제외 */
-    const codeKws = /\b(code|programming|terminal|console|screen|monitor|dark\s+theme|syntax|html|css|javascript|python|computer\s+screen)\b/i;
-    const results = (data.results || []).filter((img) => {
-      const desc = ((img.description || '') + ' ' + (img.alt_description || '')).toLowerCase();
-      return !codeKws.test(desc);
-    });
-    const urls = results.slice(0, count).map((img) => img.urls?.regular || img.urls?.full || '').filter(Boolean);
-    if (urls.length >= 1) return urls;
+    try {
+      const encoded = encodeURIComponent(q.trim());
+      const res = await fetch(
+        `https://api.unsplash.com/search/photos?query=${encoded}&per_page=15&orientation=landscape&content_filter=high&client_id=${accessKey}`
+      );
+      if (!res.ok) continue;
+      const data = await res.json();
+
+      for (const img of (data.results || [])) {
+        const desc = ((img.description || '') + ' ' + (img.alt_description || '')).toLowerCase();
+        const tags = (img.tags || []).map(t => (t.title || '').toLowerCase()).join(' ');
+        const combined = desc + ' ' + tags;
+
+        /* 비영어 제외 */
+        if (nonEnglishRe.test(desc)) continue;
+        /* 무관 이미지 제외 */
+        if (irrelevantRe.test(combined)) continue;
+        /* 코드 이미지 제외 */
+        if (codeRe.test(combined)) continue;
+
+        /* 연관도 점수 (높을수록 좋음) */
+        let relevance = 0;
+
+        /* 포커스 키워드 매칭 (가장 중요) */
+        const kwParts = keyword.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+        let kwMatch = 0;
+        for (const part of kwParts) {
+          if (combined.includes(part)) { relevance += 15; kwMatch++; }
+        }
+        /* 키워드 50% 이상 매칭 보너스 */
+        if (kwParts.length > 0 && kwMatch >= Math.ceil(kwParts.length * 0.5)) relevance += 20;
+
+        /* 카테고리 키워드 매칭 */
+        for (const ct of catTerms.split(' ')) {
+          if (ct.length > 2 && combined.includes(ct.toLowerCase())) relevance += 5;
+        }
+
+        /* 타이틀 키워드 매칭 */
+        for (const tw of titleWords.split(' ')) {
+          if (tw.length > 3 && combined.includes(tw.toLowerCase())) relevance += 8;
+        }
+
+        /* 비즈니스/기술 관련 보너스 (n0003 주제) */
+        if (/\b(business|office|team|meeting|professional|workspace|laptop|technology|digital|dashboard|analytics|chart|graph|data|design|website|server|cloud|hosting)\b/i.test(combined)) {
+          relevance += 6;
+        }
+
+        /* 최소 관련성 threshold: relevance > 5 */
+        const url = img.urls?.regular || img.urls?.full || '';
+        if (url && relevance > 5) {
+          /* 색상 정보 추출 (유사색상 방지용) */
+          const color = (img.color || '#000000').toLowerCase();
+          allCandidates.push({ url, relevance, desc: img.alt_description || '', color, id: img.id });
+        }
+      }
+    } catch (_) {}
+    if (allCandidates.length >= 20) break;
   }
-  return [];
+
+  /* 연관도 높은 순 정렬 */
+  allCandidates.sort((a, b) => b.relevance - a.relevance);
+
+  /* 중복 URL 제거 + 유사 색상 필터 */
+  const seen = new Set();
+  const usedColors = [];
+  const unique = [];
+
+  function colorDistance(hex1, hex2) {
+    const r1 = parseInt(hex1.slice(1,3), 16), g1 = parseInt(hex1.slice(3,5), 16), b1 = parseInt(hex1.slice(5,7), 16);
+    const r2 = parseInt(hex2.slice(1,3), 16), g2 = parseInt(hex2.slice(3,5), 16), b2 = parseInt(hex2.slice(5,7), 16);
+    return Math.sqrt((r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2);
+  }
+
+  for (const c of allCandidates) {
+    const base = c.url.split('?')[0];
+    if (seen.has(base)) continue;
+    /* 유사 색상 거리 체크 (최소 거리 60 이상이어야 선택) */
+    const tooSimilarColor = usedColors.some(uc => colorDistance(uc, c.color) < 60);
+    if (tooSimilarColor && unique.length > 0) continue;
+    seen.add(base);
+    usedColors.push(c.color);
+    unique.push(c.url);
+    if (unique.length >= count) break;
+  }
+
+  console.log(`[blog-gen] Unsplash: ${allCandidates.length} candidates, ${unique.length} selected (top relevance: ${allCandidates[0]?.relevance || 0}, category: ${category})`);
+  return unique;
 }
 
 /* ══════════════════════════════════════════════
-   H태그 제목당 4-5줄 단락 검증/보강
-   짧은 단락은 확장, 긴 단락은 분할
+   H2 제목당 5-6줄 단락 검증/보강
+   짧은 단락은 확장(80단어), 긴 단락은 분할(120단어)
    ══════════════════════════════════════════════ */
 function enforceHeadingParagraphLength(content) {
-  /* 모든 <p> 태그를 검사하여 60-100 단어 (4-5문장) 범위로 보정 */
+  /* 모든 <p> 태그를 검사하여 80-120 단어 (5-6문장) 범위로 보정 */
   const FILLER_SENTENCES = [
     'This approach works well for most standard setups.',
     'Many site owners overlook this simple but effective step.',
@@ -2357,28 +2792,30 @@ function enforceHeadingParagraphLength(content) {
     'It takes less effort than most people expect.',
     'The results speak for themselves once you try it.',
     'This single change can save you hours of troubleshooting later.',
+    'Teams that follow this practice report fewer issues overall.',
+    'A small investment here pays off in long-term stability.',
   ];
 
   let result = content.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, (match, inner) => {
     const text = inner.replace(/<[^>]*>/g, '').trim();
     const words = text.split(/\s+/).filter(Boolean);
 
-    /* 10단어 미만은 단독 문장 (링크, CTA 등) — 건드리지 않음 */
+    /* 10단어 미만은 단독 문장 (링크, CTA 등) - 건드리지 않음 */
     if (words.length < 10) return match;
 
-    /* 40단어 미만 → 60단어까지 보충 */
-    if (words.length < 40) {
+    /* 50단어 미만 -> 80단어까지 보충 */
+    if (words.length < 50) {
       let expanded = text;
       let fi = Math.floor(Math.random() * FILLER_SENTENCES.length);
-      while (expanded.split(/\s+/).filter(Boolean).length < 60 && fi < FILLER_SENTENCES.length + 4) {
+      while (expanded.split(/\s+/).filter(Boolean).length < 80 && fi < FILLER_SENTENCES.length + 6) {
         expanded += ' ' + FILLER_SENTENCES[fi % FILLER_SENTENCES.length];
         fi++;
       }
       return `<p>${expanded}</p>`;
     }
 
-    /* 120단어 초과 → 100단어에서 문장 경계 찾아 자르고 새 <p>로 분할 */
-    if (words.length > 120) {
+    /* 140단어 초과 -> 110단어에서 문장 경계 찾아 자르고 새 <p>로 분할 */
+    if (words.length > 140) {
       const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
       let chunk1 = '';
       let chunk2 = '';
@@ -2386,7 +2823,7 @@ function enforceHeadingParagraphLength(content) {
       let split = false;
       for (const s of sentences) {
         const sWords = s.trim().split(/\s+/).length;
-        if (!split && wCount + sWords <= 100) {
+        if (!split && wCount + sWords <= 110) {
           chunk1 += s;
           wCount += sWords;
         } else {
@@ -2403,9 +2840,117 @@ function enforceHeadingParagraphLength(content) {
   });
 
   /* 안전 체크: H태그 수 보존 확인 */
-  const beforeH = (content.match(/<h[23][\s>]/gi) || []).length;
-  const afterH = (result.match(/<h[23][\s>]/gi) || []).length;
+  const beforeH = (content.match(/<h2[\s>]/gi) || []).length;
+  const afterH = (result.match(/<h2[\s>]/gi) || []).length;
   if (beforeH !== afterH) return content;
+  return result;
+}
+
+/* ══════════════════════════════════════════════
+   프로그래밍적 Humanization (AI 의존 없이 직접 변환)
+   - 문장 길이 다양화, 펀치 문장 삽입, 질문 삽입, 구어체 전환
+   ══════════════════════════════════════════════ */
+function programmaticHumanize(content) {
+  /* 인간 필체 요소 삽입용 풀 */
+  const PUNCH_LINES = [
+    'That makes a difference.',
+    'Simple as that.',
+    'Worth the effort.',
+    'Most people skip this.',
+    'It works.',
+    'Not optional.',
+    'Big deal? Absolutely.',
+    'Start there.',
+    'Think about that.',
+    'Here\'s the thing.',
+    'Sounds familiar?',
+    'Happens all the time.',
+    'You\'d be surprised.',
+    'True story.',
+    'Keep that in mind.',
+    'That\'s the real fix.',
+    'Not hard at all.',
+    'Game plan sorted.',
+    'Quick win right there.',
+    'No shortcuts here.',
+  ];
+  const QUESTION_HOOKS = [
+    'Why does this matter?',
+    'What happens if you skip this step?',
+    'Sound like too much work?',
+    'Ever wonder why some sites load so slow?',
+    'Worried about getting this wrong?',
+    'How do you know it\'s working?',
+    'What\'s the catch?',
+    'Ready for the next part?',
+  ];
+  const CONVERSATIONAL_OPENERS = [
+    'Here\'s the thing -',
+    'The catch is this:',
+    'Fair warning:',
+    'Quick heads up -',
+    'One thing to watch:',
+    'The short version:',
+    'Real talk -',
+    'Worth mentioning:',
+  ];
+
+  let punchIdx = Math.floor(Math.random() * PUNCH_LINES.length);
+  let questionIdx = Math.floor(Math.random() * QUESTION_HOOKS.length);
+  let openerIdx = Math.floor(Math.random() * CONVERSATIONAL_OPENERS.length);
+  let punchInserted = 0;
+  let questionInserted = 0;
+  let openerInserted = 0;
+  let paraCount = 0;
+
+  const result = content.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, (match, inner) => {
+    const text = inner.replace(/<[^>]*>/g, '').trim();
+    const words = text.split(/\s+/).filter(Boolean);
+    paraCount++;
+
+    /* 10단어 미만은 건드리지 않음 (CTA, 링크 등) */
+    if (words.length < 12) return match;
+
+    let modified = inner;
+
+    /* 매 3번째 문단에 펀치 문장 삽입 (최대 5개) */
+    if (paraCount % 3 === 0 && punchInserted < 5) {
+      const punch = PUNCH_LINES[punchIdx % PUNCH_LINES.length];
+      punchIdx++;
+      punchInserted++;
+      /* 마지막 문장 뒤에 삽입 */
+      const lastDot = modified.lastIndexOf('.');
+      if (lastDot > 0) {
+        modified = modified.slice(0, lastDot + 1) + ' ' + punch + modified.slice(lastDot + 1);
+      }
+    }
+
+    /* 매 4번째 문단에 질문 삽입 (최대 4개) */
+    if (paraCount % 4 === 0 && questionInserted < 4 && paraCount > 1) {
+      const q = QUESTION_HOOKS[questionIdx % QUESTION_HOOKS.length];
+      questionIdx++;
+      questionInserted++;
+      modified = q + ' ' + modified;
+    }
+
+    /* 매 4번째 문단에 구어체 오프너 삽입 (최대 3개) */
+    if (paraCount % 4 === 2 && openerInserted < 3) {
+      const opener = CONVERSATIONAL_OPENERS[openerIdx % CONVERSATIONAL_OPENERS.length];
+      openerIdx++;
+      openerInserted++;
+      /* 기존 첫 글자 소문자로 변환 */
+      const firstChar = modified.charAt(0);
+      if (firstChar === firstChar.toUpperCase() && firstChar !== firstChar.toLowerCase()) {
+        modified = opener + ' ' + firstChar.toLowerCase() + modified.slice(1);
+      } else {
+        modified = opener + ' ' + modified;
+      }
+    }
+
+    return `<p>${modified}</p>`;
+  });
+
+  console.log(`[blog-gen] Humanize: +${punchInserted} punches, +${questionInserted} questions, +${openerInserted} openers`);
   return result;
 }
 
@@ -2413,65 +2958,154 @@ function enforceHeadingParagraphLength(content) {
    n0005 상품 프로모션 CTA 삽입
    본문 중간(50% 지점 H2 앞)에 프로모션 블록 삽입
    ══════════════════════════════════════════════ */
-function injectProductCTA(content, category) {
-  const N5 = 'https://noteracker.com';
-  const PROMOS = {
-    'malware-removal': {
-      title: 'Need Professional Malware Cleanup?',
-      desc: 'Our managed WordPress care plans include real-time malware scanning, removal, and ongoing protection so you can focus on your business.',
-      link: `${N5}/en/pricing/#MonthlyCarePlan`,
-      btn: 'View Care Plans',
-    },
-    'website-security': {
-      title: 'Get Enterprise-Grade Website Security',
-      desc: 'Cloudflare WAF, DDoS protection, SSL management, and 24/7 monitoring all included in our monthly care plans.',
-      link: `${N5}/en/pricing/#MonthlyCarePlan`,
-      btn: 'Explore Security Plans',
-    },
-    'vulnerability': {
-      title: 'Worried About Website Vulnerabilities?',
-      desc: 'Our team runs regular vulnerability assessments and patches security gaps before attackers find them.',
-      link: `${N5}/en/pricing/#MonthlyCarePlan`,
-      btn: 'Start Protection Today',
-    },
-    'threat-detection': {
-      title: 'Detect Threats Before They Strike',
-      desc: 'Real-time threat monitoring, automated alerts, and rapid incident response backed by Cloudflare infrastructure.',
-      link: `${N5}/en/pricing/#MonthlyCarePlan`,
-      btn: 'See Monitoring Plans',
-    },
-    'security-hardening': {
-      title: 'Harden Your WordPress Security',
-      desc: 'Server-level hardening, plugin audits, and security header configuration done for you every month.',
-      link: `${N5}/en/pricing/#MonthlyCarePlan`,
-      btn: 'Get Hardened Today',
-    },
-    'incident-response': {
-      title: 'Fast Incident Response When It Matters',
-      desc: 'Hacked site? Our emergency response team restores your site and closes security gaps within hours.',
-      link: `${N5}/en/pricing/#MonthlyCarePlan`,
-      btn: 'Get Emergency Help',
-    },
-  };
-  const promo = PROMOS[category] || PROMOS['website-security'];
-  const ctaHtml = `<blockquote style="border-left:4px solid #e6b802;background:#1a1a2e;padding:1.2rem 1.5rem;margin:2rem 0;border-radius:8px;">
-<p><strong>${promo.title}</strong></p>
-<p>${promo.desc}</p>
-<p><a href="${promo.link}" target="_blank" rel="noopener">${promo.btn} &rarr;</a></p>
-</blockquote>`;
+/* injectProductCTA - 완전 제거됨
+ * 이유: n0003은 WaaS/비즈니스 블로그이며 보안 상품 사이트가 아님.
+ * 단순 디지털 파일(로티 등) 판매 링크를 보안 상품/플랜처럼 포장하는 것은
+ * 라이센스/판매 관련 불법 소지가 있어 절대 금지.
+ * 본문 중간에 보안 플랜, 케어 플랜 등의 CTA 삽입 절대 불가.
+ */
+function injectProductCTA(content, _category) {
+  return content;
+}
 
-  /* 본문 H2 태그 위치 찾아서 50% 지점에 삽입 */
-  const h2Matches = [...content.matchAll(/<h2[^>]*>/gi)];
-  if (h2Matches.length >= 4) {
-    const midIdx = Math.floor(h2Matches.length / 2);
-    const insertPos = h2Matches[midIdx].index;
-    return content.slice(0, insertPos) + ctaHtml + content.slice(insertPos);
+/* ══════════════════════════════════════════════
+   DB 소스 자동 고도화 (cron 12시간마다 실행)
+   - 8개 카테고리를 매일 1개씩 순환
+   - Workers AI가 해당 카테고리의 새 고급 소스 URL을 발굴
+   - 기존 DB 소스와 중복되지 않는 새 전문 자료만 추가
+   - 카테고리 순환: business -> startup -> seo -> wordpress ->
+     web-design -> cloud -> web-hosting -> ecommerce -> (반복)
+   ══════════════════════════════════════════════ */
+const SOURCE_CATEGORIES = [
+  { id: 'business', label: 'Business Strategy, Management, Marketing, Productivity, Leadership' },
+  { id: 'startup', label: 'Startup Funding, SaaS Metrics, Product-Market Fit, Growth Hacking, VC' },
+  { id: 'seo', label: 'SEO, Search Engine Optimization, Content Marketing, Keyword Research, Link Building' },
+  { id: 'wordpress', label: 'WordPress Development, Themes, Plugins, Gutenberg, REST API, WP-CLI' },
+  { id: 'web-design', label: 'UI/UX Design, Responsive Design, Accessibility, Web Performance, CSS, Typography' },
+  { id: 'cloud', label: 'Cloud Computing, Serverless, Docker, Kubernetes, AWS, Azure, GCP, Edge Computing' },
+  { id: 'web-hosting', label: 'Web Hosting, Server Administration, CDN, DNS, SSL/TLS, Load Balancing, Caching' },
+  { id: 'ecommerce', label: 'Ecommerce, Shopify, WooCommerce, Payment Processing, Conversion Optimization, Fulfillment' },
+];
+
+export async function autoCollectSources(env) {
+  await initBlogGenDB(env.DB);
+
+  /* 오늘 순환할 카테고리 결정 (날짜 기반 순환) */
+  const dayIndex = Math.floor(Date.now() / 86400000) % SOURCE_CATEGORIES.length;
+  const targetCat = SOURCE_CATEGORIES[dayIndex];
+  console.log(`[auto-collect] Today's category: ${targetCat.id} (day index ${dayIndex})`);
+
+  /* 해당 카테고리의 기존 소스 URL 목록 조회 */
+  const existingRows = await env.DB.prepare(
+    'SELECT url, title FROM blog_sources WHERE category = ? ORDER BY created_at DESC LIMIT 80'
+  ).bind(targetCat.id).all();
+  const existingUrls = (existingRows.results || []).map(r => r.url).filter(Boolean);
+  const existingTitles = (existingRows.results || []).map(r => r.title).filter(Boolean).slice(0, 20);
+
+  console.log(`[auto-collect] ${targetCat.id}: ${existingUrls.length} existing sources`);
+
+  /* Workers AI에게 새 고급 소스 URL 발굴 요청 */
+  const prompt = `You are a professional content researcher. Find ONE high-quality, authoritative English-language resource URL about: ${targetCat.label}
+
+REQUIREMENTS:
+- Must be a REAL, publicly accessible website or blog article URL
+- Must be from an authoritative, well-known source (official docs, major publications, industry leaders)
+- Must be educational or informational (not product pages, login pages, or paywalled content)
+- Must be in English only
+- Must NOT be any of these already-registered URLs: ${existingUrls.slice(0, 30).join(', ')}
+- Must NOT duplicate these topics already covered: ${existingTitles.join('; ')}
+- Focus on finding UNIQUE, SPECIFIC article/guide URLs (not just homepage URLs)
+- Prefer recent, in-depth guides, tutorials, or research articles
+
+RESPOND WITH EXACTLY THIS JSON FORMAT (nothing else):
+{"url":"https://example.com/specific-article","title":"Descriptive Title of the Resource","tags":"tag1,tag2,tag3","priority":"normal"}`;
+
+  try {
+    const aiRes = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
+      messages: [
+        { role: 'system', content: 'You are a content research assistant. Respond ONLY with valid JSON. No markdown, no explanation.' },
+        { role: 'user', content: prompt },
+      ],
+      max_tokens: 300,
+      temperature: 0.8,
+    });
+
+    const rawText = (aiRes?.response || '').trim();
+    let parsed;
+    try {
+      parsed = JSON.parse(rawText.replace(/```json\s*/gi, '').replace(/```/g, '').trim());
+    } catch (_) {
+      console.warn(`[auto-collect] AI response parse failed: ${rawText.slice(0, 200)}`);
+      return 0;
+    }
+
+    if (!parsed.url || !parsed.title) {
+      console.warn('[auto-collect] AI returned incomplete data');
+      return 0;
+    }
+
+    /* URL 유효성 검증 */
+    const newUrl = parsed.url.trim();
+    if (!/^https?:\/\/.+\..+/.test(newUrl)) {
+      console.warn(`[auto-collect] Invalid URL: ${newUrl}`);
+      return 0;
+    }
+
+    /* DB 중복 체크 */
+    const dup = await env.DB.prepare(
+      'SELECT id FROM blog_sources WHERE url = ? LIMIT 1'
+    ).bind(newUrl).first();
+    if (dup) {
+      console.log(`[auto-collect] Duplicate skipped: ${newUrl}`);
+      return 0;
+    }
+
+    /* 실제 URL 접근 가능 여부 확인 + 콘텐츠 수집 */
+    let content = '';
+    let wordCount = 0;
+    try {
+      const res = await fetch(newUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Noteracker-Bot/1.0)' },
+        signal: AbortSignal.timeout(10000),
+      });
+      if (res.ok) {
+        const html = await res.text();
+        content = html
+          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+          .replace(/<nav[^>]*>[\s\S]*?<\/nav>/gi, ' ')
+          .replace(/<footer[^>]*>[\s\S]*?<\/footer>/gi, ' ')
+          .replace(/<header[^>]*>[\s\S]*?<\/header>/gi, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .slice(0, 15000);
+        wordCount = content.split(/\s+/).filter(Boolean).length;
+      }
+    } catch (_) {
+      /* URL 접근 실패해도 메타 정보는 저장 */
+      console.warn(`[auto-collect] Fetch failed for ${newUrl}, saving metadata only`);
+    }
+
+    /* DB에 저장 */
+    await env.DB.prepare(
+      `INSERT INTO blog_sources (type, url, title, content, word_count, category, status, priority, tags, notes)
+       VALUES ('website', ?, ?, ?, ?, ?, 'active', ?, ?, 'auto-collected')`
+    ).bind(
+      newUrl,
+      parsed.title.trim(),
+      content || '',
+      wordCount,
+      targetCat.id,
+      parsed.priority || 'normal',
+      parsed.tags || targetCat.id,
+    ).run();
+
+    console.log(`[auto-collect] Added: "${parsed.title}" (${wordCount} words) -> ${targetCat.id}`);
+    return 1;
+
+  } catch (e) {
+    console.error(`[auto-collect] Error: ${e.message}`);
+    return 0;
   }
-  /* H2가 3개 이하면 끝에서 2번째 </p> 앞에 삽입 */
-  const lastP = content.lastIndexOf('</p>');
-  if (lastP > 200) {
-    const secondLastP = content.lastIndexOf('</p>', lastP - 1);
-    if (secondLastP > 0) return content.slice(0, secondLastP + 4) + ctaHtml + content.slice(secondLastP + 4);
-  }
-  return content + ctaHtml;
 }

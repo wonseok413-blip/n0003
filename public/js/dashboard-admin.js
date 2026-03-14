@@ -876,25 +876,7 @@ async function rescorePost(id) {
       badge.textContent = score;
       badge.className = 'badge ' + (score>=90?'badge-green':score>=50?'badge-yellow':'badge-red');
     }
-    // 90점 미만이면 재작성 버튼 표시
-    const row = document.getElementById('blog-row-' + id);
-    if (row) {
-      const actions = row.querySelector('.blog-actions');
-      const existingRewrite = actions?.querySelector('.btn-rewrite-' + id);
-      if (score < 90 && actions && !existingRewrite) {
-        const btn = document.createElement('button');
-        btn.className = 'btn btn-sm btn-rewrite-' + id;
-        btn.style.cssText = 'background:rgba(137,158,46,.15);color:#899e2e;border:1px solid rgba(137,158,46,.3);';
-        btn.title = 'SEO ' + score + '점 AI 재작성';
-        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 재작성';
-        btn.onclick = () => rewritePost(id);
-        const copyrightBtn = actions.querySelector('[onclick*="copyrightCheckPost"]');
-        if (copyrightBtn) actions.insertBefore(btn, copyrightBtn);
-        else actions.appendChild(btn);
-      } else if (score >= 90 && existingRewrite) {
-        existingRewrite.remove();
-      }
-    }
+    /* 재작성 버튼은 이미 HTML에 항상 포함됨 - 동적 추가/제거 불필요 */
     toast('SEO 재측정 완료: ' + score + '점', score>=90?'success':'warning');
   } catch(e) {
     if (badge) { badge.textContent = 'ERR'; badge.className = 'badge badge-red'; }
@@ -918,10 +900,7 @@ async function rewritePost(id) {
       badge.textContent = score;
       badge.className = 'badge ' + (score>=90?'badge-green':score>=50?'badge-yellow':'badge-red');
     }
-    if (score >= 90 && row) {
-      const rewriteBtn = row.querySelector('.btn-rewrite-' + id);
-      if (rewriteBtn) rewriteBtn.remove();
-    }
+    /* 재작성 버튼은 항상 유지 */
     toast('✅ 재작성 완료! ' + prev + '점 → ' + score + '점', 'success');
   } catch(e) {
     if (badge) { badge.textContent = 'ERR'; badge.className = 'badge badge-red'; }
@@ -1176,11 +1155,7 @@ async function runSeoRewrite(postId, btnEl) {
       // SEO 뱃지 업데이트
       const badge = document.getElementById('seo-badge-' + postId);
       if (badge) { badge.textContent = data.new_score; badge.className = 'badge ' + (data.new_score>=90?'badge-green':data.new_score>=50?'badge-yellow':'badge-red'); }
-      if (data.new_score >= 90) {
-        const row = document.getElementById('blog-row-' + postId);
-        const rwBtn = row?.querySelector('.btn-rewrite-' + postId);
-        if (rwBtn) rwBtn.remove();
-      }
+      /* 재작성 버튼 항상 유지 */
     } else {
       toast('재작성 실패: ' + (data.error||'오류'));
     }

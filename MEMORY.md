@@ -23,16 +23,37 @@
 - **토큰 저장 위치**: `.env` 파일 (gitignore됨) + `deploy.sh` 스크립트
 - **GitHub**: https://github.com/wonseok413-blip/n0003 (branch: main)
 - **배포 순서**: 로컬 수정 → `git push origin main` → Cloudflare 배포
-- **배포 명령**: `export PATH="/c/Program Files/nodejs:/c/Users/amyis/AppData/Roaming/npm:$PATH" && export CLOUDFLARE_API_TOKEN="wAk3kDGVK6_RCIwuV8715u2S_XS8V0MBPnhQmIde" && cd "/c/Users/amyis/Downloads/DDD/NNN/n0003" && npx wrangler deploy`
+- **배포 명령**: `export PATH="/c/Program Files/nodejs:/c/Users/amyis/AppData/Roaming/npm:$PATH" && export CLOUDFLARE_API_TOKEN="ezONXUr64gYHuanmdMln4NL7Eda5rybngwEAiBx2" && cd "/c/Users/amyis/Downloads/DDD/NNN/n0003" && npx wrangler deploy`
 - **GitHub push**: `cd "/c/Users/amyis/Downloads/DDD/NNN/n0003" && git add -A && git commit -m "update" && git push origin main`
 
 ## 프로젝트 개요
-- Noteracker Ltd. 웹사이트 (WordPress 멀웨어 케어 & 관리 서비스)
-- n0004와 완벽히 동일한 사이트 (noteracker.kr 용)
+- n0003 = WaaS/비즈니스 블로그 (noteracker.kr 용)
+- **보안(security) 관련 콘텐츠/판매/홍보 절대 금지 (보안은 n0004 전용)**
+- 8개 카테고리: business, startup, seo, wordpress, web-design, cloud, web-hosting, ecommerce
 - Cloudflare Workers로 배포 (wrangler), 정적 사이트 + Worker API
-- 로컬 개발 서버: `server.js` (포트 8889)
 
 ## 필수 규칙
+
+### ⛔ 보안 콘텐츠 절대 금지
+- n0003에서 보안 관련 텍스트/CTA/프로모션/링크 절대 금지
+- 보안 상품, 보안 플랜, 케어 플랜 등의 CTA 삽입 절대 불가
+- 보안은 n0004에서만 다룸
+
+### ⛔ 로티(Lottie) 요소 표기 절대 금지 규칙
+- **단순 디지털 파일인 로티 요소를 보안 웹사이트 상품처럼 블록으로 감싸서 표기하는 것 = 사기 - 절대 금지**
+- 본문 중간 로티파일 판매 링크를 보안플랜 살펴보기 등으로 연결 절대 금지
+- 로티 애니메이션을 상품/서비스 카드처럼 포장하는 디자인 절대 불허
+- 로티는 순수 장식/애니메이션 용도로만 사용 가능
+
+### ⛔ 블로그 이미지 절대 규칙
+- **본문 글과 무관한 이미지 가져오기 절대 금지** (연관성 99% 이상 필수)
+- **영어 이외 다국어 사용 이미지 사용 절대 금지**
+- **유사 이미지/유사 색상 이미지 사용 금지**
+- 카테고리 + 키워드 기반 정밀 검색으로 본문 주제와 직결되는 이미지만 사용
+
+### ⛔ 블로그 Q&A/요약 규칙
+- 질문과 답변은 최대 2개까지만 (간단한 질문/요약)
+- 불필요하게 긴 Q&A 금지
 
 ### 헤더/푸터 공통 컴포넌트
 - **새로운 페이지를 만들 때 반드시 공통 헤더/푸터 컴포넌트를 사용할 것**

@@ -106,6 +106,16 @@ export async function autoInit(DB) {
       UNIQUE(post_id, lang)
     )`).run();
 
+    /* ── 8. writing_samples (유명 작가 문체 참고용) ── */
+    await DB.prepare(`CREATE TABLE IF NOT EXISTS writing_samples (
+      id         INTEGER PRIMARY KEY AUTOINCREMENT,
+      author     TEXT NOT NULL,
+      genre      TEXT DEFAULT 'tech',
+      excerpt    TEXT NOT NULL,
+      style_note TEXT DEFAULT '',
+      created_at TEXT DEFAULT (datetime('now'))
+    )`).run();
+
     /* ── 기본 설정 ── */
     const defaultSettings = [
       ['header_logo_url',   ''],
