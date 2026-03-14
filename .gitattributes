@@ -1,4 +1,7 @@
 # Override GitHub linguist to show correct language stats
-# Mark frontend JS as vendored so linguist focuses on src/ (Worker code)
+# Mark frontend files as vendored so linguist focuses on src/ (Worker code)
 public/js/*.js linguist-vendored
 public/css/*.css linguist-vendored
+public/*.html linguist-vendored
+public/pages/*.html linguist-vendored
+public/components/*.html linguist-vendored

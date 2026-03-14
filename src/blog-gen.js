@@ -1055,8 +1055,11 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
     });
   }
 
-  /* ⛔ H태그 제목당 4-5줄 규정 검증 — 너무 짧은 단락 보강 */
+  /* ⛔ H태그 제목당 4-5줄 규정 검증 -- 너무 짧은 단락 보강 */
   post.content = enforceHeadingParagraphLength(post.content);
+
+  /* ⛔ H2 섹션 밸런서 -- 각 H2 섹션 최대 250단어(8-10문장) 제한 */
+  post.content = balanceH2Sections(post.content);
 
   /* ⛔ R7 키워드 횟수 강제 조정 (4-8회, 목표 6회) */
   post.content = enforceKeywordCount(post.content, focusKw, 6);
@@ -1152,7 +1155,7 @@ Return ONLY a JSON object: {"title":"English title","content":"HTML blog post in
         post.content = post.content.replace(bannedRe, (m) => replacements[m.toLowerCase()] || m);
 
         /* R13 수정: 결론 H2 제거 */
-        post.content = post.content.replace(/<h2[^>]*>\s*(Conclusion|Final Thoughts|Summary|Wrapping Up|Key Takeaways)[^<]*<\/h2>/gi, '');
+        post.content = post.content.replace(/<h2[^>]*>\s*(Conclusion|Final Thoughts|Summary|Wrapping Up|Key Takeaways|Related Articles|Further Reading|Additional Resources|See Also)[^<]*<\/h2>/gi, '');
 
         /* R10 수정: 빈 태그 제거 */
         post.content = post.content.replace(/<(strong|em|h2|p)>\s*<\/\1>/gi, '');
@@ -1457,7 +1460,12 @@ ${post.content}`;
     }
     /* H3 최종 제거 보장 */
     post.content = post.content.replace(/<h3[^>]*>[\s\S]*?<\/h3>/gi, '');
+    /* 금지 H2 최종 제거 */
+    post.content = post.content.replace(/<h2[^>]*>\s*(?:Conclusion|Final Thoughts?|Summary|Wrapping Up|Related Articles|Further Reading|Additional Resources|See Also)[^<]*<\/h2>/gi, '');
   }
+
+  /* ⛔ 최종 H2 섹션 밸런서 (모든 수정 후 마지막으로 적용) */
+  post.content = balanceH2Sections(post.content);
 
   /* DB 저장 */
   const authorId = Math.random() < 0.5 ? 1 : 2;
@@ -2103,70 +2111,85 @@ function enforceKeywordCount(content, keyword, targetCount = 6) {
    ══════════════════════════════════════════════ */
 async function expandContent(env, content, focusKw, currentWc) {
   try {
-    const shortSections = [];
-    /* H2 아래 직접 본문이 짧은 섹션 찾기 */
-    const h2Re = /<h2[^>]*>([\s\S]*?)<\/h2>([\s\S]*?)(?=<h2|$)/gi;
-    let m2;
-    while ((m2 = h2Re.exec(content)) !== null) {
-      const title = m2[1].replace(/<[^>]*>/g, '').trim();
-      const directBody = m2[2].trim();
-      const bodyWc = directBody.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
-      if (bodyWc < 80 && title.length > 3) {
-        shortSections.push({ tag: 'h2', title, matchEnd: m2.index + `<h2>${m2[1]}</h2>`.length });
+    /* H2 개수 확인 */
+    const h2Count = (content.match(/<h2[\s>]/gi) || []).length;
+    const neededWords = 1600 - currentWc;
+
+    /* H2가 7개 미만이면 부족한 만큼 새 H2+p 섹션 추가 */
+    if (h2Count < 7) {
+      const missing = 7 - h2Count;
+      console.log(`[blog-gen] Only ${h2Count} H2 tags, adding ${missing} new sections`);
+      const existingTitles = (content.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || []).map(h => h.replace(/<[^>]*>/g,'').trim()).join('; ');
+      const raw = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
+        messages: [
+          { role: 'system', content: 'Return ONLY HTML. Each section = one <h2> + one <p> (8-10 sentences, 120-150 words). No JSON, no markdown fences.' },
+          { role: 'user', content: `Write exactly ${missing} new blog sections about "${focusKw}". Each section needs one <h2> heading (4-8 words) and one <p> paragraph (8-10 sentences, 120-150 words). Existing sections: ${existingTitles}. Create NEW subtopics not already covered. Mention "${focusKw}" once per 2 sections. Return ONLY <h2>...<p>... HTML.` },
+        ],
+        max_tokens: 2500,
+        temperature: 0.7,
+      });
+      let extra = (raw?.response || '').trim().replace(/^```html?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      if (extra && extra.includes('<h2')) {
+        /* H3 제거 */
+        extra = extra.replace(/<h3[^>]*>[\s\S]*?<\/h3>/gi, '');
+        /* 마지막 </p> 앞에 삽입 (closing paragraph 앞) */
+        const lastPClose = content.lastIndexOf('</p>');
+        const lastPOpen = content.lastIndexOf('<p>', lastPClose > 0 ? lastPClose - 1 : undefined);
+        if (lastPOpen > 0) {
+          content = content.slice(0, lastPOpen) + extra + '\n' + content.slice(lastPOpen);
+        } else {
+          content += '\n' + extra;
+        }
+        const newH2 = (content.match(/<h2[\s>]/gi) || []).length;
+        console.log(`[blog-gen] H2 count: ${h2Count} -> ${newH2}`);
       }
     }
-    /* 짧은 섹션이 없으면 일반 확장 */
-    if (shortSections.length === 0) {
-      const h2Titles = (content.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || []).map((h) => h.replace(/<[^>]*>/g, '').trim()).slice(0, 4).join('; ');
-      const raw2 = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
+
+    /* 각 H2 섹션에서 본문이 짧은 섹션 찾아서 확장 */
+    const h2Re2 = /<h2[^>]*>([\s\S]*?)<\/h2>([\s\S]*?)(?=<h2|$)/gi;
+    let m2;
+    const shortSections = [];
+    while ((m2 = h2Re2.exec(content)) !== null) {
+      const title = m2[1].replace(/<[^>]*>/g, '').trim();
+      const body = m2[2].trim();
+      const bodyWc = body.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
+      if (bodyWc < 100 && title.length > 3) {
+        shortSections.push({ title, bodyWc, fullMatch: m2[0], matchIdx: m2.index });
+      }
+    }
+
+    if (shortSections.length > 0) {
+      const targets = shortSections.slice(0, 4);
+      const sectionList = targets.map((s, i) => `${i+1}. "${s.title}" (currently ${s.bodyWc} words, needs 120-150)`).join('\n');
+      const raw = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
         messages: [
-          { role: 'system', content: 'Return only <p> HTML paragraphs. No headings, no JSON, no markdown.' },
-          { role: 'user', content: `Write 4 additional <p> paragraphs (each 110-130 words) expanding on "${focusKw}". Subtopics covered: ${h2Titles}. Add new practical details not yet covered. Mention "${focusKw}" once naturally. Return ONLY <p> tags.` },
+          { role: 'system', content: 'Return ONLY <p> paragraphs. One per topic, numbered. 8-10 sentences each, 120-150 words. No headings, no JSON.' },
+          { role: 'user', content: `Expand these blog sections about "${focusKw}". Write one <p> paragraph per topic (8-10 sentences, 120-150 words each):\n${sectionList}\nReturn ONLY <p> tags in order.` },
         ],
-        max_tokens: 1800,
+        max_tokens: 2000,
         temperature: 0.65,
       });
-      let extra2 = (raw2?.response || '').trim().replace(/^```html?\s*/i, '').replace(/\s*```\s*$/, '').trim();
-      if (!extra2) return content;
-      if (!/<p[^>]*>/i.test(extra2)) {
-        extra2 = extra2.split(/\n\n+/).filter((t) => t.trim().length > 30).map((t) => `<p>${t.trim()}</p>`).join('\n');
-      }
-      const lastP = content.lastIndexOf('<p>');
-      content = lastP > 0 ? content.slice(0, lastP) + extra2 + '\n' + content.slice(lastP) : content + '\n' + extra2;
-      const nwc = content.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
-      console.log(`[blog-gen] expanded (general) ${currentWc} → ${nwc} words`);
-      return content;
-    }
-    /* 타겟 섹션별 확장 */
-    const targets = shortSections.slice(0, 5);
-    const sectionList = targets.map((s, i) => `${i + 1}. "${s.title}"`).join('\n');
-    const raw = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
-      messages: [
-        { role: 'system', content: 'You are a blog writer. Return exactly the requested number of <p> paragraphs in order. No headings, no JSON, no extra text.' },
-        { role: 'user', content: `For each numbered topic below, write ONE detailed <p> paragraph (110–130 words each) with practical tips related to "${focusKw}". Return ONLY the <p> tags, in the same numbered order:\n${sectionList}\n\nOutput format:\n<p>1: ...</p>\n<p>2: ...</p>\n...` },
-      ],
-      max_tokens: 1800,
-      temperature: 0.65,
-    });
-    let extra = (raw?.response || '').trim().replace(/^```html?\s*/i, '').replace(/\s*```\s*$/, '').trim();
-    if (!extra) return content;
-    const newParas = (extra.match(/<p[^>]*>[\s\S]*?<\/p>/gi) || []).map((p) => p.replace(/<p([^>]*)>\s*\d+[.:]\s*/i, '<p$1>'));
-    let result = content;
-    for (let i = 0; i < Math.min(newParas.length, targets.length); i++) {
-      const s = targets[i];
-      const para = newParas[i];
-      if (!para) continue;
-      const escapedTitle = s.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const hRe = new RegExp(`<${s.tag}[^>]*>${escapedTitle}<\\/${s.tag}>`, 'i');
-      const match = hRe.exec(result);
-      if (match) {
-        const insertAt = match.index + match[0].length;
-        result = result.slice(0, insertAt) + '\n' + para + '\n' + result.slice(insertAt);
+      let extra = (raw?.response || '').trim().replace(/^```html?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      if (extra) {
+        const newParas = (extra.match(/<p[^>]*>[\s\S]*?<\/p>/gi) || []).map(p => p.replace(/<p([^>]*)>\s*\d+[.:]\s*/i, '<p$1>'));
+        for (let i = 0; i < Math.min(newParas.length, targets.length); i++) {
+          const s = targets[i];
+          const para = newParas[i];
+          if (!para) continue;
+          const escaped = s.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const hRe = new RegExp(`(<h2[^>]*>${escaped}</h2>)`, 'i');
+          const hMatch = hRe.exec(content);
+          if (hMatch) {
+            const insertAt = hMatch.index + hMatch[0].length;
+            content = content.slice(0, insertAt) + '\n' + para + '\n' + content.slice(insertAt);
+          }
+        }
       }
     }
-    const newWc = result.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
-    console.log(`[blog-gen] expanded (targeted) ${currentWc} → ${newWc} words`);
-    return result;
+
+    const newWc = content.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
+    console.log(`[blog-gen] expanded ${currentWc} -> ${newWc} words`);
+    return content;
   } catch (e) {
     console.warn('[blog-gen] expandContent failed:', e.message);
     return content;
@@ -2226,6 +2249,7 @@ function postProcessContent(content) {
     /* 보안 CTA / 상품 프로모션 blockquote 완전 제거 (n0003은 보안 판매/홍보 사이트가 아님) */
     .replace(/<blockquote[^>]*>[\s\S]*?(?:Care Plan|Security Plan|Protection|Malware|Monitoring Plan|Emergency Help|Hardened Today|noteracker\.com)[\s\S]*?<\/blockquote>/gi, '')
     .replace(/<h1[^>]*>[\s\S]*?<\/h1>/gi, '')
+    .replace(/<h2[^>]*>\s*(Conclusion|Final Thoughts|Summary|Wrapping Up|Key Takeaways|Related Articles|Further Reading|Additional Resources|See Also)[^<]*<\/h2>/gi, '')
     .replace(/<h[2-6][^>]*>\s*<\/h[2-6]>/gi, '')
     .replace(/<strong>\s*<\/strong>/gi, '')
     .replace(/<em>\s*<\/em>/gi, '')
@@ -2238,8 +2262,25 @@ function postProcessContent(content) {
     .replace(/<a\s[^>]*>([\s\S]*?)<\/a>/gi, '$1')
     .replace(/\s+style="[^"]*"/gi, '')
     .replace(/(<\/p>)\s{2,}(<p)/gi, '$1\n$2');
-  /* "Conclusion" 타입 H2 제목만 제거 (본문 문단은 유지하여 단어수 보존) */
-  c = c.replace(/<h2[^>]*>\s*(?:Conclusion|Final Thoughts?|Summary|Wrapping Up|In Closing|Conclusion and Next Steps)[^<]*<\/h2>/gi, '');
+  /* "Conclusion" / "Related Articles" 등 금지 H2 제거 */
+  c = c.replace(/<h2[^>]*>\s*(?:Conclusion|Final Thoughts?|Summary|Wrapping Up|In Closing|Conclusion and Next Steps|Related Articles|Further Reading|Additional Resources|See Also)[^<]*<\/h2>/gi, '');
+
+  /* H2 제목에서 모호한 대명사 표현 제거 ("this approach", "such methods" 등) */
+  {
+    const replacements = ['Smart Strategies', 'Proven Tactics', 'Key Practices', 'Core Steps', 'Best Methods', 'Quick Fixes', 'Real Solutions'];
+    let repIdx = 0;
+    c = c.replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, (m, inner) => {
+      let title = inner.replace(/<[^>]*>/g, '').trim();
+      title = title.replace(/\b(?:this|that|such|these|those|the) (?:approach|process|strategy|method|system|practice|technique|concept|idea|thing|way|stuff)(?:es|s)?\b/gi, () => {
+        const rep = replacements[repIdx % replacements.length];
+        repIdx++;
+        return rep;
+      });
+      title = title.replace(/\b(?:such|these|those) (methods|techniques|strategies|practices|tools|steps|tips)/gi, '$1');
+      /* "Effective methods" 단독 H2도 제거 방지 - 앞뒤에 내용 없으면 제목 보강 */
+      return `<h2>${title}</h2>`;
+    });
+  }
 
   /* AI 패턴 후처리 제거 */
   const aiPhrases = [
@@ -2873,6 +2914,82 @@ async function fetchUnsplashImages(keyword, accessKey, count = 2, category = '',
    H2 제목당 5-6줄 단락 검증/보강
    짧은 단락은 확장(80단어), 긴 단락은 분할(120단어)
    ══════════════════════════════════════════════ */
+/* ── H2 섹션 밸런서: 각 섹션 최대 250단어 (8-10문장), 초과 p 제거 ── */
+function balanceH2Sections(content) {
+  const MAX_SECTION_WORDS = 250;
+  const MAX_SECTION_SENTENCES = 10;
+
+  /* H2 기준으로 섹션 분리 */
+  const sectionRe = /(<h2[^>]*>[\s\S]*?<\/h2>)([\s\S]*?)(?=<h2|$)/gi;
+  let match;
+  const sections = [];
+  let lastIdx = 0;
+  let intro = '';
+
+  /* intro (첫 H2 이전 콘텐츠) 분리 */
+  const firstH2 = content.search(/<h2[\s>]/i);
+  if (firstH2 > 0) {
+    intro = content.slice(0, firstH2);
+    lastIdx = firstH2;
+  }
+
+  const workContent = content.slice(lastIdx);
+  const secRe = /(<h2[^>]*>[\s\S]*?<\/h2>)([\s\S]*?)(?=<h2|$)/gi;
+  let m;
+  while ((m = secRe.exec(workContent)) !== null) {
+    sections.push({ heading: m[1], body: m[2] });
+  }
+
+  if (sections.length === 0) return content;
+
+  /* 각 섹션 밸런싱 */
+  let trimmed = false;
+  for (let i = 0; i < sections.length; i++) {
+    const sec = sections[i];
+    const bodyText = sec.body.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    const words = bodyText.split(/\s+/).filter(Boolean);
+    const sentences = bodyText.split(/[.!?]+/).filter(s => s.trim().length > 10);
+
+    if (words.length > MAX_SECTION_WORDS || sentences.length > MAX_SECTION_SENTENCES) {
+      /* p 태그 단위로 분리하여 250단어까지만 유지 */
+      const pTags = sec.body.match(/<p[^>]*>[\s\S]*?<\/p>/gi) || [];
+      let kept = '';
+      let keptWords = 0;
+      let keptSentences = 0;
+      for (const p of pTags) {
+        const pText = p.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        const pWords = pText.split(/\s+/).filter(Boolean).length;
+        const pSents = pText.split(/[.!?]+/).filter(s => s.trim().length > 10).length;
+        if (keptWords + pWords > MAX_SECTION_WORDS || keptSentences + pSents > MAX_SECTION_SENTENCES) {
+          /* 첫 p는 항상 유지 */
+          if (kept === '') {
+            kept += p;
+            keptWords += pWords;
+          }
+          break;
+        }
+        kept += p;
+        keptWords += pWords;
+        keptSentences += pSents;
+      }
+      if (kept) {
+        sec.body = kept;
+        trimmed = true;
+        console.log(`[blog-gen] Section #${i+1} trimmed: ${words.length} -> ${keptWords} words`);
+      }
+    }
+  }
+
+  if (!trimmed) return content;
+
+  /* 재조립 */
+  let result = intro;
+  for (const sec of sections) {
+    result += sec.heading + sec.body;
+  }
+  return result;
+}
+
 function enforceHeadingParagraphLength(content) {
   /* 모든 <p> 태그를 검사하여 80-120 단어 (5-6문장) 범위로 보정 */
   const FILLER_SENTENCES = [
