@@ -835,9 +835,7 @@ async function loadBlogList() {
           const seoScore = p.seo_score || 0;
           const seoClass = seoScore>=90?'badge-green':seoScore>=50?'badge-yellow':'badge-red';
           const statusClass = p.status==='published'?'badge-green':p.status==='draft'?'badge-gray':'badge-yellow';
-          const rewriteBtn = seoScore < 90
-            ? `<button class="btn btn-sm btn-rewrite-${p.id}" style="background:rgba(137,158,46,.15);color:#899e2e;border:1px solid rgba(137,158,46,.3);" onclick="runSeoRewrite(${p.id},this)" title="SEO ${seoScore}점 AI 재작성"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 재작성</button>`
-            : '';
+          const rewriteBtn = `<button class="btn btn-sm btn-rewrite-${p.id}" style="background:rgba(137,158,46,.15);color:#899e2e;border:1px solid rgba(137,158,46,.3);" onclick="runSeoRewrite(${p.id},this)" title="SEO ${seoScore}점 AI 재작성"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 재작성</button>`;
           return `<tr id="blog-row-${p.id}">
             <td>
               <div class="blog-item-title">${esc(p.title)}</div>

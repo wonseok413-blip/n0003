@@ -51,7 +51,7 @@ export async function autoInit(DB) {
       featured_image  TEXT, body_image TEXT,
       category        TEXT, tags TEXT,
       seo_title       TEXT, seo_description TEXT,
-      seo_score       INTEGER DEFAULT 0, ai_review TEXT,
+      seo_score       INTEGER DEFAULT 0, focus_keyword TEXT DEFAULT '', ai_review TEXT,
       status          TEXT DEFAULT 'draft',
       scheduled_at    TEXT,
       author_id       INTEGER, published_at TEXT,

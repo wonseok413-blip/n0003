@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap"></noscript>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/index.css?v=3">
 </head>
 <body class="index-page">
   <div id="header-one"></div>
@@ -41,29 +41,253 @@
     </div>
   </section>
 
-  <!-- Hero Showcase -->
+  <!-- Hero Showcase: Monitor -->
   <section class="hero-showcase">
-    <div class="hero-showcase__frame">
-      <div id="hero-lottie" style="width:100%;height:100%;"></div>
+    <div class="monitor">
+      <div class="monitor-bezel">
+        <div class="monitor-screen">
+          <div class="idx-screen" id="idx-lottie-widget">
+            <!-- Mouse cursor -->
+            <div class="idx-cursor" id="idx-cursor">
+              <svg width="16" height="20" viewBox="0 0 16 20" fill="none"><path d="M1 1l5.5 17L9 11.5l6.5-2.5L1 1z" fill="#fff" stroke="#000" stroke-width="1"/></svg>
+              <div class="idx-click-ring"></div>
+            </div>
+            <!-- Top toolbar -->
+            <div class="idx-toolbar">
+              <div class="idx-tb-left">
+                <div class="idx-dots"><span></span><span></span><span></span></div>
+                <div class="idx-tb-tabs">
+                  <span class="idx-tb-tab active">Pages</span>
+                  <span class="idx-tb-tab">Styling</span>
+                  <span class="idx-tb-tab">Components</span>
+                  <span class="idx-tb-tab">Media</span>
+                </div>
+              </div>
+              <div class="idx-tb-right">
+                <span class="idx-tb-btn">Preview</span>
+                <span class="idx-tb-btn idx-tb-publish">Publish</span>
+              </div>
+            </div>
+            <!-- Editor body -->
+            <div class="idx-editor">
+              <!-- Left panel: layers/properties -->
+              <div class="idx-panel">
+                <div class="idx-panel-title">Layers</div>
+                <div class="idx-layer idx-layer-active"><span class="idx-ly-icon">&#9654;</span> Header</div>
+                <div class="idx-layer"><span class="idx-ly-icon">&#9654;</span> Hero Section</div>
+                <div class="idx-layer"><span class="idx-ly-icon">&#9654;</span> Features Grid</div>
+                <div class="idx-layer"><span class="idx-ly-icon">&#9654;</span> Testimonials</div>
+                <div class="idx-layer"><span class="idx-ly-icon">&#9654;</span> Pricing Table</div>
+                <div class="idx-layer"><span class="idx-ly-icon">&#9654;</span> Contact Form</div>
+                <div class="idx-layer"><span class="idx-ly-icon">&#9654;</span> Blog Feed</div>
+                <div class="idx-layer"><span class="idx-ly-icon">&#9654;</span> Footer</div>
+                <div class="idx-panel-title" style="margin-top:8px;">Properties</div>
+                <div class="idx-prop"><span>Width</span><span>1200px</span></div>
+                <div class="idx-prop"><span>Padding</span><span>48px 24px</span></div>
+                <div class="idx-prop"><span>Background</span><span>#1c2228</span></div>
+                <div class="idx-prop"><span>Font</span><span>Noto Sans</span></div>
+                <div class="idx-prop"><span>Border</span><span>none</span></div>
+              </div>
+              <!-- Center: website preview canvas (8 steps) -->
+              <div class="idx-canvas-area">
+                <div class="lottie-wrap" style="background:none;border:none;padding:0;height:100%;">
+                  <!-- Step 1: Homepage layout editing -->
+                  <div class="lstep lstep-active" data-step="0">
+                    <div class="idx-web">
+                      <div class="idx-w-nav"><span class="idx-w-logo">FLAVOR</span><span class="idx-w-links">Home &nbsp; About &nbsp; Services &nbsp; Shop &nbsp; Blog &nbsp; Contact</span></div>
+                      <div class="idx-w-hero"><div class="idx-w-hero-text"><div class="idx-w-h1">Build Your Dream Website</div><div class="idx-w-p">Professional web solutions powered by modern cloud infrastructure. Launch faster, scale better.</div><div class="idx-w-btns"><span class="idx-w-btn-p">Get Started</span><span class="idx-w-btn-s">Learn More</span></div></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Our Services</div><div class="idx-w-grid-3"><div class="idx-w-fcard"><div class="idx-w-ficon">&#9881;</div><div class="idx-w-fname">Web Design</div><div class="idx-w-fdesc">Custom responsive layouts built with modern frameworks and tools</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#9889;</div><div class="idx-w-fname">Performance</div><div class="idx-w-fdesc">Optimized loading speeds with CDN and edge caching technology</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#9733;</div><div class="idx-w-fname">SEO</div><div class="idx-w-fdesc">Search engine optimization to boost your online visibility</div></div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Trusted by 500+ Businesses</div><div class="idx-w-stats"><span>99.9% Uptime</span><span>50ms Response</span><span>24/7 Support</span><span>150+ Countries</span></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Recent Projects</div><div class="idx-w-grid-2"><div class="idx-w-fcard"><div class="idx-w-ficon">&#127968;</div><div class="idx-w-fname">RealEstate Pro</div><div class="idx-w-fdesc">Full property listing platform with virtual tours and map integration</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#127869;</div><div class="idx-w-fname">FoodieApp</div><div class="idx-w-fdesc">Restaurant ordering system with delivery tracking and loyalty points</div></div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Testimonials</div><div class="idx-w-blog-list"><div class="idx-w-blog-item">&#9733;&#9733;&#9733;&#9733;&#9733; &quot;Incredible speed and reliability from day one&quot;</div><div class="idx-w-blog-item">&#9733;&#9733;&#9733;&#9733;&#9733; &quot;Reduced our operational costs by 55%&quot;</div><div class="idx-w-blog-item">&#9733;&#9733;&#9733;&#9733;&#9734; &quot;Best migration experience we've had&quot;</div></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Get Started Today</div><div class="idx-w-p" style="text-align:center;margin-bottom:8px;">Launch your website with enterprise-grade infrastructure and 24/7 managed support.</div><div class="idx-w-btns"><span class="idx-w-btn-p">Start Free Trial</span><span class="idx-w-btn-s">Book a Demo</span></div></div>
+                      <div class="idx-w-footer"><span>&#169; 2026 Flavor Inc.</span><span>Privacy</span><span>Terms</span><span>Contact</span></div>
+                    </div>
+                    <div class="idx-edit-hint"><span class="idx-cursor-icon">&#9997;</span> Editing: Homepage Layout</div>
+                  </div>
+                  <!-- Step 2: Hero section text editing -->
+                  <div class="lstep" data-step="1">
+                    <div class="idx-web">
+                      <div class="idx-w-nav"><span class="idx-w-logo">FLAVOR</span><span class="idx-w-links">Home &nbsp; About &nbsp; Services &nbsp; Shop &nbsp; Blog &nbsp; Contact</span></div>
+                      <div class="idx-w-hero idx-w-selected"><div class="idx-w-hero-text"><div class="idx-w-h1 idx-typing">Build Your Dream Website<span class="idx-caret">|</span></div><div class="idx-w-p">Professional web solutions powered by modern cloud infrastructure. Launch faster, scale better, grow bigger.</div><div class="idx-w-btns"><span class="idx-w-btn-p">Get Started Free</span><span class="idx-w-btn-s">Watch Demo</span></div></div><div class="idx-w-resize-handle"></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Why Choose Us</div><div class="idx-w-grid-2"><div class="idx-w-fcard"><div class="idx-w-ficon">&#128640;</div><div class="idx-w-fname">Fast Deployment</div><div class="idx-w-fdesc">Go live in days, not months with our streamlined WaaS platform</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#128274;</div><div class="idx-w-fname">Enterprise Security</div><div class="idx-w-fdesc">SSL, WAF, DDoS protection included with every plan</div></div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Latest Articles</div><div class="idx-w-blog-list"><div class="idx-w-blog-item">How to Boost WordPress Performance by 300%</div><div class="idx-w-blog-item">The Ultimate Guide to WaaS Platforms in 2026</div><div class="idx-w-blog-item">E-Commerce Security Best Practices</div><div class="idx-w-blog-item">Cloud Migration Strategies for Small Business</div></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Trusted Partners</div><div class="idx-w-stats"><span>&#9729; Cloudflare</span><span>&#9889; Vultr</span><span>&#128187; WordPress</span><span>&#128176; Stripe</span></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">How It Works</div><div class="idx-w-grid-3"><div class="idx-w-fcard"><div class="idx-w-ficon">&#9312;</div><div class="idx-w-fname">Choose Plan</div><div class="idx-w-fdesc">Select the package that fits your business needs</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#9313;</div><div class="idx-w-fname">We Build It</div><div class="idx-w-fdesc">Our team designs and develops your website</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#9314;</div><div class="idx-w-fname">Go Live</div><div class="idx-w-fdesc">Launch your site with full support and monitoring</div></div></div></div>
+                      <div class="idx-w-footer"><span>&#169; 2026 Flavor Inc.</span><span>Privacy</span><span>Terms</span><span>Contact</span></div>
+                    </div>
+                    <div class="idx-edit-hint"><span class="idx-cursor-icon">&#9997;</span> Editing: Hero Text &amp; CTA Buttons</div>
+                  </div>
+                  <!-- Step 3: Adding product cards -->
+                  <div class="lstep" data-step="2">
+                    <div class="idx-web">
+                      <div class="idx-w-nav"><span class="idx-w-logo">FLAVOR</span><span class="idx-w-links">Home &nbsp; Products &nbsp; Pricing &nbsp; Blog &nbsp; Contact</span></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Product Catalog</div><div class="idx-w-grid-3"><div class="idx-w-pcard"><div class="idx-w-pimg" style="background:linear-gradient(135deg,#C7D2FE,#A5B4FC);"></div><div class="idx-w-pname">Basic Plan</div><div class="idx-w-pprice">$49<span>/mo</span></div><div class="idx-w-pdesc">WordPress hosting, SSL, weekly backups, email support</div><div class="idx-w-btn-p" style="font-size:10px;padding:5px 0;text-align:center;">Subscribe</div></div><div class="idx-w-pcard idx-w-selected"><div class="idx-w-pimg" style="background:linear-gradient(135deg,#C7D2FE,#A5B4FC);"></div><div class="idx-w-pname">Pro Plan</div><div class="idx-w-pprice">$99<span>/mo</span></div><div class="idx-w-pdesc">All Basic features + CDN, daily backups, priority support, SEO tools</div><div class="idx-w-btn-p" style="font-size:10px;padding:5px 0;text-align:center;">Subscribe</div></div><div class="idx-w-pcard"><div class="idx-w-pimg" style="background:linear-gradient(135deg,#C7D2FE,#A5B4FC);"></div><div class="idx-w-pname">Enterprise</div><div class="idx-w-pprice">$199<span>/mo</span></div><div class="idx-w-pdesc">All Pro features + custom dev, AI chatbot, dedicated server, SLA</div><div class="idx-w-btn-p" style="font-size:10px;padding:5px 0;text-align:center;">Contact Us</div></div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Payment Methods</div><div class="idx-w-stats"><span>&#128179; Visa</span><span>&#128179; MasterCard</span><span>Stripe</span><span>PayPal</span></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Customer Reviews</div><div class="idx-w-blog-list"><div class="idx-w-blog-item">&#9733;&#9733;&#9733;&#9733;&#9733; &quot;Incredible service, our site loads in under 1s!&quot;</div><div class="idx-w-blog-item">&#9733;&#9733;&#9733;&#9733;&#9733; &quot;Best WaaS platform we've ever used.&quot;</div><div class="idx-w-blog-item">&#9733;&#9733;&#9733;&#9733;&#9734; &quot;Easy migration, excellent support team.&quot;</div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Frequently Asked</div><div class="idx-w-stats"><span>&#10067; Refund Policy</span><span>&#128337; SLA 99.9%</span><span>&#128231; 24/7 Support</span></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Compare Plans</div><div class="idx-w-grid-3"><div class="idx-w-fcard"><div class="idx-w-fname">Storage</div><div class="idx-w-fdesc">10GB / 50GB / Unlimited</div></div><div class="idx-w-fcard"><div class="idx-w-fname">Bandwidth</div><div class="idx-w-fdesc">100GB / 500GB / Unlimited</div></div><div class="idx-w-fcard"><div class="idx-w-fname">Support</div><div class="idx-w-fdesc">Email / Priority / Dedicated</div></div></div></div>
+                      <div class="idx-w-footer"><span>&#169; 2026 Flavor Inc.</span><span>Refund Policy</span><span>Terms</span><span>Support</span></div>
+                    </div>
+                    <div class="idx-edit-hint"><span class="idx-cursor-icon">&#128722;</span> Editing: Product Cards &amp; Pricing</div>
+                  </div>
+                  <!-- Step 4: Styling colors/fonts -->
+                  <div class="lstep" data-step="3">
+                    <div class="idx-web idx-web-styled">
+                      <div class="idx-w-nav"><span class="idx-w-logo" style="color:#7C3AED;">FLAVOR</span><span class="idx-w-links">Home &nbsp; About &nbsp; Services &nbsp; Portfolio &nbsp; Contact</span></div>
+                      <div class="idx-w-hero" style="background:linear-gradient(135deg,#DDD6FE,#C4B5FD);"><div class="idx-w-hero-text"><div class="idx-w-h1" style="color:#5B21B6;">Modern Design System</div><div class="idx-w-p" style="color:#6B7280;">Customized color palette, typography, and spacing applied globally across your entire website</div><div class="idx-w-btns"><span class="idx-w-btn-p" style="background:#7C3AED;color:#fff;">Explore Now</span><span class="idx-w-btn-s" style="border-color:#7C3AED;color:#7C3AED;">View Portfolio</span></div></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title" style="color:#7C3AED;">Design Tokens Applied</div><div class="idx-w-grid-2"><div class="idx-w-fcard" style="border-color:#7C3AED33;"><div class="idx-w-ficon" style="color:#7C3AED;">&#127912;</div><div class="idx-w-fname">Primary: #a78bfa</div><div class="idx-w-fdesc">Violet accent applied to buttons, links, headings, icons and hover states</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#128396;</div><div class="idx-w-fname">Font: Inter Bold</div><div class="idx-w-fdesc">Typography updated to Inter with 700 weight for headings, 400 for body text</div></div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title" style="color:#7C3AED;">Spacing Grid: 8px Base</div><div class="idx-w-stats"><span>Padding: 48px</span><span>Gap: 24px</span><span>Radius: 12px</span><span>Shadow: lg</span></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title" style="color:#7C3AED;">Component Library</div><div class="idx-w-grid-3"><div class="idx-w-fcard"><div class="idx-w-ficon" style="color:#7C3AED;">&#9744;</div><div class="idx-w-fname">Buttons</div><div class="idx-w-fdesc">12 variants with hover, active, disabled states</div></div><div class="idx-w-fcard"><div class="idx-w-ficon" style="color:#7C3AED;">&#9744;</div><div class="idx-w-fname">Cards</div><div class="idx-w-fdesc">8 layouts for product, blog, team</div></div><div class="idx-w-fcard"><div class="idx-w-ficon" style="color:#7C3AED;">&#9744;</div><div class="idx-w-fname">Forms</div><div class="idx-w-fdesc">6 templates for contact, login, signup</div></div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title" style="color:#7C3AED;">Color Palette Preview</div><div class="idx-w-grid-2"><div class="idx-w-fcard" style="border-color:#7C3AED33;"><div class="idx-w-fname">Dark Mode</div><div class="idx-w-fdesc">Background #0f172a, Surface #1e293b, Border #334155</div></div><div class="idx-w-fcard" style="border-color:#7C3AED33;"><div class="idx-w-fname">Typography</div><div class="idx-w-fdesc">H1: 48px / H2: 36px / Body: 16px / Small: 14px</div></div></div></div>
+                      <div class="idx-w-footer"><span>&#169; 2026 Flavor Inc.</span><span>Style Guide</span><span>Components</span><span>Tokens</span></div>
+                    </div>
+                    <div class="idx-edit-hint"><span class="idx-cursor-icon">&#127912;</span> Editing: Colors, Fonts &amp; Spacing</div>
+                  </div>
+                  <!-- Step 5: Adding contact form -->
+                  <div class="lstep" data-step="4">
+                    <div class="idx-web">
+                      <div class="idx-w-nav"><span class="idx-w-logo">FLAVOR</span><span class="idx-w-links">Home &nbsp; About &nbsp; Services &nbsp; Contact</span></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Contact Us</div><div class="idx-w-form"><div class="idx-w-form-row"><div class="idx-w-input-wrap"><label>Full Name</label><div class="idx-w-input">John Smith</div></div><div class="idx-w-input-wrap"><label>Email Address</label><div class="idx-w-input">john@company.com</div></div></div><div class="idx-w-form-row"><div class="idx-w-input-wrap"><label>Phone</label><div class="idx-w-input">+1 (555) 123-4567</div></div><div class="idx-w-input-wrap"><label>Company</label><div class="idx-w-input">Smith Corp</div></div></div><div class="idx-w-input-wrap" style="width:100%;"><label>Message</label><div class="idx-w-textarea idx-w-selected">I'm interested in your Pro Plan for our e-commerce website. We currently have about 200 products and need migration support. Can we schedule a call?</div></div><div class="idx-w-btns" style="margin-top:6px;"><span class="idx-w-btn-p">Send Message</span><span class="idx-w-btn-s">Attach File</span></div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Our Offices</div><div class="idx-w-grid-2"><div class="idx-w-fcard"><div class="idx-w-ficon">&#127759;</div><div class="idx-w-fname">Seoul, South Korea</div><div class="idx-w-fdesc">3F, Room 302-J37, 36 Daeji-ro, Suji-gu, Yongin-si, Gyeonggi-do</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#127468;&#127463;</div><div class="idx-w-fname">London, United Kingdom</div><div class="idx-w-fdesc">71-75 Shelton Street, Covent Garden, London WC2H 9JQ</div></div></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Business Hours</div><div class="idx-w-stats"><span>&#128337; Mon-Fri 9-18</span><span>&#128231; 24h Email</span><span>&#128172; Live Chat</span></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">FAQ</div><div class="idx-w-blog-list"><div class="idx-w-blog-item">&#10148; How long does migration take? Usually 3-5 business days.</div><div class="idx-w-blog-item">&#10148; Do you offer a free trial? Yes, 14 days free for all plans.</div><div class="idx-w-blog-item">&#10148; Can I cancel anytime? Yes, no lock-in contracts.</div></div></div>
+                      <div class="idx-w-footer"><span>&#169; 2026 Flavor Inc.</span><span>Privacy</span><span>Terms</span><span>GDPR</span></div>
+                    </div>
+                    <div class="idx-edit-hint"><span class="idx-cursor-icon">&#128221;</span> Editing: Contact Form Fields</div>
+                  </div>
+                  <!-- Step 6: Mobile responsive preview -->
+                  <div class="lstep" data-step="5">
+                    <div class="idx-responsive-wrap">
+                      <div class="idx-web idx-web-mobile">
+                        <div class="idx-w-nav"><span class="idx-w-logo">FLAVOR</span><span class="idx-w-hamburger">&#9776;</span></div>
+                        <div class="idx-w-hero"><div class="idx-w-hero-text"><div class="idx-w-h1">Build Your Dream Website</div><div class="idx-w-p">Professional web solutions powered by modern cloud infrastructure</div><div class="idx-w-btns"><span class="idx-w-btn-p">Get Started</span></div></div></div>
+                        <div class="idx-w-section"><div class="idx-w-section-title">Our Services</div><div class="idx-w-grid-1"><div class="idx-w-fcard"><div class="idx-w-ficon">&#9881;</div><div class="idx-w-fname">Web Design</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#9889;</div><div class="idx-w-fname">Performance</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#9733;</div><div class="idx-w-fname">SEO</div></div></div></div>
+                        <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Stats</div><div class="idx-w-grid-1"><div class="idx-w-fcard"><div class="idx-w-fname">99.9% Uptime</div></div><div class="idx-w-fcard"><div class="idx-w-fname">50ms Response</div></div></div></div>
+                        <div class="idx-w-section"><div class="idx-w-section-title">Contact</div><div class="idx-w-p" style="text-align:center;">hello@flavor.com</div><div class="idx-w-btns"><span class="idx-w-btn-p">Get in Touch</span></div></div>
+                        <div class="idx-w-footer"><span>&#169; 2026 Flavor</span></div>
+                      </div>
+                      <div class="idx-web idx-web-tablet">
+                        <div class="idx-w-nav"><span class="idx-w-logo">FLAVOR</span><span class="idx-w-links" style="font-size:7px;">Home &nbsp; About &nbsp; Services &nbsp; Contact</span></div>
+                        <div class="idx-w-hero"><div class="idx-w-hero-text"><div class="idx-w-h1">Build Your Dream Website</div><div class="idx-w-p">Professional web solutions powered by cloud infrastructure. Scale better.</div><div class="idx-w-btns"><span class="idx-w-btn-p">Get Started</span><span class="idx-w-btn-s">Learn More</span></div></div></div>
+                        <div class="idx-w-section"><div class="idx-w-section-title">Services</div><div class="idx-w-grid-2"><div class="idx-w-fcard"><div class="idx-w-ficon">&#9881;</div><div class="idx-w-fname">Web Design</div></div><div class="idx-w-fcard"><div class="idx-w-ficon">&#9889;</div><div class="idx-w-fname">Performance</div></div></div></div>
+                        <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Projects</div><div class="idx-w-grid-2"><div class="idx-w-fcard"><div class="idx-w-fname">RealEstate Pro</div></div><div class="idx-w-fcard"><div class="idx-w-fname">FoodieApp</div></div></div></div>
+                        <div class="idx-w-footer"><span>&#169; 2026 Flavor Inc.</span><span>Privacy</span><span>Terms</span></div>
+                      </div>
+                    </div>
+                    <div class="idx-edit-hint"><span class="idx-cursor-icon">&#128241;</span> Responsive: Mobile &amp; Tablet Preview</div>
+                  </div>
+                  <!-- Step 7: SEO & Performance check -->
+                  <div class="lstep" data-step="6">
+                    <div class="idx-web">
+                      <div class="idx-w-nav"><span class="idx-w-logo">FLAVOR</span><span class="idx-w-links">Home &nbsp; About &nbsp; Services &nbsp; Blog &nbsp; Contact</span></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Performance &amp; SEO Audit</div><div class="idx-w-grid-3"><div class="idx-w-score"><div class="idx-w-score-num" style="color:#059669;">98</div><div class="idx-w-score-label">Performance</div></div><div class="idx-w-score"><div class="idx-w-score-num" style="color:#059669;">96</div><div class="idx-w-score-label">Accessibility</div></div><div class="idx-w-score"><div class="idx-w-score-num" style="color:#059669;">100</div><div class="idx-w-score-label">SEO</div></div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Core Web Vitals</div><div class="idx-w-vitals"><div class="idx-w-vital"><span>LCP</span><div class="idx-w-vital-bar"><div style="width:85%;background:#059669;height:100%;border-radius:2px;"></div></div><span style="color:#059669;">0.8s</span></div><div class="idx-w-vital"><span>FID</span><div class="idx-w-vital-bar"><div style="width:95%;background:#059669;height:100%;border-radius:2px;"></div></div><span style="color:#059669;">12ms</span></div><div class="idx-w-vital"><span>CLS</span><div class="idx-w-vital-bar"><div style="width:98%;background:#059669;height:100%;border-radius:2px;"></div></div><span style="color:#059669;">0.01</span></div><div class="idx-w-vital"><span>TTFB</span><div class="idx-w-vital-bar"><div style="width:90%;background:#059669;height:100%;border-radius:2px;"></div></div><span style="color:#059669;">45ms</span></div></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">SEO Checklist</div><div class="idx-w-checklist"><div>&#10003; Meta titles &amp; descriptions optimized</div><div>&#10003; Open Graph tags configured</div><div>&#10003; Sitemap.xml generated</div><div>&#10003; Robots.txt configured</div><div>&#10003; Schema markup added</div><div>&#10003; Image alt tags complete</div><div>&#10003; Canonical URLs set</div><div>&#10003; Mobile-friendly validated</div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Page Speed Insights</div><div class="idx-w-stats"><span>&#128247; Images optimized</span><span>&#128230; Gzip enabled</span><span>&#128268; Lazy loading</span><span>&#9889; HTTP/3</span></div></div>
+                      <div class="idx-w-footer"><span>&#169; 2026 Flavor Inc.</span><span>Performance Report</span><span>Analytics</span></div>
+                    </div>
+                    <div class="idx-edit-hint"><span class="idx-cursor-icon">&#128200;</span> Auditing: Performance &amp; SEO Scores</div>
+                  </div>
+                  <!-- Step 8: Publish & Go Live -->
+                  <div class="lstep" data-step="7">
+                    <div class="idx-web">
+                      <div class="idx-w-nav"><span class="idx-w-logo">FLAVOR</span><span class="idx-w-links">Home &nbsp; About &nbsp; Services &nbsp; Shop &nbsp; Blog &nbsp; Contact</span></div>
+                      <div class="idx-w-hero" style="background:linear-gradient(135deg,#A7F3D0,#D1FAE5);"><div class="idx-w-hero-text"><div class="idx-w-deploy-icon">&#10003;</div><div class="idx-w-h1" style="color:#059669;">Website Published!</div><div class="idx-w-p">Your website is now live at mybusiness.com. All services are active and monitoring is enabled.</div></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Deployment Summary</div><div class="idx-w-grid-3"><div class="idx-w-fcard"><div class="idx-w-ficon" style="color:#059669;">&#9679;</div><div class="idx-w-fname">Status: Live</div><div class="idx-w-fdesc">All 8 pages deployed successfully to Cloudflare edge network</div></div><div class="idx-w-fcard"><div class="idx-w-ficon" style="color:#0052FF;">v1.0</div><div class="idx-w-fname">Version 1.0</div><div class="idx-w-fdesc">First release with full e-commerce, blog, and contact integration</div></div><div class="idx-w-fcard"><div class="idx-w-ficon" style="color:#059669;">45ms</div><div class="idx-w-fname">Response Time</div><div class="idx-w-fdesc">Global average response time from 200+ edge locations worldwide</div></div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Active Services</div><div class="idx-w-stats"><span>&#128274; SSL</span><span>&#9889; CDN</span><span>&#129302; AI Chat</span><span>&#128202; Analytics</span><span>&#128737; WAF</span><span>&#128230; Backups</span></div></div>
+                      <div class="idx-w-section"><div class="idx-w-section-title">Live Monitoring</div><div class="idx-w-grid-2"><div class="idx-w-fcard"><div class="idx-w-ficon" style="color:#059669;">&#128994;</div><div class="idx-w-fname">Uptime 100%</div><div class="idx-w-fdesc">Last 30 days, zero downtime recorded</div></div><div class="idx-w-fcard"><div class="idx-w-ficon" style="color:#0052FF;">&#128200;</div><div class="idx-w-fname">1.2k Visitors</div><div class="idx-w-fdesc">First week traffic from 45 countries</div></div></div></div>
+                      <div class="idx-w-section" style="background:#F3F4F6;"><div class="idx-w-section-title">Next Steps</div><div class="idx-w-blog-list"><div class="idx-w-blog-item">&#10148; Connect Google Analytics for visitor tracking</div><div class="idx-w-blog-item">&#10148; Set up automated email reports weekly</div><div class="idx-w-blog-item">&#10148; Configure AI chatbot training data</div></div></div>
+                      <div class="idx-w-footer"><span>&#169; 2026 Flavor Inc.</span><span>Dashboard</span><span>Support</span><span>Docs</span></div>
+                    </div>
+                    <div class="idx-edit-hint"><span class="idx-cursor-icon">&#128640;</span> Published: Website is Live!</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Bottom status + nav dots -->
+            <div class="idx-statusbar">
+              <span class="idx-sb-text">WaaS Editor v2.0</span>
+              <div class="lnav">
+                <button class="lnav-btn active" data-target="0"></button>
+                <button class="lnav-btn" data-target="1"></button>
+                <button class="lnav-btn" data-target="2"></button>
+                <button class="lnav-btn" data-target="3"></button>
+                <button class="lnav-btn" data-target="4"></button>
+                <button class="lnav-btn" data-target="5"></button>
+                <button class="lnav-btn" data-target="6"></button>
+                <button class="lnav-btn" data-target="7"></button>
+              </div>
+              <span class="idx-sb-text">Step <span id="idx-step-num">1</span>/8</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-stand"></div>
+      <div class="monitor-base"></div>
     </div>
   </section>
+
   <script>
   (function(){
-    var el = document.getElementById('hero-lottie');
-    if (!el) return;
-    var s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js';
-    s.onload = function(){
-      if (!window.lottie) return;
-      window.lottie.loadAnimation({
-        container: el,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: '/animations/monitor-demo.json'
-      });
-    };
-    document.head.appendChild(s);
+    var widget = document.getElementById('idx-lottie-widget');
+    if (!widget) return;
+    var cursor = document.getElementById('idx-cursor');
+    var stepNum = document.getElementById('idx-step-num');
+    var steps = widget.querySelectorAll('.lstep');
+    var navBtns = widget.querySelectorAll('.lnav-btn');
+    var layers = widget.querySelectorAll('.idx-layer');
+    var tabs = widget.querySelectorAll('.idx-tb-tab');
+    var cursorPositions = [
+      {top:'13%',left:'7%'},
+      {top:'23%',left:'7%'},
+      {top:'3%',left:'16%'},
+      {top:'27%',left:'7%'},
+      {top:'3%',left:'89%'},
+      {top:'3%',left:'8%'},
+      {top:'3%',left:'94%'},
+      {top:'9%',left:'7%'}
+    ];
+    var layerMap = [0, 1, 4, 2, 5, 6, 3, 7];
+    var tabMap   = [0, 0, 0, 1, 0, 0, 0, 0];
+    var current = 0;
+    var INTERVAL = 5000;
+    var timer;
+    function moveCursor(idx) {
+      var pos = cursorPositions[idx];
+      if(cursor && pos) { cursor.style.top = pos.top; cursor.style.left = pos.left; }
+    }
+    function clickAndNext() {
+      var nextIdx = (current+1) % steps.length;
+      var prevIdx = current;
+      if(cursor) {
+        cursor.classList.add('clicking');
+        setTimeout(function(){ cursor.classList.remove('clicking'); }, 400);
+      }
+      setTimeout(function(){
+        /* new step fades in ON TOP (z-index 3) */
+        steps[nextIdx].style.zIndex = '3';
+        steps[nextIdx].classList.add('lstep-active');
+        /* update sidebar/toolbar/nav */
+        navBtns.forEach(function(b,i){ b.classList.toggle('active', i===nextIdx); });
+        layers.forEach(function(l,i){ l.classList.toggle('idx-layer-active', i===layerMap[nextIdx]); });
+        tabs.forEach(function(t,i){ t.classList.toggle('active', i===tabMap[nextIdx]); });
+        if(stepNum) stepNum.textContent = nextIdx+1;
+        moveCursor(nextIdx);
+        current = nextIdx;
+        /* after fade-in done, remove old step */
+        setTimeout(function(){
+          steps[prevIdx].classList.remove('lstep-active');
+          steps[nextIdx].style.zIndex = '';
+        }, 550);
+      }, 400);
+    }
+    function startAuto() { clearInterval(timer); timer = setInterval(clickAndNext, INTERVAL); }
+    navBtns.forEach(function(btn,i){
+      btn.addEventListener('click', function(){ showStep(i); moveCursor(i); startAuto(); });
+    });
+    moveCursor(0);
+    startAuto();
   })();
   </script>
 
@@ -275,21 +499,23 @@
       (function(){
         var grid = document.getElementById('index-blog-grid');
         if (!grid) return;
+        function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+        function strip(s){return String(s||'').replace(/<[^>]*>/g,'');}
         fetch('/api/blog').then(function(r){return r.json();}).then(function(d){
           var posts = (d.posts||[]).slice(0,3);
           if (!posts.length) return;
           grid.innerHTML = posts.map(function(p){
             var tag = (p.category||'Blog').replace(/-/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
-            var excerpt = (p.excerpt||'').slice(0,140);
+            var excerpt = strip(p.excerpt).slice(0,200);
             var icon = p.featured_image
-              ? '<img src="'+p.featured_image+'" alt="'+p.title+'" style="width:100%;height:100%;object-fit:cover;display:block;">'
+              ? '<img src="'+esc(p.featured_image)+'" alt="'+esc(p.title)+'">'
               : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;color:#e6b802;opacity:.5;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
             return '<a href="/blog-post.html?slug='+encodeURIComponent(p.slug)+'" class="index-blog-card">'
               +'<div class="index-blog-card__icon">'+icon+'</div>'
               +'<div class="index-blog-card__content">'
-              +'<span class="blog-tag">'+tag+'</span>'
-              +'<h3>'+p.title+'</h3>'
-              +'<p>'+excerpt+'</p>'
+              +'<span class="blog-tag">'+esc(tag)+'</span>'
+              +'<h3>'+esc(p.title)+'</h3>'
+              +'<p>'+esc(excerpt)+'</p>'
               +'<span class="card-link">Read More &#8594;</span>'
               +'</div></a>';
           }).join('');

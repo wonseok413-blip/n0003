@@ -185,6 +185,7 @@ function initCounterAnimation() {
 // Lottie-style Widget Auto-Rotation
 function initLottieWidgets() {
   document.querySelectorAll('.lottie-wrap').forEach(function(wrap) {
+    if (wrap.closest('#idx-lottie-widget')) return;
     var steps = wrap.querySelectorAll('.lstep');
     var navBtns = wrap.querySelectorAll('.lnav-btn');
     if (steps.length === 0) return;

@@ -1,7 +1,7 @@
 import { autoInit, maybeCleanupSessions } from './db.js';
 import { login, logout, me, getSession } from './auth.js';
 import { adminRoute } from './admin.js';
-import { blogGenRoute } from './blog-gen.js';
+import { blogGenRoute, runBlogGeneration } from './blog-gen.js';
 
 const CORS = {
   'Access-Control-Allow-Origin' : '*',
@@ -168,7 +168,6 @@ const FOOTER_HTML = `<footer class="footer" id="footer">
             <li><a href="${N5}/service">WP Performance &amp; Security</a></li>
             <li><a href="${N5}/pricing.html">Monthly WP Care Plans</a></li>
             <li><a href="${N5}/service">Digital file</a></li>
-            <li><a href="${N5}/service" class="footer-note">Other products besides our monthly subscription management services are currently being prepared for launch.</a></li>
           </ul>
         </div>
 
@@ -202,7 +201,7 @@ const FOOTER_HTML = `<footer class="footer" id="footer">
           </ul>
         </div>
 
-        <div class="footer-col">
+        <div class="footer-col footer-col-compliance">
           <h4>Compliance</h4>
           <ul>
             <li><a href="${N5}/terms-of-service.html" target="_blank" rel="noopener">Terms of Service</a></li>
@@ -218,8 +217,7 @@ const FOOTER_HTML = `<footer class="footer" id="footer">
       <div class="footer-bottom">
         <div class="footer-copy">
           <strong>&copy; 2026 Noteracker Korea</strong><br />
-          418-38-01542<br />
-          3F, Room 302-J37, 36 Daeji-ro, Suji-gu, Yongin-si, Gyeonggi-do, 16873, South Korea
+          418-38-01542 3F, Room 302-J37, 36 Daeji-ro,<br />Suji-gu, Yongin-si, Gyeonggi-do, 16873, South Korea
         </div>
       </div>
       <div class="footer-trademark">
@@ -290,15 +288,19 @@ export default {
       /* 공개 블로그 API */
       if (p === '/api/blog' && m === 'GET') {
         const rows = await env.DB.prepare(
-          `SELECT id, title, slug, excerpt, featured_image, category, tags, published_at, created_at
-           FROM blog_posts WHERE status='published' ORDER BY published_at DESC`
+          `SELECT p.id, p.title, p.slug, p.excerpt, p.featured_image, p.category, p.tags, p.published_at, p.created_at,
+                  a.name AS author_name, a.avatar AS author_avatar
+           FROM blog_posts p LEFT JOIN blog_authors a ON p.author_id = a.id
+           WHERE p.status='published' ORDER BY p.published_at DESC`
         ).all();
         return json({ posts: rows.results ?? [] });
       }
       const blogSlugMatch = p.match(/^\/api\/blog\/(.+)$/);
       if (blogSlugMatch && m === 'GET') {
         const post = await env.DB.prepare(
-          "SELECT * FROM blog_posts WHERE slug=? AND status='published'"
+          `SELECT p.*, a.name AS author_name, a.title AS author_title, a.avatar AS author_avatar, a.bio AS author_bio
+           FROM blog_posts p LEFT JOIN blog_authors a ON p.author_id = a.id
+           WHERE p.slug=? AND p.status='published'`
         ).bind(blogSlugMatch[1]).first();
         if (!post) return json({ error: 'Post not found' }, 404);
         const translations = await env.DB.prepare(
@@ -330,6 +332,13 @@ export default {
 
     const contentType = response.headers.get('content-type') || '';
     if (!contentType.includes('text/html')) {
+      const ext = p.split('.').pop()?.toLowerCase();
+      const longCache = ['css','js','webp','png','jpg','jpeg','gif','svg','ico','woff','woff2','ttf','eot'];
+      if (longCache.includes(ext)) {
+        const nh = new Headers(response.headers);
+        nh.set('Cache-Control', 'public, max-age=2592000, immutable');
+        return new Response(response.body, { status: response.status, headers: nh });
+      }
       return response;
     }
 
@@ -352,5 +361,22 @@ export default {
       status: transformed.status,
       headers: newHeaders,
     });
+  },
+
+  /* ── Cron 트리거: 12시간마다 블로그 1개 자동 생성 (하루 2개) ── */
+  async scheduled(event, env, ctx) {
+    try {
+      await autoInit(env.DB);
+      await env.DB.prepare("DELETE FROM sessions WHERE expires_at <= datetime('now')").run();
+      console.log('[cron] Session cleanup done');
+    } catch (e) {
+      console.error('[cron] Session cleanup error:', e.message);
+    }
+    try {
+      const count = await runBlogGeneration(env, 1);
+      console.log(`[cron] Blog generation done: ${count} post(s) created`);
+    } catch (e) {
+      console.error('[cron] Blog generation failed:', e.message);
+    }
   },
 };

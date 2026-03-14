@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title id="page-title">Blog – Noteracker</title>
   <meta name="description" id="page-desc" content="Noteracker Blog" />
-  <meta name="keywords" content="malware removal, website security, vulnerability, threat detection, security hardening, incident response" />
+  <meta name="keywords" content="wordpress, web hosting, ecommerce, seo, web security, online business" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
@@ -164,37 +164,31 @@
   <div id="footer-one"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" defer></script>
-  <script src="/js/main.js"></script>
+  <script src="/js/main.js?v=2" defer></script>
   <script>
     /* ══════════════════════════════════════════════
        N0005 상품 마케팅 n0005와 동일한 구조
        ══════════════════════════════════════════════ */
     var N5 = 'https://noteracker.com';
 
-    /* ── 작성자 정보 ── */
-    var AUTHORS = [
-      {
-        name: 'Rafferty Hale',
-        role: 'Founder of Noteracker',
-        photo: '/images/Rafferty Hale.webp',
-        bio: 'Rafferty founded Noteracker to give WordPress site owners a straightforward path to better security and reliable maintenance without the technical headaches. He writes to share the thinking behind Noteracker\'s approach and to help site owners make confident decisions about their WordPress setup.'
-      },
-      {
-        name: 'Sarah Jones',
-        role: 'Noteracker Community Contributor',
-        photo: '/images/Sarah Jones.webp',
-        bio: 'A Noteracker community contributor passionate about helping small business owners get more from their WordPress sites. Sarah covers topics ranging from website care to everyday security always with a focus on clear, no-nonsense guidance.'
-      }
-    ];
+    /* ── 작성자 정보 (DB에서 가져온 데이터 우선, 없으면 폴백) ── */
+    var FALLBACK_AUTHOR = {
+      name: 'Noteracker Team',
+      role: 'Noteracker',
+      photo: '',
+      bio: 'Expert professionals specializing in WordPress performance, security, and website management.'
+    };
 
-    /* 슬러그 기반 결정적 작성자 선택 같은 포스트는 항상 같은 작성자 표시 */
-    function _pickAuthor(slug) {
-      if (!slug) return AUTHORS[Math.floor(Math.random() * AUTHORS.length)];
-      var hash = 0;
-      for (var i = 0; i < slug.length; i++) {
-        hash = (hash * 31 + slug.charCodeAt(i)) & 0x7fffffff;
+    function _authorFromPost(post) {
+      if (post.author_name) {
+        return {
+          name: post.author_name,
+          role: post.author_title || '',
+          photo: post.author_avatar || '',
+          bio: post.author_bio || ''
+        };
       }
-      return AUTHORS[hash % AUTHORS.length];
+      return FALLBACK_AUTHOR;
     }
 
     /* HTML 이스케이프 */
@@ -238,13 +232,14 @@
         ? '<img src="' + esc(N5 + p.thumbnail_url) + '" alt="' + esc(_enOnly(p.name) || 'Product') + '" loading="lazy">'
         : _photoIcon();
       var price = p.price_cents ? '<span class="sidebar-shop-price" style="margin-left:8px;">' + _fmtPrice(p.price_cents) + '</span>' : '';
-      var displayName = _enOnly(p.name) || 'Digital Product';
+      var displayName = _enOnly(p.name) || 'Lottie Animation';
       return '<div class="sidebar-shop-label">' + esc(label) + '</div>' +
         '<a href="' + esc(url) + '" class="sidebar-shop-card-link" target="_blank" rel="noopener">' +
           '<div class="' + thumbCls + '" id="' + esc(tid) + '">' + thumbInner + '</div>' +
           '<div class="sidebar-shop-name-row">' +
             '<span class="sidebar-shop-name">' + esc(displayName) + '</span>' + price +
           '</div>' +
+          '<div style="font-size:10px;color:var(--text-dim);letter-spacing:.05em;margin-top:2px;">LOTTIE ANIMATION FILE</div>' +
         '</a>';
     }
 
@@ -403,15 +398,15 @@
         var heroImg = (bodyImgMatch && bodyImgMatch[1]) ? bodyImgMatch[1] : post.featured_image;
         if (heroImg) document.getElementById('hero-bg').style.backgroundImage = "url('" + heroImg + "')";
 
-        /* 작성자 슬러그 기반으로 두 필자 중 한 명 선택 */
-        var author = _pickAuthor(slug);
+        /* 작성자: DB에서 가져온 데이터 우선 사용 */
+        var author = _authorFromPost(post);
         document.getElementById('hero-author').textContent = 'By ' + author.name;
         document.getElementById('sep-author').style.display = '';
         document.getElementById('author-name').textContent = author.name;
         /* 아바타 이미지 교체 */
         var avatarWrap = document.querySelector('.author-avatar-wrap');
-        if (avatarWrap) {
-          avatarWrap.innerHTML = '<img src="' + author.photo + '" alt="' + esc(author.name) + '" class="author-avatar-img">';
+        if (avatarWrap && author.photo) {
+          avatarWrap.innerHTML = '<img src="' + esc(author.photo) + '" alt="' + esc(author.name) + '" class="author-avatar-img">';
         }
         /* role 표시 author-name 바로 뒤에 삽입 (중복 방지) */
         var existingRole = document.getElementById('author-role');
